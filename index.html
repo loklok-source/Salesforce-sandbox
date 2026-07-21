@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Service Cloud Sandbox & AI Training Simulator</title>
+    <!-- Tailwind CSS for modern responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons for high-fidelity Salesforce Lightning styling -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --sf-blue: #0176d3;
+            --sf-bg: #f3f2f1;
+            --sf-border: #dddbda;
+            --sf-text-dark: #181818;
+            --sf-text-light: #514f4d;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--sf-bg);
+            color: var(--sf-text-dark);
+        }
+
+        /* High-fidelity custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col overflow-hidden relative">
+
+    <!-- ================================================================= -->
+    <!-- ROLE GATEWAY LANDING VIEW                                         -->
+    <!-- ================================================================= -->
+    <div id="role-gateway-view" class="flex-1 flex flex-col items-center justify-center bg-slate-900 p-6 text-white relative">
+        <div class="max-w-xl w-full bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl text-center space-y-6">
+            <div class="w-16 h-16 bg-[#0176d3]/20 border border-[#0176d3] rounded-2xl flex items-center justify-center mx-auto text-3xl text-blue-400 shadow-inner">
+                <i class="fa-solid fa-cloud"></i>
+            </div>
+
+            <div>
+                <h1 class="text-2xl font-black tracking-tight text-white">Salesforce Service Cloud Sandbox</h1>
+                <p class="text-xs text-slate-400 mt-2 font-medium">Select your portal access mode to begin chat simulation or manage case database scenarios.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                <!-- Agent Button -->
+                <button onclick="navigateToPortal('agent')" class="group bg-slate-700/60 hover:bg-[#0176d3] border border-slate-600 hover:border-blue-400 p-5 rounded-xl transition-all text-left flex flex-col justify-between space-y-3 shadow-md hover:shadow-blue-500/20">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 group-hover:text-white flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-white transition-all"></i>
+                    </div>
+                    <div>
+                        <span class="text-sm font-extrabold block text-white">Agent Portal</span>
+                        <span class="text-[11px] text-slate-400 group-hover:text-blue-100 font-medium">Practice case scenarios & SOP workflows</span>
+                    </div>
+                </button>
+
+                <!-- Trainer Button -->
+                <button onclick="promptTrainerAccess()" class="group bg-slate-700/60 hover:bg-amber-600 border border-slate-600 hover:border-amber-400 p-5 rounded-xl transition-all text-left flex flex-col justify-between space-y-3 shadow-md hover:shadow-amber-500/20">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 group-hover:text-white flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <i class="fa-solid fa-lock text-xs text-slate-500 group-hover:text-white transition-all"></i>
+                    </div>
+                    <div>
+                        <span class="text-sm font-extrabold block text-white">Trainer Portal</span>
+                        <span class="text-[11px] text-slate-400 group-hover:text-amber-100 font-medium">Upload CSV databases & manage SOP rules</span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="pt-2 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                <span>Service Cloud Sandbox v3.5</span>
+                <span id="user-session-id-display" class="text-blue-400">User Session: Ready</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- AGENT PORTAL VIEW                                                 -->
+    <!-- ================================================================= -->
+    <div id="agent-portal-view" class="hidden flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 p-6 space-y-6">
+        <!-- Agent Header Ribbon -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-5 rounded-xl border border-gray-200 shadow-sm gap-4">
+            <div>
+                <h1 class="text-2xl font-extrabold text-[#0176d3] flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap"></i> Agent Case Training Portal
+                </h1>
+                <p class="text-xs text-gray-500 mt-1 font-medium">Select an assigned training case topic below to launch your chat practice session.</p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200">
+                    <i class="fa-solid fa-folder-open mr-1"></i> <span id="portal-case-count">0</span> Active Topics
+                </span>
+                <button onclick="returnToGateway()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border">
+                    <i class="fa-solid fa-right-from-bracket"></i> Switch Profile
+                </button>
+            </div>
+        </div>
+
+        <!-- Case Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="agent-case-grid">
+            <!-- Dynamically populated -->
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- TRAINER PORTAL VIEW                                              -->
+    <!-- ================================================================= -->
+    <div id="trainer-portal-view" class="hidden flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 p-6 space-y-6">
+        <!-- Header Ribbon -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-5 rounded-xl border border-gray-200 shadow-sm gap-4">
+            <div>
+                <h1 class="text-2xl font-extrabold text-amber-600 flex items-center gap-2">
+                    <i class="fa-solid fa-chalkboard-user"></i> Trainer Control Center
+                </h1>
+                <p class="text-xs text-gray-500 mt-1 font-medium">Upload custom scenario database CSV files to update training procedures and add new customer cases.</p>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="bg-purple-50 border border-purple-200 p-2.5 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-purple-700 text-sm"></i>
+                    <input type="password" id="gemini-key" value="" onchange="notifyKeySaved()" placeholder="Enter Gemini API Key..." class="text-xs p-1.5 border border-purple-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white min-w-[200px]">
+                </div>
+                <button onclick="returnToGateway()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border">
+                    <i class="fa-solid fa-right-from-bracket"></i> Switch Profile
+                </button>
+            </div>
+        </div>
+
+        <!-- Upload & Case Database Workspace -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Card: Upload Control -->
+            <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+                <div class="flex items-center gap-2 text-amber-700 font-extrabold text-sm border-b pb-3">
+                    <i class="fa-solid fa-file-csv text-lg"></i>
+                    <h2>Import Scenario CSV Database</h2>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    Upload your updated scenario database CSV to refresh process rules, SOP criteria, header parameters, and AI system prompts in real-time across all agents.
+                </p>
+
+                <div class="space-y-3 pt-2">
+                    <label class="block w-full cursor-pointer bg-amber-50 hover:bg-amber-100 text-amber-800 border-2 border-dashed border-amber-300 rounded-xl p-5 text-center transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2 block text-amber-600"></i>
+                        <span class="text-xs font-extrabold block">Select Scenario Database CSV</span>
+                        <span class="text-[10px] text-amber-600 font-medium">Click to browse or drop file here</span>
+                        <input type="file" id="csv-file-input" accept=".csv" onchange="handleCSVUpload(event)" class="hidden">
+                    </label>
+
+                    <button onclick="downloadCSVTemplate()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 border">
+                        <i class="fa-solid fa-download"></i> Download Standard CSV Template
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Card: Loaded Cases Preview -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b pb-3">
+                    <div class="flex items-center gap-2 text-slate-800 font-extrabold text-sm">
+                        <i class="fa-solid fa-list-check text-blue-600"></i>
+                        <h2>Loaded Scenario Database</h2>
+                    </div>
+                </div>
+
+                <div class="space-y-2 max-h-[400px] overflow-y-auto pr-1" id="trainer-cases-preview-list">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- MAIN SALESFORCE SERVICE CLOUD WORKSPACE                          -->
+    <!-- ================================================================= -->
+    <div id="sf-workspace" class="hidden flex-1 flex flex-col h-full overflow-hidden">
+        <!-- Top Salesforce Navigation Bar -->
+        <div class="bg-[#1b1b1b] h-[35px] flex items-end px-3 justify-between">
+            <div class="flex items-center gap-1">
+                <div class="bg-white text-gray-900 px-4 py-1.5 text-xs font-bold rounded-t border-t-2 border-[#0176d3] flex items-center gap-2 shadow-sm">
+                    💬 Case: <span id="target-case-number-header">82337790</span>
+                </div>
+            </div>
+            <button onclick="exitSandboxToPortal()" class="text-gray-300 hover:text-white text-xs font-bold px-3 py-1 flex items-center gap-1">
+                <i class="fa-solid fa-arrow-left"></i> Exit to Agent Portal
+            </button>
+        </div>
+
+        <!-- Case Customer Header Bar -->
+        <div class="bg-white border-b border-[#dddbda] px-6 py-3 flex justify-between items-center border-t-[4px] border-[#0176d3]">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-[#fdf2f8] border border-pink-200 flex items-center justify-center text-xl text-pink-600 font-bold shadow-sm">
+                    👤
+                </div>
+                <div>
+                    <h1 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                        <span id="target-header-name">Sarah Connor</span>, <span id="target-header-age">60</span>
+                        <span class="text-xs text-gray-400 font-medium font-mono">• <span id="target-header-email">sconnor@cyberdyne.com</span> • <span id="target-header-phone">+15550192823</span></span>
+                    </h1>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span id="target-header-mid" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono">MCX1892B</span>
+                        <span id="target-header-segment" class="text-xs font-extrabold text-[#7f4fce] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">Priority</span>
+                        <span id="target-header-health-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Active Unlimited</span>
+                        <span id="target-header-role-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Owner</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button class="bg-white hover:bg-gray-50 text-[#0176d3] border border-[#aeaeae] px-3 py-1.5 rounded text-xs font-bold transition-all shadow-sm">Backoffice</button>
+                <button class="bg-white hover:bg-gray-50 text-[#0176d3] border border-[#aeaeae] px-3 py-1.5 rounded text-xs font-bold transition-all shadow-sm">Bank Backoffice</button>
+                <button class="bg-white hover:bg-gray-50 text-gray-600 border border-[#aeaeae] px-2.5 py-1.5 rounded text-xs transition-all shadow-sm">▼</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Grid Content Workspace -->
+        <div class="flex-1 flex overflow-hidden pb-[35px]">
+            
+            <!-- LEFT COLUMN: Key Info & Contact Card -->
+            <div class="w-[280px] border-r border-[#dddbda] bg-[#fdfdfd] flex flex-col overflow-y-auto">
+                
+                <!-- KEY INFORMATION CARD - Navy Blue with Crisp White Text -->
+                <div class="p-4 border-b border-[#dddbda] bg-[#16325c] text-white">
+                    <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-key text-blue-300"></i> <span class="text-white font-extrabold">Key Information</span>
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">Channel</span>
+                            <div>
+                                <span id="target-badge-channel" class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Logged In</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">MFA</span>
+                            <div>
+                                <span id="target-badge-mfa" class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Passed</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">Acc. Health</span>
+                            <div>
+                                <span id="target-badge-health" class="bg-[#1b8042] text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Active</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">Segment</span>
+                            <div>
+                                <span id="target-badge-segment" class="bg-purple-700 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Priority</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-1 mt-3 pt-3 border-t border-blue-900">
+                        <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">User Access Tier</span>
+                        <div>
+                            <span id="target-badge-access" class="bg-slate-700 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Full</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Details Card -->
+                <div class="p-4 border-b border-[#dddbda] bg-white">
+                    <h3 class="text-xs font-extrabold text-[#0176d3] uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-address-card"></i> Contact Details
+                    </h3>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Account Name</label>
+                            <span id="target-detail-accname" class="text-xs font-semibold text-gray-800">Cyberdyne Global Tech</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Birthdate</label>
+                                <span id="target-detail-birthdate" class="text-xs font-semibold text-gray-800">10.11.1965</span>
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Mobile Phone</label>
+                                <span id="target-detail-phone" class="text-xs font-semibold text-[#0176d3] hover:underline cursor-pointer font-mono">+15550192823</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Email Address</label>
+                            <span id="target-detail-email" class="text-xs font-semibold text-[#0176d3] hover:underline cursor-pointer font-mono">sconnor@cyberdyne.com</span>
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Validated Region</label>
+                            <span id="target-detail-country" class="text-xs font-semibold text-gray-800">Germany 🇩🇪</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTER COLUMN: Conversations & Tabs -->
+            <div class="flex-1 flex flex-col bg-white border-r border-[#dddbda] overflow-hidden">
+                <div class="flex bg-[#f3f2f1] border-b border-[#dddbda] pl-2">
+                    <button class="px-4 py-2.5 text-xs font-bold border-b-2 border-[#0176d3] text-gray-800 bg-white" id="tab-conv" onclick="switchCenterTab('conv')">Standard Conversation</button>
+                    <button class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800" id="tab-details" onclick="switchCenterTab('details')">Details</button>
+                </div>
+
+                <div class="flex-1 flex flex-col overflow-hidden">
+                    <!-- Tab 1: Live Chat Conversation -->
+                    <div class="flex-1 flex flex-col bg-white overflow-hidden" id="pane-conv">
+                        
+                        <!-- Standby State Call-to-Action -->
+                        <div id="empty-state" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50">
+                            <div class="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-2xl text-blue-600 mb-4 animate-bounce">
+                                💬
+                            </div>
+                            <h3 class="text-base font-extrabold text-gray-800">Simulation Session Ready</h3>
+                            <p class="text-xs text-gray-500 max-w-sm mt-1 mb-6">Click below to launch the live customer chat simulation and begin practice.</p>
+                            
+                            <button onclick="initializeSimulationSession()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-6 py-3 rounded-xl font-extrabold text-xs shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-play"></i> Start Practice Session Now
+                            </button>
+                        </div>
+
+                        <!-- Active Timeline -->
+                        <div class="hidden flex-1 overflow-y-auto p-4 space-y-4" id="chat-scroller">
+                            <div class="space-y-4" id="live-chat-timeline">
+                                <!-- Appended dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Chat Reply Input -->
+                        <div class="p-3 border-t border-[#dddbda] flex gap-2 bg-[#f3f2f1]">
+                            <input type="text" id="agent-input" placeholder="Click 'Start Practice' to begin." disabled class="flex-1 text-xs p-2.5 border border-[#dddbda] rounded bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <button onclick="sendAgentMessage()" id="agent-send-btn" disabled class="bg-[#0176d3] hover:bg-[#005fb2] disabled:opacity-50 text-white px-4 py-2 rounded text-xs font-bold transition-all flex items-center gap-1.5">
+                                Send <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                            <button onclick="triggerCaseGrading()" id="end-session-btn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-xs font-bold transition-all flex items-center gap-1.5">
+                                <i class="fa-solid fa-square-check"></i> Wrap Up Case
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab 2: Context Details Sheet -->
+                    <div class="hidden p-6 overflow-y-auto bg-white h-full" id="pane-details">
+                        <h3 class="text-xs font-extrabold text-[#0176d3] border-b pb-2 mb-4 uppercase">System Context Data</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Merchant Country</label>
+                                <input type="text" id="target-detail-country-meta" readonly class="w-full text-xs p-2 bg-slate-100 border border-slate-200 rounded font-bold">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Assigned Merchant ID</label>
+                                <input type="text" id="target-detail-mid-meta" readonly class="w-full text-xs p-2 bg-slate-100 border border-slate-200 rounded font-bold font-mono">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Agent Actions Hub -->
+            <div class="w-[320px] bg-white flex flex-col h-full overflow-y-auto border-l border-[#dddbda]">
+                <div class="bg-[#f3f2f1] p-3 font-bold text-xs border-b border-[#dddbda] flex items-center gap-1.5 text-gray-700">
+                    <i class="fa-solid fa-wand-magic-sparkles text-blue-600"></i> Agent Actions Hub
+                </div>
+
+                <!-- Copilot Tabs -->
+                <div class="flex border-b border-[#dddbda] bg-slate-50 text-[11px] font-bold text-gray-500">
+                    <button class="flex-1 p-2 text-center border-b-2 border-[#0176d3] text-gray-900 bg-white font-bold" id="copilot-tab-actions" onclick="switchCopilotTab('actions')">Actions</button>
+                </div>
+
+                <!-- Escalation & Classification Workspace -->
+                <div id="copilot-pane-actions" class="p-4 space-y-4">
+                    <!-- Escalation Controls -->
+                    <div class="border-b border-[#dddbda] bg-amber-50/40 p-3 rounded-lg space-y-2">
+                        <div class="bg-red-50 border border-red-200 text-[#c23934] text-[10px] font-bold p-2.5 rounded-md mb-2 flex items-center gap-1.5 shadow-sm hidden" id="esc-banner">
+                            <i class="fa-solid fa-triangle-exclamation"></i> ESCALATED TO BACKOFFICE QUEUE
+                        </div>
+                        <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-route"></i> Escalation Controls
+                        </h4>
+                        <p class="text-[10px] text-gray-500 leading-relaxed">Route standard exceptions below if credentials fall short or MFA verification fails.</p>
+                        
+                        <div class="space-y-2.5 pt-1">
+                            <div>
+                                <label class="block text-[9px] font-bold text-gray-500 uppercase">Target Escalation Queue / Path</label>
+                                <select id="esc-target" class="w-full text-xs p-2 border border-gray-300 rounded bg-white">
+                                    <option value="Tier 2 Backoffice Support">Tier 2 Backoffice Support</option>
+                                    <option value="Bank Backoffice Core Hub">Bank Backoffice Core Hub</option>
+                                    <option value="Direct Supervisor Escalation">Direct Supervisor Escalation</option>
+                                    <option value="VeriFactu Compliance Tier">VeriFactu Compliance Tier</option>
+                                    <option value="European Billing Backoffice">European Billing Backoffice</option>
+                                </select>
+                            </div>
+                            <button onclick="executeEscalation()" class="w-full bg-[#0176d3] hover:bg-[#005fb2] text-white py-2 rounded text-xs font-bold transition-all shadow shadow-blue-100 flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-share-from-square"></i> Escalate Case Record
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Case Classification Dropdowns (4-Tier) -->
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-tags"></i> Case Classification
+                        </h4>
+                        <div class="text-[11px] text-gray-600">
+                            <strong>Classification Status:</strong> <span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check"></i> Ready</span>
+                        </div>
+
+                        <div class="space-y-2.5 pt-1">
+                            <div>
+                                <label class="block text-[9px] font-bold text-gray-500 uppercase">* 1. Product</label>
+                                <select id="class-product" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
+                                    <option value="">Select Product...</option>
+                                    <option>Service Cloud Core</option>
+                                    <option>Billing & Payments</option>
+                                    <option>Verification & Security</option>
+                                    <option>VeriFactu Compliance</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-gray-500 uppercase">* 2. Sub-Product</label>
+                                <select id="class-subproduct" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
+                                    <option value="">Select Sub Product...</option>
+                                    <option>Account Credentials</option>
+                                    <option>API Gateway</option>
+                                    <option>European Billing</option>
+                                    <option>MFA Authentication</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-gray-500 uppercase">* 3. Service</label>
+                                <select id="class-service" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
+                                    <option value="">Select Service...</option>
+                                    <option>User Verification Service</option>
+                                    <option>Merchant ID Sync</option>
+                                    <option>Invoice Direct API</option>
+                                    <option>Multi-Factor Auth Service</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[9px] font-bold text-gray-500 uppercase">* 4. Cause / Reason</label>
+                                <select id="class-cause" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
+                                    <option value="">Select Cause...</option>
+                                    <option>Credentials Issue</option>
+                                    <option>Verification Failed</option>
+                                    <option>VeriFactu System Link</option>
+                                    <option>MFA Authentication Error</option>
+                                    <option>Region Discrepancy</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Strip -->
+        <div class="fixed bottom-0 left-0 right-0 h-[35px] bg-[#f3f2f1] border-t border-[#dddbda] flex items-center px-4 justify-between text-[11px] text-gray-500 z-10">
+            <div class="flex items-center gap-3 font-semibold">
+                <span>Bottom Bar:</span>
+                <span class="hover:text-gray-900 cursor-pointer">Macros</span> | 
+                <span class="hover:text-gray-900 cursor-pointer">Recent Items</span> | 
+                <span class="hover:text-gray-900 cursor-pointer">Five9 Supervisor Plus</span>
+            </div>
+            <div class="font-bold text-blue-600 flex items-center gap-2">
+                <span id="footer-uid-badge" class="text-[10px] font-mono text-gray-500">ID: anon</span>
+                <span><i class="fa-solid fa-circle text-[8px] text-green-500 mr-1 animate-pulse"></i> Salesforce Service Hub Active</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50 pointer-events-none"></div>
+
+    <!-- TRAINER PASSCODE MODAL OVERLAY -->
+    <div id="trainer-passcode-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center space-y-4">
+            <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-key"></i>
+            </div>
+            <div>
+                <h3 class="text-base font-extrabold text-gray-800">Trainer Security Authentication</h3>
+                <p class="text-xs text-gray-500 mt-1">Enter passcode <strong class="text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded font-mono">1234</strong> to unlock management features.</p>
+            </div>
+
+            <input type="password" id="trainer-pin-input" placeholder="Enter PIN (Default: 1234)" class="w-full text-center text-lg p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none font-mono tracking-widest bg-slate-50">
+
+            <p id="pin-error-text" class="text-xs font-bold text-red-600 hidden"><i class="fa-solid fa-circle-exclamation"></i> Incorrect PIN. Passcode is 1234.</p>
+
+            <div class="flex gap-2 pt-2">
+                <button onclick="closeTrainerPasscode()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-lg text-xs font-bold transition-all">Cancel</button>
+                <button onclick="verifyTrainerPasscode()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg text-xs font-bold transition-all">Unlock Portal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EVALUATION / CASE WRAP-UP MODAL OVERLAY -->
+    <div id="grading-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[85vh] overflow-hidden">
+            <div class="bg-[#16325c] p-5 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">
+                        🏆
+                    </div>
+                    <div>
+                        <h2 class="text-base font-extrabold uppercase tracking-wide">Training Performance Report</h2>
+                        <p class="text-[10px] text-blue-200 mt-0.5">Automated QA Scoring and Verification Results</p>
+                    </div>
+                </div>
+                <button onclick="closeGradingModal()" class="text-white hover:text-gray-200 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="p-6 flex-1 overflow-y-auto space-y-6">
+                <!-- Score Card -->
+                <div class="bg-slate-50 p-5 rounded-lg border border-gray-200 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-gray-500 block uppercase">Overall Training Score</span>
+                        <span id="evaluation-rating" class="text-3xl font-black text-gray-800">85 / 100</span>
+                        <span id="evaluation-grade" class="block text-[11px] font-bold text-emerald-600 mt-1">Excellent Case Handling</span>
+                    </div>
+                    <div class="w-20 h-20 bg-white rounded-full border-4 border-emerald-500 flex items-center justify-center shadow-md">
+                        <span id="evaluation-percent" class="text-lg font-black text-emerald-600">85%</span>
+                    </div>
+                </div>
+
+                <!-- Checked Criteria List -->
+                <div class="space-y-3">
+                    <h3 class="text-xs font-extrabold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 border-b pb-1.5">
+                        <i class="fa-solid fa-clipboard-check"></i> Target Verification Checklist
+                    </h3>
+                    
+                    <div class="space-y-2" id="criteria-checklist-container">
+                        <!-- Populated Dynamically -->
+                    </div>
+                </div>
+
+                <!-- Qualitative Feedback -->
+                <div class="bg-blue-50/50 border border-blue-200 p-4 rounded-lg">
+                    <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                        <i class="fa-solid fa-message"></i> Qualitative Feedback
+                    </h3>
+                    <p id="evaluation-feedback-text" class="text-xs text-blue-900 leading-relaxed font-medium">
+                        Great job verifying credentials before providing account information.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-4 border-t flex justify-end gap-2">
+                <button onclick="closeGradingModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded font-bold text-xs transition-all">Dismiss Report</button>
+                <button onclick="restartCaseSession()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-5 py-2 rounded font-bold text-xs transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-rotate-right"></i> Restart Practice Round
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- JAVASCRIPT MECHANICS: CORE APPLICATION & FIREBASE PERSISTENCE     -->
+    <!-- ================================================================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, deleteDoc, getDocs, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sf-sandbox-v1';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyDemoConfigForFallbackOnly",
+            authDomain: "demo-app.firebaseapp.com",
+            projectId: "demo-app",
+            storageBucket: "demo-app.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        let app = null;
+        let auth = null;
+        let db = null;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (e) {
+            console.warn("Firebase fallback mode initialized", e);
+        }
+
+        let currentUser = null;
+        let currentUserId = 'local-user-' + Math.floor(Math.random() * 10000);
+        let userCompletedCases = {};
+
+        const TRAINER_PASCODE_PIN = "1234";
+
+        window.conversationTurnIndex = 0;
+        window.currentRole = ""; 
+        window.currentCaseIndex = 0;
+        window.chatMessages = [];
+        window.sessionActive = false;
+        window.isEscalated = false;
+        window.escalationQueue = "";
+
+        window.verifiedItems = {
+            name: false,
+            phone: false,
+            birthdate: false,
+            email: false,
+            mfaChecked: false
+        };
+
+        window.loadedCases = [];
+        window.currentCase = null;
+
+        // Immediately load saved cases from localStorage for instant display across refreshes
+        const localSavedCases = localStorage.getItem('sf_sandbox_cases');
+        if (localSavedCases) {
+            try {
+                const parsed = JSON.parse(localSavedCases);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    window.loadedCases = parsed;
+                }
+            } catch(e) {}
+        }
+
+        // Immediately update session text so UI is never stuck on "Initializing..."
+        const sessionDisplay = document.getElementById('user-session-id-display');
+        if (sessionDisplay) sessionDisplay.innerText = `User ID: ${currentUserId.slice(0, 12)}...`;
+        const footerUidBadge = document.getElementById('footer-uid-badge');
+        if (footerUidBadge) footerUidBadge.innerText = `ID: ${currentUserId}`;
+
+        window.promptTrainerAccess = function() {
+            const pinInput = document.getElementById('trainer-pin-input');
+            if (pinInput) pinInput.value = "";
+            const errText = document.getElementById('pin-error-text');
+            if (errText) errText.classList.add('hidden');
+            const modal = document.getElementById('trainer-passcode-modal');
+            if (modal) modal.classList.remove('hidden');
+            setTimeout(() => { if (pinInput) pinInput.focus(); }, 100);
+        };
+
+        window.closeTrainerPasscode = function() {
+            const modal = document.getElementById('trainer-passcode-modal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.verifyTrainerPasscode = function() {
+            const pinInput = document.getElementById('trainer-pin-input');
+            const pinVal = pinInput ? pinInput.value.trim() : "";
+            if (pinVal === TRAINER_PASCODE_PIN) {
+                window.closeTrainerPasscode();
+                window.navigateToPortal('trainer');
+                showToast("Access Unlocked", "Welcome back, Trainer.", "success");
+            } else {
+                const errText = document.getElementById('pin-error-text');
+                if (errText) errText.classList.remove('hidden');
+            }
+        };
+
+        window.navigateToPortal = function(role) {
+            window.currentRole = role;
+            const gatewayView = document.getElementById('role-gateway-view');
+            if (gatewayView) gatewayView.classList.add('hidden');
+
+            if (role === 'agent') {
+                const agentView = document.getElementById('agent-portal-view');
+                if (agentView) agentView.classList.remove('hidden');
+                window.renderAgentCaseCards();
+            } else if (role === 'trainer') {
+                const trainerView = document.getElementById('trainer-portal-view');
+                if (trainerView) trainerView.classList.remove('hidden');
+                window.renderTrainerPreviewList();
+            }
+        };
+
+        window.returnToGateway = function() {
+            window.currentRole = "";
+            document.getElementById('agent-portal-view')?.classList.add('hidden');
+            document.getElementById('trainer-portal-view')?.classList.add('hidden');
+            document.getElementById('sf-workspace')?.classList.add('hidden');
+            document.getElementById('role-gateway-view')?.classList.remove('hidden');
+        };
+
+        window.renderAgentCaseCards = function() {
+            const grid = document.getElementById('agent-case-grid');
+            const countSpan = document.getElementById('portal-case-count');
+            if (!grid) return;
+
+            if (countSpan) countSpan.innerText = window.loadedCases.length;
+
+            if (window.loadedCases.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center space-y-3">
+                        <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-xl">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h3 class="text-sm font-bold text-slate-700">No Training Scenarios Loaded</h3>
+                        <p class="text-xs text-slate-400 max-w-sm mx-auto">Trainers must log into the Trainer Portal and import a scenario CSV database to populate practice topics.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = window.loadedCases.map((cs, idx) => {
+                const completedData = userCompletedCases[String(cs.caseNumber)];
+                const isCompleted = !!completedData;
+
+                return `
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-5 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                                    Case #${cs.caseNumber}
+                                </span>
+                                ${isCompleted ? `
+                                    <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded flex items-center gap-1">
+                                        <i class="fa-solid fa-circle-check"></i> ${completedData.score}% (${completedData.grade})
+                                    </span>
+                                ` : `
+                                    <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                                        <i class="fa-solid fa-clock mr-1"></i> Open Case
+                                    </span>
+                                `}
+                            </div>
+
+                            <h3 class="text-sm font-extrabold text-gray-800 leading-snug">${cs.topic}</h3>
+                            <p class="text-xs text-gray-500 font-medium">Customer: <span class="text-gray-700 font-bold">${cs.customerName}</span> (${cs.country})</p>
+                        </div>
+
+                        <button onclick="launchCase(${idx})" class="w-full bg-[#0176d3] hover:bg-[#005fb2] text-white py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-play"></i> ${isCompleted ? 'Retry Practice Case' : 'Start Practice Session'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        window.renderTrainerPreviewList = function() {
+            const list = document.getElementById('trainer-cases-preview-list');
+            if (!list) return;
+
+            if (window.loadedCases.length === 0) {
+                list.innerHTML = `
+                    <div class="p-6 text-center text-slate-400 bg-slate-50 rounded-lg border border-dashed border-slate-200">
+                        <i class="fa-solid fa-inbox text-2xl mb-2 text-slate-300"></i>
+                        <p class="text-xs font-bold">No cases uploaded in database yet.</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Use the CSV upload tool on the left to populate practice scenarios.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = window.loadedCases.map((cs) => `
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between gap-3 hover:bg-slate-100 transition-all">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-blue-700 font-mono">#${cs.caseNumber}</span>
+                            <span class="text-xs font-extrabold text-slate-800 truncate">${cs.topic}</span>
+                        </div>
+                        <p class="text-[10px] text-slate-500 truncate mt-0.5">
+                            <strong>Customer:</strong> ${cs.customerName} (${cs.country}) | <strong>SOP:</strong> ${(cs.sopGradingRubric || cs.rubrics || '').slice(0, 60)}...
+                        </p>
+                    </div>
+                    <span class="text-[10px] font-extrabold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-sans">
+                        ACTIVE
+                    </span>
+                </div>
+            `).join('');
+        };
+
+        async function initAuth() {
+            if (!auth) return;
+            try {
+                const initialToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (initialToken) {
+                    await signInWithCustomToken(auth, initialToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.warn("Auth initialization fallback active", err);
+            }
+        }
+
+        if (auth) {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    currentUserId = user.uid;
+                    
+                    const sessionDisplay = document.getElementById('user-session-id-display');
+                    if (sessionDisplay) sessionDisplay.innerText = `User ID: ${user.uid.slice(0, 8)}...`;
+                    
+                    const footerUidBadge = document.getElementById('footer-uid-badge');
+                    if (footerUidBadge) footerUidBadge.innerText = `ID: ${user.uid}`;
+
+                    subscribeToPublicCases();
+                    subscribeToUserProgress(user.uid);
+                }
+            });
+        }
+
+        function subscribeToPublicCases() {
+            if (!currentUser || !db) return;
+            const casesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'cases');
+            onSnapshot(casesColRef, (snapshot) => {
+                const publicCases = [];
+                snapshot.forEach(docSnap => {
+                    publicCases.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                if (publicCases.length > 0) {
+                    window.loadedCases = publicCases;
+                    localStorage.setItem('sf_sandbox_cases', JSON.stringify(publicCases));
+                    window.renderAgentCaseCards();
+                    window.renderTrainerPreviewList();
+                }
+            }, (error) => {
+                console.error("Error listening to public cases:", error);
+            });
+        }
+
+        function subscribeToUserProgress(uid) {
+            if (!uid || !db) return;
+            const userProgressRef = collection(db, 'artifacts', appId, 'users', uid, 'completedCases');
+            onSnapshot(userProgressRef, (snapshot) => {
+                userCompletedCases = {};
+                snapshot.forEach(docSnap => {
+                    userCompletedCases[docSnap.id] = docSnap.data();
+                });
+                window.renderAgentCaseCards();
+                window.renderTrainerPreviewList();
+            }, (error) => {
+                console.error("Error listening to user progress:", error);
+            });
+        }
+
+        window.onload = function() {
+            initAuth();
+            window.renderAgentCaseCards();
+            window.renderTrainerPreviewList();
+        };
+
+        window.notifyKeySaved = function() {
+            const keyVal = document.getElementById('gemini-key').value.trim();
+            if (keyVal) {
+                showToast("API Key Configured", "Gemini API Key saved for active training session.", "info");
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const pinInput = document.getElementById('trainer-pin-input');
+            if (pinInput) {
+                pinInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        window.verifyTrainerPasscode();
+                    }
+                });
+            }
+
+            const agentInput = document.getElementById('agent-input');
+            if (agentInput) {
+                agentInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        window.sendAgentMessage();
+                    }
+                });
+            }
+        });
+
+        window.launchCase = function(index) {
+            if (!window.loadedCases || !window.loadedCases[index]) return;
+
+            window.currentCaseIndex = index;
+            window.currentCase = window.loadedCases[index];
+
+            window.chatMessages = [];
+            window.sessionActive = false;
+            window.isEscalated = false;
+            window.escalationQueue = "";
+            window.verifiedItems = { name: false, phone: false, birthdate: false, email: false, mfaChecked: false };
+
+            const cs = window.currentCase;
+
+            document.getElementById('target-case-number-header').innerText = cs.caseNumber;
+            document.getElementById('target-header-name').innerText = cs.customerName;
+            document.getElementById('target-header-age').innerText = calculateAge(cs.birthdate);
+            document.getElementById('target-header-email').innerText = cs.email;
+            document.getElementById('target-header-phone').innerText = cs.mobilePhone;
+            document.getElementById('target-header-mid').innerText = cs.merchantId;
+            document.getElementById('target-header-segment').innerText = cs.segment;
+
+            // Badges in Header
+            const healthBadgeEl = document.getElementById('target-header-health-badge');
+            if (healthBadgeEl) healthBadgeEl.innerText = cs.accountHealth || 'Active Unlimited';
+            
+            const roleBadgeEl = document.getElementById('target-header-role-badge');
+            if (roleBadgeEl) roleBadgeEl.innerText = cs.accountRole || 'Owner';
+
+            // Key Info Cards
+            document.getElementById('target-badge-channel').innerText = cs.channelStatus || 'Logged In';
+            document.getElementById('target-badge-channel').className = (cs.channelStatus === 'Logged Out') ? 'bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded' : 'bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded';
+
+            document.getElementById('target-badge-mfa').innerText = cs.mfaStatus || 'Passed';
+            document.getElementById('target-badge-mfa').className = (cs.mfaStatus === 'Failed' || cs.mfaStatus === 'Low') ? 'bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded' : 'bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded';
+
+            const healthKeyEl = document.getElementById('target-badge-health');
+            if (healthKeyEl) healthKeyEl.innerText = cs.accountHealth || 'Active';
+
+            document.getElementById('target-badge-segment').innerText = cs.segment || 'Small';
+            document.getElementById('target-badge-access').innerText = cs.accessTier || 'Full';
+
+            // Contact Details Card
+            document.getElementById('target-detail-accname').innerText = cs.accountName || cs.customerName;
+            document.getElementById('target-detail-birthdate').innerText = formatDateDisplay(cs.birthdate);
+            document.getElementById('target-detail-phone').innerText = cs.mobilePhone;
+            document.getElementById('target-detail-email').innerText = cs.email;
+            document.getElementById('target-detail-country').innerText = cs.country;
+
+            document.getElementById('target-detail-country-meta').value = cs.country;
+            document.getElementById('target-detail-mid-meta').value = cs.merchantId;
+
+            // Classification defaults if present in CSV
+            if (cs.expectedProduct) {
+                const el = document.getElementById('class-product');
+                if (el) el.value = cs.expectedProduct;
+            }
+            if (cs.expectedSubProduct) {
+                const el = document.getElementById('class-subproduct');
+                if (el) el.value = cs.expectedSubProduct;
+            }
+            if (cs.expectedService) {
+                const el = document.getElementById('class-service');
+                if (el) el.value = cs.expectedService;
+            }
+            if (cs.expectedCause) {
+                const el = document.getElementById('class-cause');
+                if (el) el.value = cs.expectedCause;
+            }
+            if (cs.escalationPath) {
+                const el = document.getElementById('esc-target');
+                if (el) el.value = cs.escalationPath;
+            }
+
+            document.getElementById('empty-state').classList.remove('hidden');
+            document.getElementById('chat-scroller').classList.add('hidden');
+            document.getElementById('live-chat-timeline').innerHTML = '';
+
+            const agentInput = document.getElementById('agent-input');
+            agentInput.value = '';
+            agentInput.disabled = true;
+            agentInput.placeholder = "Click 'Start Practice Session Now' to begin.";
+
+            document.getElementById('agent-send-btn').disabled = true;
+            document.getElementById('end-session-btn').classList.add('hidden');
+            document.getElementById('esc-banner').classList.add('hidden');
+
+            document.getElementById('agent-portal-view').classList.add('hidden');
+            document.getElementById('sf-workspace').classList.remove('hidden');
+        };
+
+        window.exitSandboxToPortal = function() {
+            document.getElementById('sf-workspace').classList.add('hidden');
+            document.getElementById('agent-portal-view').classList.remove('hidden');
+            window.renderAgentCaseCards();
+        };
+
+        function calculateAge(birthdateStr) {
+            if (!birthdateStr) return '30';
+            const birthDate = new Date(birthdateStr);
+            if (isNaN(birthDate.getTime())) return '30';
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age > 0 ? age : '30';
+        }
+
+        function formatDateDisplay(dateStr) {
+            if (!dateStr) return '01.01.1990';
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return dateStr;
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
+
+        window.initializeSimulationSession = function() {
+            if (!window.currentCase) return;
+
+            window.sessionActive = true;
+            window.conversationTurnIndex = 0;
+            window.chatMessages = [];
+
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('chat-scroller').classList.remove('hidden');
+
+            const timeline = document.getElementById('live-chat-timeline');
+            const nowStr = new Date().toLocaleString();
+            timeline.innerHTML = `<div class="text-center text-gray-400 text-[10px] my-2 font-mono">Chat session accepted by Agent • ${nowStr}</div>`;
+
+            const agentInput = document.getElementById('agent-input');
+            agentInput.disabled = false;
+            agentInput.placeholder = "Type your response as support agent...";
+            agentInput.focus();
+
+            document.getElementById('agent-send-btn').disabled = false;
+            document.getElementById('end-session-btn').classList.remove('hidden');
+
+            const cs = window.currentCase;
+            const openingText = cs.openingLine || (cs.topic ? `Hello, I need assistance with ${cs.topic}.` : "Hello, I need assistance with my account.");
+            setTimeout(() => {
+                appendChatMessage("Guest (Customer)", openingText, false);
+            }, 300);
+        };
+
+        window.sendAgentMessage = function() {
+            const input = document.getElementById('agent-input');
+            const text = input.value.trim();
+            if (!text || !window.sessionActive) return;
+
+            appendChatMessage("Support Agent", text, true);
+            input.value = '';
+
+            scanHeuristicsForVerification(text);
+            triggerAICustomerResponse(text);
+        };
+
+        function scanHeuristicsForVerification(msgText) {
+            const lc = msgText.toLowerCase();
+            const cName = window.currentCase.customerName.toLowerCase().split(' ')[0];
+            
+            if (lc.includes(cName) || lc.includes("confirm your name") || lc.includes("verification process") || lc.includes("verify your identity") || lc.includes("full name")) {
+                window.verifiedItems.name = true;
+            }
+            const cPhone = window.currentCase.mobilePhone.replace('+', '').slice(-4);
+            if (lc.includes(cPhone) || lc.includes("mobile phone") || lc.includes("phone number") || lc.includes("phone")) {
+                window.verifiedItems.phone = true;
+            }
+            if (lc.includes("birthdate") || lc.includes("born") || lc.includes("date of birth") || lc.includes("birthday") || lc.includes("dob")) {
+                window.verifiedItems.birthdate = true;
+            }
+            const cEmailId = window.currentCase.email.split('@')[0];
+            if (lc.includes(cEmailId) || lc.includes("email address") || lc.includes("confirm email") || lc.includes("email")) {
+                window.verifiedItems.email = true;
+            }
+            if (lc.includes("mfa") || lc.includes("authentication") || lc.includes("passed") || lc.includes("failed") || lc.includes("multi-factor")) {
+                window.verifiedItems.mfaChecked = true;
+            }
+        }
+
+        function appendChatMessage(sender, text, isAgent) {
+            const timeline = document.getElementById('live-chat-timeline');
+            if (!timeline) return;
+
+            window.chatMessages.push({ sender, text, isAgent });
+
+            const bubbleRow = document.createElement('div');
+            bubbleRow.className = `flex flex-col w-full ${isAgent ? 'items-end' : 'items-start'}`;
+
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            bubbleRow.innerHTML = `
+                <div class="p-3 rounded-lg text-xs max-w-[80%] leading-relaxed ${isAgent ? 'bg-[#16325c] text-white rounded-br-none shadow-sm' : 'bg-slate-100 text-slate-800 border border-slate-200 rounded-bl-none shadow-sm'}">
+                    <p>${text.replace(/\n/g, '<br>')}</p>
+                    <span class="block text-[9px] mt-1 ${isAgent ? 'text-blue-200 text-right' : 'text-slate-400'} font-mono">${sender} • ${timestamp}</span>
+                </div>
+            `;
+
+            timeline.appendChild(bubbleRow);
+            const scroller = document.getElementById('chat-scroller');
+            if (scroller) scroller.scrollTop = scroller.scrollHeight;
+        }
+
+        function appendSystemLog(text) {
+            const timeline = document.getElementById('live-chat-timeline');
+            if (!timeline) return;
+
+            const logDiv = document.createElement('div');
+            logDiv.className = 'text-center text-amber-700 bg-amber-50 border border-amber-200 text-[10px] font-bold p-2 rounded my-2';
+            logDiv.innerHTML = `<i class="fa-solid fa-circle-info mr-1"></i> ${text}`;
+
+            timeline.appendChild(logDiv);
+            const scroller = document.getElementById('chat-scroller');
+            if (scroller) scroller.scrollTop = scroller.scrollHeight;
+        }
+
+        async function triggerAICustomerResponse(agentMsg) {
+            const customKey = document.getElementById('gemini-key') ? document.getElementById('gemini-key').value.trim() : "";
+            const success = await callGeminiAI(customKey, agentMsg);
+            if (!success) {
+                runLocalHeuristicCustomerReply(agentMsg);
+            }
+        }
+
+        async function callGeminiAI(userKey, agentMsg) {
+            const apiKey = userKey || "";
+            if (!apiKey) return false;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            if (!window.currentCase) return false;
+
+            const cs = window.currentCase;
+
+            const systemInstructionText = `You are playing the role of a real customer in a simulated Salesforce Service Cloud support chat.
+
+CUSTOM CUSTOMER PERSONA & INSTRUCTIONS (FROM CSV):
+${cs.aiSystemPrompt || "Act as a customer needing support for your issue."}
+
+CUSTOMER PROFILE RECORD DATA:
+- Full Name: ${cs.customerName}
+- Company/Account Name: ${cs.accountName}
+- Mobile Phone: ${cs.mobilePhone}
+- Birthdate: ${cs.birthdate}
+- Email: ${cs.email}
+- Country Origin: ${cs.country}
+- Merchant ID: ${cs.merchantId}
+- Current MFA Status: ${cs.mfaStatus}
+- Access Tier: ${cs.accessTier}
+- Segment: ${cs.segment}
+
+ACTIVE SCENARIO CONTEXT:
+- Support Topic: ${cs.topic}
+- Opening Line Issue: "${cs.openingLine}"
+- SOP Grading Rubric Criteria: "${cs.sopGradingRubric || cs.rubrics || ''}"
+
+ROLEPLAY INSTRUCTIONS:
+1. Embody the persona and instructions described in the CSV AI System Prompt above. Act 100% as customer ${cs.customerName}. Never admit you are an AI.
+2. Respond directly to the support agent's message. Provide requested identity details (Name, DOB, Phone, Email, Merchant ID) when asked.
+3. Keep responses concise and realistic (1 to 3 sentences max).
+4. Match the language used by the support agent.
+5. Do NOT repeat previous statements. Progress the issue toward resolution or escalation according to your persona.`;
+
+            const turns = [];
+            turns.push({ 
+                role: "user", 
+                parts: [{ text: `[System: Customer ${cs.customerName} initiated chat regarding topic "${cs.topic}". Opening issue: "${cs.openingLine}"]` }] 
+            });
+            turns.push({ 
+                role: "model", 
+                parts: [{ text: cs.openingLine || "Hello, I need assistance." }] 
+            });
+
+            for (const msg of window.chatMessages) {
+                if (!msg.isAgent && msg.text === cs.openingLine && turns.length === 2) {
+                    continue;
+                }
+
+                const role = msg.isAgent ? "user" : "model";
+                if (turns.length > 0 && turns[turns.length - 1].role === role) {
+                    turns[turns.length - 1].parts[0].text += "\n" + msg.text;
+                } else {
+                    turns.push({ role: role, parts: [{ text: msg.text }] });
+                }
+            }
+
+            if (turns.length === 0 || turns[turns.length - 1].role !== "user") {
+                turns.push({ role: "user", parts: [{ text: agentMsg }] });
+            }
+
+            const payload = {
+                systemInstruction: { parts: [{ text: systemInstructionText }] },
+                contents: turns
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) return false;
+
+                const data = await response.json();
+                const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (replyText && replyText.trim()) {
+                    setTimeout(() => {
+                        appendChatMessage("Guest (Customer)", replyText.trim(), false);
+                    }, 600);
+                    return true;
+                }
+            } catch (err) {
+                console.warn("Gemini API call skipped or unconfigured, utilizing dynamic heuristic fallback.", err);
+                return false;
+            }
+            return false;
+        }
+
+        function runLocalHeuristicCustomerReply(agentMsg) {
+            const lc = agentMsg.toLowerCase();
+            window.conversationTurnIndex++;
+            
+            const cs = window.currentCase;
+            if (!cs) return;
+
+            let reply = "";
+
+            const mentionsName = lc.includes("name") || lc.includes("nombre") || lc.includes("identity") || lc.includes("who am i") || lc.includes("identifi");
+            const mentionsPhone = lc.includes("phone") || lc.includes("mobile") || lc.includes("teléfono") || lc.includes("celular") || lc.includes("contacto");
+            const mentionsDob = lc.includes("birth") || lc.includes("dob") || lc.includes("nacimiento") || lc.includes("cumplea") || lc.includes("born");
+            const mentionsEmail = lc.includes("email") || lc.includes("mail") || lc.includes("correo");
+            const mentionsMid = lc.includes("merchant") || lc.includes("mid") || lc.includes("id") || lc.includes("código") || lc.includes("comercio");
+            const isGreeting = lc.includes("hello") || lc.includes("hi") || lc.includes("hola") || lc.includes("good day") || lc.includes("buenos días") || lc.includes("buenas");
+            const isThanks = lc.includes("thank") || lc.includes("gracias") || lc.includes("great") || lc.includes("perfect") || lc.includes("excelente");
+            const isEscalating = lc.includes("escalat") || lc.includes("transfer") || lc.includes("backoffice") || lc.includes("supervisor") || lc.includes("tier 2") || lc.includes("departamento");
+
+            if (mentionsName) {
+                reply = `My full name is ${cs.customerName}, and the account name is ${cs.accountName}.`;
+            } else if (mentionsPhone) {
+                reply = `My registered mobile phone number is ${cs.mobilePhone}.`;
+            } else if (mentionsDob) {
+                reply = `My date of birth is ${formatDateDisplay(cs.birthdate)}.`;
+            } else if (mentionsEmail) {
+                reply = `My email address on file is ${cs.email}.`;
+            } else if (mentionsMid) {
+                reply = `My Merchant ID is ${cs.merchantId}.`;
+            } else if (isGreeting && window.conversationTurnIndex <= 2) {
+                reply = `Hello! I'm ${cs.customerName}. Thank you for taking my chat regarding ${cs.topic}. My issue is: ${cs.openingLine}`;
+            } else if (isThanks) {
+                reply = `Thank you! Will you be able to update my record or guide me on the next steps?`;
+            } else if (isEscalating) {
+                reply = `Understood. Thank you for routing my request to the appropriate backoffice queue. I'll await their update.`;
+            } else {
+                reply = `Regarding my issue with ${cs.topic}: ${cs.openingLine} Could you check if my account permissions or MFA status are causing this?`;
+            }
+
+            setTimeout(() => {
+                appendChatMessage("Guest (Customer)", reply, false);
+            }, 700);
+        }
+
+        window.executeEscalation = function() {
+            if (!window.sessionActive) {
+                showToast("Action Locked", "Start a practice session first to unlock escalations.", "error");
+                return;
+            }
+
+            const queueSelection = document.getElementById('esc-target').value;
+            window.isEscalated = true;
+            window.escalationQueue = queueSelection;
+
+            const banner = document.getElementById('esc-banner');
+            banner.innerText = `🚨 ACTION RECORDED: ESCALATED TO [${queueSelection.toUpperCase()}]`;
+            banner.classList.remove('hidden');
+
+            appendSystemLog(`Case routed manually to [${queueSelection}] queue. Active flags updated.`);
+            showToast("Case Escalated", `Routed successfully to ${queueSelection}`, "success");
+        };
+
+        window.triggerCaseGrading = async function() {
+            if (!window.sessionActive) return;
+
+            const checklistContainer = document.getElementById('criteria-checklist-container');
+            checklistContainer.innerHTML = '<div class="text-center text-xs font-bold text-gray-500 py-4"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Analyzing chat transcript & classifications against SOP Grading Rubric...</div>';
+
+            document.getElementById('evaluation-rating').innerText = "... / 100";
+            document.getElementById('evaluation-percent').innerText = "...%";
+            document.getElementById('evaluation-grade').innerText = "Evaluating...";
+            document.getElementById('evaluation-feedback-text').innerText = "Generating feedback based on SOP Rubric...";
+
+            document.getElementById('grading-modal').classList.remove('hidden');
+
+            const customKey = document.getElementById('gemini-key') ? document.getElementById('gemini-key').value.trim() : "";
+            const apiKey = customKey || "";
+
+            if (!apiKey) {
+                runFallbackGrading(window.currentCase.sopGradingRubric || window.currentCase.rubrics || "Verify Customer Credentials");
+                return;
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            const transcript = window.chatMessages.map(m => `${m.sender}: ${m.text}`).join('\n');
+            const rubricText = window.currentCase.sopGradingRubric || window.currentCase.rubrics || "Verify Customer Name, Phone, Birthdate, Email, and MFA status.";
+
+            const selectedProduct = document.getElementById('class-product')?.value || 'Not selected';
+            const selectedSubProduct = document.getElementById('class-subproduct')?.value || 'Not selected';
+            const selectedService = document.getElementById('class-service')?.value || 'Not selected';
+            const selectedCause = document.getElementById('class-cause')?.value || 'Not selected';
+            const selectedEscalation = window.isEscalated ? window.escalationQueue : 'None';
+
+            const evaluationPrompt = `You are a Senior QA Evaluator for a Salesforce Service Cloud Customer Support Team.
+Evaluate the following chat transcript and agent classification selections against the provided SOP Grading Rubric.
+
+CASE TOPIC: ${window.currentCase.topic}
+CUSTOMER MFA STATUS: ${window.currentCase.mfaStatus}
+
+AGENT SELECTIONS IN SYSTEM:
+- Selected Product: ${selectedProduct} (Expected: ${window.currentCase.expectedProduct || 'Any relevant'})
+- Selected Sub-Product: ${selectedSubProduct} (Expected: ${window.currentCase.expectedSubProduct || 'Any relevant'})
+- Selected Service: ${selectedService} (Expected: ${window.currentCase.expectedService || 'Any relevant'})
+- Selected Cause/Reason: ${selectedCause} (Expected: ${window.currentCase.expectedCause || 'Any relevant'})
+- Escalation Queue Selected: ${selectedEscalation} (Expected Escalation Path: ${window.currentCase.escalationPath || 'As required by SOP'})
+
+SOP GRADING RUBRIC TO ENFORCE:
+${rubricText}
+
+CHAT TRANSCRIPT:
+${transcript}
+
+Return a JSON object with this exact structure:
+{
+  "score": number (0 to 100),
+  "grade": string ("Excellent", "Satisfactory", or "Needs Improvement"),
+  "feedback": string (2-3 sentences of clear qualitative feedback on what the agent did well and how to improve according to the SOP Grading Rubric),
+  "checklist": [
+    { "item": string (SOP Criteria Description), "passed": boolean, "points": string (e.g. "+20" or "0") }
+  ]
+}`;
+
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: evaluationPrompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            score: { type: "INTEGER" },
+                            grade: { type: "STRING" },
+                            feedback: { type: "STRING" },
+                            checklist: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        item: { type: "STRING" },
+                                        passed: { type: "BOOLEAN" },
+                                        points: { type: "STRING" }
+                                    },
+                                    required: ["item", "passed", "points"]
+                                }
+                            }
+                        },
+                        required: ["score", "grade", "feedback", "checklist"]
+                    }
+                }
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const evalText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (evalText) {
+                        const evalResult = JSON.parse(evalText);
+                        renderEvaluationReport(evalResult.score, evalResult.grade, evalResult.feedback, evalResult.checklist);
+                        saveCompletedProgress(evalResult.score, evalResult.grade);
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn("AI grading unavailable, falling back to heuristic grading", e);
+            }
+
+            // Fallback grading if AI call is unreachable
+            runFallbackGrading(rubricText);
+        };
+
+        function renderEvaluationReport(score, grade, feedback, checklist) {
+            document.getElementById('evaluation-rating').innerText = `${score} / 100`;
+            document.getElementById('evaluation-percent').innerText = `${score}%`;
+            document.getElementById('evaluation-grade').innerText = grade;
+            document.getElementById('evaluation-feedback-text').innerText = feedback;
+
+            const container = document.getElementById('criteria-checklist-container');
+            if (checklist && checklist.length > 0) {
+                container.innerHTML = checklist.map(c => `
+                    <div class="flex items-center justify-between p-2.5 rounded ${c.passed ? 'bg-emerald-50 text-emerald-800 border border-emerald-100' : 'bg-rose-50 text-rose-800 border border-rose-100'} text-xs font-semibold">
+                        <span>${c.item}</span>
+                        <span>${c.passed ? '✓ PASSED (' + c.points + ')' : '✗ FAILED (0)'}</span>
+                    </div>
+                `).join('');
+            } else {
+                container.innerHTML = `<div class="text-xs text-gray-500">Grading criteria evaluated against active SOP rubric.</div>`;
+            }
+        }
+
+        function runFallbackGrading(rubricText) {
+            let score = 0;
+            const verifyNamePassed = window.verifiedItems.name;
+            if (verifyNamePassed) score += 25;
+
+            const verifyPhonePassed = window.verifiedItems.phone;
+            if (verifyPhonePassed) score += 25;
+
+            const verifyBirthdatePassed = window.verifiedItems.birthdate;
+            if (verifyBirthdatePassed) score += 25;
+
+            const verifyEmailPassed = window.verifiedItems.email;
+            if (verifyEmailPassed) score += 25;
+
+            const checklist = [
+                { item: "Verify Customer Full Name", passed: verifyNamePassed, points: "+25" },
+                { item: "Verify Mobile Phone Number", passed: verifyPhonePassed, points: "+25" },
+                { item: "Verify Customer Birthdate", passed: verifyBirthdatePassed, points: "+25" },
+                { item: "Verify Registered Email Address", passed: verifyEmailPassed, points: "+25" }
+            ];
+
+            let grade = score >= 75 ? "Satisfactory" : "Needs Improvement";
+            let feedback = `Evaluated against SOP Rubric: "${rubricText.slice(0, 80)}...". Please make sure all required SOP verification steps are performed before resolving the case.`;
+
+            renderEvaluationReport(score, grade, feedback, checklist);
+            saveCompletedProgress(score, grade);
+        }
+
+        function saveCompletedProgress(score, grade) {
+            if (currentUser && currentUserId && window.currentCase) {
+                const caseNumStr = String(window.currentCase.caseNumber);
+                const docRef = doc(db, 'artifacts', appId, 'users', currentUserId, 'completedCases', caseNumStr);
+                setDoc(docRef, {
+                    caseNumber: caseNumStr,
+                    topic: window.currentCase.topic || 'Case Practice',
+                    score: score,
+                    grade: grade,
+                    completed: true,
+                    completedAt: new Date().toISOString()
+                }).catch(err => console.error("Error saving user completed case:", err));
+            }
+        }
+
+        window.closeGradingModal = function() {
+            document.getElementById('grading-modal').classList.add('hidden');
+            window.exitSandboxToPortal();
+        };
+
+        window.restartCaseSession = function() {
+            document.getElementById('grading-modal').classList.add('hidden');
+            window.initializeSimulationSession();
+        };
+
+        window.switchCenterTab = function(tab) {
+            const tabConv = document.getElementById('tab-conv');
+            const tabDetails = document.getElementById('tab-details');
+            const paneConv = document.getElementById('pane-conv');
+            const paneDetails = document.getElementById('pane-details');
+
+            if (tab === 'conv') {
+                tabConv.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-[#0176d3] text-gray-800 bg-white";
+                tabDetails.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800";
+                paneConv.classList.remove('hidden');
+                paneDetails.classList.add('hidden');
+            } else {
+                tabDetails.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-[#0176d3] text-gray-800 bg-white";
+                tabConv.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800";
+                paneDetails.classList.remove('hidden');
+                paneConv.classList.add('hidden');
+            }
+        };
+
+        window.downloadCSVTemplate = function() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "CaseNumber,Topic,CustomerName,AccountName,MobilePhone,Birthdate,Email,ChannelStatus,MfaStatus,AccountHealth,Segment,AccessTier,AccountRole,Country,MerchantId,OpeningLine,AI_System_Prompt,SOP_Grading_Rubric,EscalationPath,ExpectedProduct,ExpectedSubProduct,ExpectedService,ExpectedCause\n";
+            csvContent += "9941012,Sovereign Hub Compliance Validation,Sarah Connor,Cyberdyne Global Tech,+15550192823,1965-11-10,sconnor@cyberdyne.com,Logged In,Passed,Active Unlimited,Priority,Full,Owner,Germany,MCX1892B,\"Hello, I need to check European compliance codes and verify account details for Cyberdyne.\",\"Act as an impatient CTO requesting urgent European compliance verification. Demand quick answers but give Name and DOB when asked.\",\"1. Verify Customer Name and DOB.\\n2. Confirm Account Segment.\\n3. Check European Region Compliance.\",Tier 2 Backoffice Support,VeriFactu Compliance,Account Credentials,User Verification Service,VeriFactu System Link\n";
+            csvContent += "4810291,European Hub Billing Issue,John Doe,Doe Enterprises Limited,+447123456789,1990-01-01,john.doe@doe-enterprises.co.uk,Logged Out,Failed,Active,Small,Team Member,User,Spain,MCX23910,\"Hi there. I got locked out of my billing module. Can you check my profile access details?\",\"Act as a confused business owner locked out of billing due to failed MFA. Ask agent to fix it or transfer to backoffice.\",\"1. Verify Customer Name and Phone.\\n2. Check MFA Status (Failed).\\n3. Escalate case to Backoffice Core queue as per security procedure.\",Bank Backoffice Core Hub,Billing & Payments,European Billing,Invoice Direct API,MFA Authentication Error\n";
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Sandbox template 2026 - Scenario DB.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("CSV Downloaded", "Standard template downloaded with complete header & escalation columns.", "info");
+        };
+
+        window.handleCSVUpload = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processUploadedCSV(e.target.result);
+            };
+            reader.readAsText(file);
+        };
+
+        // RFC-4180 Compliant Quote-Aware CSV Parser State Machine
+        function parseFullCSV(text) {
+            const rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentCell += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    currentRow.push(currentCell.trim());
+                    currentCell = '';
+                } else if ((char === '\r' || char === '\n') && !inQuotes) {
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                    currentRow.push(currentCell.trim());
+                    if (currentRow.some(c => c !== '')) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentCell = '';
+                } else {
+                    currentCell += char;
+                }
+            }
+            if (currentCell || currentRow.length > 0) {
+                currentRow.push(currentCell.trim());
+                if (currentRow.some(c => c !== '')) {
+                    rows.push(currentRow);
+                }
+            }
+            return rows;
+        }
+
+        async function processUploadedCSV(text) {
+            const rows = parseFullCSV(text);
+            if (rows.length < 2) {
+                showToast("Error", "CSV file contains no valid data rows.", "error");
+                return;
+            }
+
+            const headerCols = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+            
+            const getIdx = (candidates) => {
+                for (let candidate of candidates) {
+                    const cleanCandidate = candidate.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    const idx = headerCols.findIndex(h => h.includes(cleanCandidate));
+                    if (idx !== -1) return idx;
+                }
+                return -1;
+            };
+
+            const idxNum = getIdx(['casenumber', 'case number', 'case', 'id']);
+            const idxTopic = getIdx(['topic', 'subject', 'title', 'scenario']);
+            const idxCustName = getIdx(['customername', 'customer name', 'customer', 'name']);
+            const idxAccName = getIdx(['accountname', 'account name', 'account', 'company']);
+            const idxPhone = getIdx(['mobilephone', 'mobile phone', 'phone', 'mobile']);
+            const idxDob = getIdx(['birthdate', 'birth date', 'dob', 'birth']);
+            const idxEmail = getIdx(['email']);
+            const idxChannel = getIdx(['channelstatus', 'channel status', 'channel']);
+            const idxMfa = getIdx(['mfastatus', 'mfa status', 'mfa']);
+            const idxHealth = getIdx(['accounthealth', 'account health', 'health', 'acc health']);
+            const idxSeg = getIdx(['segment']);
+            const idxAccess = getIdx(['accesstier', 'access tier', 'access']);
+            const idxRole = getIdx(['accountrole', 'account role', 'role', 'badge']);
+            const idxCountry = getIdx(['country', 'region', 'validatedregion']);
+            const idxMid = getIdx(['merchantid', 'merchant id', 'merchant', 'mid']);
+            const idxOpening = getIdx(['openingline', 'opening line', 'opening', 'firstline', 'first line', 'initialmessage', 'initial message', 'customermessage', 'openingtext', 'issue']);
+            const idxPrompt = getIdx(['aisystemprompt', 'ai system prompt', 'systemprompt', 'system prompt', 'prompt', 'persona', 'instructions']);
+            const idxRubric = getIdx(['sopgradingrubric', 'sop grading rubric', 'gradingrubric', 'grading rubric', 'rubrics', 'rubric', 'sop', 'criteria']);
+            const idxEsc = getIdx(['escalationpath', 'escalation path', 'escalationqueue', 'targetqueue']);
+            const idxProd = getIdx(['expectedproduct', 'product']);
+            const idxSubProd = getIdx(['expectedsubproduct', 'subproduct', 'sub product']);
+            const idxServ = getIdx(['expectedservice', 'service']);
+            const idxCause = getIdx(['expectedcause', 'cause', 'reason']);
+
+            let newCases = [];
+            for (let i = 1; i < rows.length; i++) {
+                const cols = rows[i];
+                if (cols.length < 2) continue;
+
+                const caseNum = (idxNum !== -1 && cols[idxNum]) ? cols[idxNum] : Math.floor(Math.random() * 8000000 + 1000000).toString();
+                const topic = (idxTopic !== -1 && cols[idxTopic]) ? cols[idxTopic] : "Standard Procedure Case";
+                const cName = (idxCustName !== -1 && cols[idxCustName]) ? cols[idxCustName] : "Jane Doe";
+                const aName = (idxAccName !== -1 && cols[idxAccName]) ? cols[idxAccName] : "Acme Corp";
+                const phone = (idxPhone !== -1 && cols[idxPhone]) ? cols[idxPhone] : "+34600112233";
+                const dob = (idxDob !== -1 && cols[idxDob]) ? cols[idxDob] : "1988-05-15";
+                const email = (idxEmail !== -1 && cols[idxEmail]) ? cols[idxEmail] : "customer@example.com";
+                const channel = (idxChannel !== -1 && cols[idxChannel]) ? cols[idxChannel] : "Logged In";
+                const mfa = (idxMfa !== -1 && cols[idxMfa]) ? cols[idxMfa] : "Passed";
+                const health = (idxHealth !== -1 && cols[idxHealth]) ? cols[idxHealth] : "Active Unlimited";
+                const segment = (idxSeg !== -1 && cols[idxSeg]) ? cols[idxSeg] : "Small";
+                const access = (idxAccess !== -1 && cols[idxAccess]) ? cols[idxAccess] : "Full";
+                const role = (idxRole !== -1 && cols[idxRole]) ? cols[idxRole] : "Owner";
+                const country = (idxCountry !== -1 && cols[idxCountry]) ? cols[idxCountry] : "Spain";
+                const mid = (idxMid !== -1 && cols[idxMid]) ? cols[idxMid] : "MCX99881";
+                
+                let opening = (idxOpening !== -1 && cols[idxOpening]) ? cols[idxOpening] : "";
+                if (!opening) {
+                    if (topic && topic !== "Standard Procedure Case") {
+                        opening = `Hello, I need assistance with ${topic}.`;
+                    } else {
+                        opening = "Hello, I need assistance with my account.";
+                    }
+                }
+                
+                const prompt = (idxPrompt !== -1 && cols[idxPrompt]) ? cols[idxPrompt] : "";
+                const rubrics = (idxRubric !== -1 && cols[idxRubric]) ? cols[idxRubric] : "1. Verify Customer Name.\n2. Verify Phone & Birthdate.\n3. Check MFA status.";
+                const escPath = (idxEsc !== -1 && cols[idxEsc]) ? cols[idxEsc] : "Tier 2 Backoffice Support";
+                const exProd = (idxProd !== -1 && cols[idxProd]) ? cols[idxProd] : "";
+                const exSubProd = (idxSubProd !== -1 && cols[idxSubProd]) ? cols[idxSubProd] : "";
+                const exServ = (idxServ !== -1 && cols[idxServ]) ? cols[idxServ] : "";
+                const exCause = (idxCause !== -1 && cols[idxCause]) ? cols[idxCause] : "";
+
+                newCases.push({
+                    caseNumber: caseNum,
+                    topic: topic,
+                    customerName: cName,
+                    accountName: aName,
+                    mobilePhone: phone,
+                    birthdate: dob,
+                    email: email,
+                    channelStatus: channel,
+                    mfaStatus: mfa,
+                    accountHealth: health,
+                    segment: segment,
+                    accessTier: access,
+                    accountRole: role,
+                    country: country,
+                    merchantId: mid,
+                    openingLine: opening,
+                    aiSystemPrompt: prompt,
+                    sopGradingRubric: rubrics,
+                    rubrics: rubrics,
+                    escalationPath: escPath,
+                    expectedProduct: exProd,
+                    expectedSubProduct: exSubProd,
+                    expectedService: exServ,
+                    expectedCause: exCause
+                });
+            }
+
+            if (newCases.length > 0) {
+                window.loadedCases = newCases;
+                window.currentCase = window.loadedCases[0];
+                
+                // Save locally to localStorage so cases persist across refreshes
+                localStorage.setItem('sf_sandbox_cases', JSON.stringify(newCases));
+
+                if (currentUser && db) {
+                    try {
+                        const casesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'cases');
+                        const existingDocs = await getDocs(casesColRef);
+                        const deletePromises = [];
+                        existingDocs.forEach(docSnap => {
+                            deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cases', docSnap.id)));
+                        });
+                        await Promise.all(deletePromises);
+
+                        for (const cs of newCases) {
+                            const caseDocId = `case_${cs.caseNumber}`;
+                            const caseRef = doc(db, 'artifacts', appId, 'public', 'data', 'cases', caseDocId);
+                            await setDoc(caseRef, cs);
+                        }
+                    } catch (err) {
+                        console.error("Error updating Firestore cases:", err);
+                    }
+                }
+
+                showToast("Database Updated & Saved", `Uploaded ${newCases.length} scenario(s). Cases are saved permanently until next upload!`, "success");
+                window.renderAgentCaseCards();
+                window.renderTrainerPreviewList();
+            } else {
+                showToast("Error", "No valid case records detected in CSV.", "error");
+            }
+        }
+
+        function showToast(title, message, type = "info") {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-lg shadow-lg text-white text-xs font-semibold max-w-sm pointer-events-auto transition-all duration-300 transform translate-x-5 flex flex-col gap-0.5`;
+            
+            if (type === "success") {
+                toast.classList.add('bg-[#1b8042]');
+            } else if (type === "error") {
+                toast.classList.add('bg-[#c23934]');
+            } else {
+                toast.classList.add('bg-[#16325c]');
+            }
+
+            toast.innerHTML = `
+                <strong class="block text-[10px] uppercase tracking-wider font-extrabold">${title}</strong>
+                <span class="text-slate-100 font-medium">${message}</span>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-x-5'); }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
