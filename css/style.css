@@ -1,1 +1,30 @@
+.training-card{
+    margin-top:20px;
+    padding:18px;
+    border:1px solid #d9d9d9;
+    border-radius:10px;
+    background:#fafafa;
+}
 
+.training-card details{
+    margin-bottom:12px;
+}
+
+.training-card summary{
+    cursor:pointer;
+    font-size:15px;
+    padding:8px 0;
+}
+
+.training-card p{
+    margin:10px 0;
+    line-height:1.6;
+}
+
+.training-card ul{
+    margin-left:20px;
+}
+
+.training-card li{
+    margin:6px 0;
+}
