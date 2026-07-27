@@ -216,11 +216,11 @@
             </div>
             <div>
                 <h1 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                    <span id="target-header-name">Sarah Connor</span>, <span id="target-header-age">60</span>
+                    <span id="target-header-name"><span id="case-customer"></span></span>, <span id="target-header-age">60</span>
                     <span class="text-xs text-gray-400 font-medium font-mono">• <span id="target-header-email">sconnor@cyberdyne.com</span> • <span id="target-header-phone">+15550192823</span></span>
                 </h1>
                 <div class="flex items-center gap-2 mt-1">
-                    <span id="target-header-mid" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono">MCX1892B</span>
+                    <span id="target-header-mid" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono"><span id="case-mid"></span></span>
                     <span id="target-header-segment" class="text-xs font-extrabold text-[#7f4fce] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">Priority</span>
                     <span id="target-header-health-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Active Unlimited</span>
                     <span id="target-header-role-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Owner</span>
@@ -438,7 +438,7 @@ New Joiner
 
 <span class="bg-orange-100 text-orange-700 text-[10px] px-2 py-1 rounded-full font-semibold">
 
-Logged Out Chat
+<span id="case-channel"></span>
 
 </span>
 
@@ -447,12 +447,12 @@ Logged Out Chat
 
             <tr>
                 <td class="py-1 text-gray-500">Merchant</td>
-                <td id="case-customer">Sarah Connor</td>
+                <td id="case-customer"><span id="case-customer"></span></td>
             </tr>
 
             <tr>
                 <td class="py-1 text-gray-500">Merchant ID</td>
-                <td id="case-mid">MCX1892B</td>
+                <td id="case-mid"><span id="case-mid"></span></td>
             </tr>
 
         </table>
@@ -1638,7 +1638,7 @@ Return a JSON object with this exact structure:{"score": number (0 to 100),"grad
     window.downloadCSVTemplate = function() {
         let csvContent = "data:text/csv;charset=utf-8,";
         csvContent += "CaseNumber,Topic,CustomerName,AccountName,MobilePhone,Birthdate,Email,ChannelStatus,MfaStatus,AccountHealth,Segment,AccessTier,AccountRole,Country,MerchantId,OpeningLine,AI_System_Prompt,SOP_Grading_Rubric,EscalationPath,ExpectedProduct,ExpectedSubProduct,ExpectedService,ExpectedCause\n";
-        csvContent += "9941012,Sovereign Hub Compliance Validation,Sarah Connor,Cyberdyne Global Tech,+15550192823,1965-11-10,sconnor@cyberdyne.com,Logged In,Passed,Active Unlimited,Priority,Full,Owner,Germany,MCX1892B,\"Hello, I need to check European compliance codes and verify account details for Cyberdyne.\",\"Act as an impatient CTO requesting urgent European compliance verification. Demand quick answers but give Name and DOB when asked.\",\"1. Verify Customer Name and DOB.\\n2. Confirm Account Segment.\\n3. Check European Region Compliance.\",Tier 2 Backoffice Support,VeriFactu Compliance,Account Credentials,User Verification Service,VeriFactu System Link\n";
+        csvContent += "9941012,Sovereign Hub Compliance Validation,<span id="case-customer"></span>,Cyberdyne Global Tech,+15550192823,1965-11-10,sconnor@cyberdyne.com,Logged In,Passed,Active Unlimited,Priority,Full,Owner,Germany,<span id="case-mid"></span>,\"Hello, I need to check European compliance codes and verify account details for Cyberdyne.\",\"Act as an impatient CTO requesting urgent European compliance verification. Demand quick answers but give Name and DOB when asked.\",\"1. Verify Customer Name and DOB.\\n2. Confirm Account Segment.\\n3. Check European Region Compliance.\",Tier 2 Backoffice Support,VeriFactu Compliance,Account Credentials,User Verification Service,VeriFactu System Link\n";
         csvContent += "4810291,European Hub Billing Issue,John Doe,Doe Enterprises Limited,+447123456789,1990-01-01,john.doe@doe-enterprises.co.uk,Logged Out,Failed,Active,Small,Team Member,User,Spain,MCX23910,\"Hi there. I got locked out of my billing module. Can you check my profile access details?\",\"Act as a confused business owner locked out of billing due to failed MFA. Ask agent to fix it or transfer to backoffice.\",\"1. Verify Customer Name and Phone.\\n2. Check MFA Status (Failed).\\n3. Escalate case to Backoffice Core queue as per security procedure.\",Bank Backoffice Core Hub,Billing & Payments,European Billing,Invoice Direct API,MFA Authentication Error\n";
         
         const encodedUri = encodeURI(csvContent);
