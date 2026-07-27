@@ -404,33 +404,112 @@
 </div>
 
             <!-- Escalation & Classification Workspace -->
-            <div id="copilot-pane-actions" class="p-4 space-y-4">
-                <!-- Escalation Controls -->
-                <div class="border-b border-[#dddbda] bg-amber-50/40 p-3 rounded-lg space-y-2">
-                    <div class="bg-red-50 border border-red-200 text-[#c23934] text-[10px] font-bold p-2.5 rounded-md mb-2 flex items-center gap-1.5 shadow-sm hidden" id="esc-banner">
-                        <i class="fa-solid fa-triangle-exclamation"></i> ESCALATED TO BACKOFFICE QUEUE
-                    </div>
-                    <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-route"></i> Escalation Controls
-                    </h4>
-                    <p class="text-[10px] text-gray-500 leading-relaxed">Route standard exceptions below if credentials fall short or MFA verification fails.</p>
-                    
-                    <div class="space-y-2.5 pt-1">
-                        <div>
-                            <label class="block text-[9px] font-bold text-gray-500 uppercase">Target Escalation Queue / Path</label>
-                            <select id="esc-target" class="w-full text-xs p-2 border border-gray-300 rounded bg-white">
-                                <option value="Tier 2 Backoffice Support">Tier 2 Backoffice Support</option>
-                                <option value="Bank Backoffice Core Hub">Bank Backoffice Core Hub</option>
-                                <option value="Direct Supervisor Escalation">Direct Supervisor Escalation</option>
-                                <option value="VeriFactu Compliance Tier">VeriFactu Compliance Tier</option>
-                                <option value="European Billing Backoffice">European Billing Backoffice</option>
-                            </select>
-                        </div>
-                        <button onclick="executeEscalation()" class="w-full bg-[#0176d3] hover:bg-[#005fb2] text-white py-2 rounded text-xs font-bold transition-all shadow shadow-blue-100 flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-share-from-square"></i> Escalate Case Record
-                        </button>
-                    </div>
-                </div>
+            <div id="copilot-pane-summary" class="p-4">
+
+    <div class="bg-white border rounded-lg p-3 mb-4">
+
+        <h3 class="font-bold text-sm text-[#0176d3] mb-3">
+            Case Details
+        </h3>
+
+        <table class="w-full text-xs">
+
+            <tr>
+                <td class="py-1 text-gray-500">Case ID</td>
+                <td><strong id="case-id">TR-100001</strong></td>
+            </tr>
+
+            <tr>
+                <td class="py-1 text-gray-500">Training Level</td>
+                <td id="case-level">New Joiner</td>
+            </tr>
+
+            <tr>
+                <td class="py-1 text-gray-500">Channel</td>
+                <td id="case-channel">Logged Out Chat</td>
+            </tr>
+
+            <tr>
+                <td class="py-1 text-gray-500">Merchant</td>
+                <td id="case-customer">Sarah Connor</td>
+            </tr>
+
+            <tr>
+                <td class="py-1 text-gray-500">Merchant ID</td>
+                <td id="case-mid">MCX1892B</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="bg-blue-50 border rounded-lg p-3 mb-4">
+
+        <h3 class="font-bold text-sm mb-2">
+
+            Scenario
+
+        </h3>
+
+        <p id="case-scenario" class="text-xs leading-5">
+
+            The merchant cannot access the account after failing MFA.
+            Investigate the issue using Salesforce Live, Hive and the
+            Knowledge Base before resolving the case.
+
+        </p>
+
+    </div>
+
+    <div class="bg-white border rounded-lg p-3 mb-4">
+
+        <h3 class="font-bold text-sm mb-2">
+
+            Learning Objectives
+
+        </h3>
+
+        <ul class="text-xs list-disc ml-4 space-y-1">
+
+            <li>Follow the correct workflow.</li>
+
+            <li>Verify the merchant correctly.</li>
+
+            <li>Search the correct KB article.</li>
+
+            <li>Provide a professional resolution.</li>
+
+        </ul>
+
+    </div>
+
+    <div class="bg-white border rounded-lg p-3">
+
+        <h3 class="font-bold text-sm mb-2">
+
+            Workflow Progress
+
+        </h3>
+
+        <div class="space-y-2 text-xs">
+
+            ⬜ Greeting<br>
+
+            ⬜ Verification<br>
+
+            ⬜ Discovery<br>
+
+            ⬜ Investigation<br>
+
+            ⬜ Resolution<br>
+
+            ⬜ Closing
+
+        </div>
+
+    </div>
+
+</div>
 
                 <!-- Case Classification Dropdowns (4-Tier) -->
                 <div class="space-y-3">
