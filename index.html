@@ -380,9 +380,28 @@
             </div>
 
             <!-- Copilot Tabs -->
-            <div class="flex border-b border-[#dddbda] bg-slate-50 text-[11px] font-bold text-gray-500">
-                <button class="flex-1 p-2 text-center border-b-2 border-[#0176d3] text-gray-900 bg-white font-bold" id="copilot-tab-actions" onclick="switchCopilotTab('actions')">Actions</button>
-            </div>
+            <!-- Copilot Tabs -->
+<div class="flex border-b border-[#dddbda] bg-slate-50 text-[11px] font-bold">
+
+    <button
+        class="flex-1 p-2 border-b-2 border-[#0176d3] bg-white"
+        onclick="switchCopilotTab('summary')">
+        Summary
+    </button>
+
+    <button
+        class="flex-1 p-2"
+        onclick="switchCopilotTab('assistant')">
+        AI Assistant
+    </button>
+
+    <button
+        class="flex-1 p-2"
+        onclick="switchCopilotTab('wrapup')">
+        Wrap-up
+    </button>
+
+</div>
 
             <!-- Escalation & Classification Workspace -->
             <div id="copilot-pane-actions" class="p-4 space-y-4">
