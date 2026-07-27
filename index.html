@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,39 +9,38 @@
     <!-- FontAwesome Icons for high-fidelity Salesforce Lightning styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    :root {
-        --sf-blue: #0176d3;
-        --sf-bg: #f3f2f1;
-        --sf-border: #dddbda;
-        --sf-text-dark: #181818;
-        --sf-text-light: #514f4d;
-    }
+        :root {
+            --sf-blue: #0176d3;
+            --sf-bg: #f3f2f1;
+            --sf-border: #dddbda;
+            --sf-text-dark: #181818;
+            --sf-text-light: #514f4d;
+        }
 
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--sf-bg);
-        color: var(--sf-text-dark);
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--sf-bg);
+            color: var(--sf-text-dark);
+        }
 
-    /* High-fidelity custom scrollbars */
-    ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #c1c1c1;
-        border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #a8a8a8;
-    }
-</style>
-
+        /* High-fidelity custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
 </head>
 <body class="h-screen w-screen flex flex-col overflow-hidden relative">
 
@@ -216,11 +214,11 @@
             </div>
             <div>
                 <h1 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                    <span id="target-header-name"><span id="case-customer"></span></span>, <span id="target-header-age">60</span>
+                    <span id="target-header-name">Sarah Connor</span>, <span id="target-header-age">60</span>
                     <span class="text-xs text-gray-400 font-medium font-mono">• <span id="target-header-email">sconnor@cyberdyne.com</span> • <span id="target-header-phone">+15550192823</span></span>
                 </h1>
                 <div class="flex items-center gap-2 mt-1">
-                    <span id="target-header-mid" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono"><span id="case-mid"></span></span>
+                    <span id="target-header-mid" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono">MCX1892B</span>
                     <span id="target-header-segment" class="text-xs font-extrabold text-[#7f4fce] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">Priority</span>
                     <span id="target-header-health-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Active Unlimited</span>
                     <span id="target-header-role-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Owner</span>
@@ -239,75 +237,108 @@
     <div class="flex-1 flex overflow-hidden pb-[35px]">
         
         <!-- LEFT COLUMN: Key Info & Contact Card -->
-        <div class="w-[280px] border-r border-[#dddbda] bg-[#fdfdfd] flex flex-col overflow-y-auto">
+        <div class="w-[280px] border-r border-[#dddbda] bg-[#f3f2f1] flex flex-col overflow-y-auto gap-2 p-2">
             
-            <!-- KEY INFORMATION CARD - Navy Blue with Crisp White Text -->
-            <div class="p-4 border-b border-[#dddbda] bg-[#16325c] text-white">
-                <h3 class="text-xs font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <i class="fa-solid fa-key text-blue-300"></i> <span class="text-white font-extrabold">Key Information</span>
+            <!-- Key Information Card -->
+            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white">
+                <h3 class="text-[14px] font-bold text-[#014486] mb-4">
+                    Key Information
                 </h3>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
                     <div class="flex flex-col gap-1">
-                        <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">Channel</span>
-                        <div>
-                            <span id="target-badge-channel" class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Logged In</span>
-                        </div>
+                        <span class="text-[11px] text-gray-500">Channel</span>
+                        <div><span id="target-badge-channel" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Logged In</span></div>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">MFA</span>
-                        <div>
-                            <span id="target-badge-mfa" class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Passed</span>
-                        </div>
+                        <span class="text-[11px] text-gray-500">MFA</span>
+                        <div><span id="target-badge-mfa" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Passed</span></div>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">Acc. Health</span>
-                        <div>
-                            <span id="target-badge-health" class="bg-[#1b8042] text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Active</span>
-                        </div>
+                        <span class="text-[11px] text-gray-500">Account health</span>
+                        <div><span id="target-badge-health" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Active unlimited</span></div>
                     </div>
                     <div class="flex flex-col gap-1">
-                        <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">Segment</span>
-                        <div>
-                            <span id="target-badge-segment" class="bg-purple-700 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Priority</span>
-                        </div>
+                        <span class="text-[11px] text-gray-500">Segment</span>
+                        <div><span id="target-badge-segment" class="bg-gray-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Nano-micro</span></div>
                     </div>
-                </div>
-                <div class="flex flex-col gap-1 mt-3 pt-3 border-t border-blue-900">
-                    <span class="text-[9px] text-blue-100 uppercase tracking-wider font-extrabold">User Access Tier</span>
-                    <div>
-                        <span id="target-badge-access" class="bg-slate-700 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded">Full</span>
+                    <div class="flex flex-col gap-1 col-span-2">
+                        <span class="text-[11px] text-gray-500">User access</span>
+                        <div><span id="target-badge-access" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Full</span></div>
                     </div>
                 </div>
             </div>
 
+            <!-- Chat Interaction Summary (Mock) -->
+            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-[14px] font-bold text-[#181818]">Chat Interaction Summary</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] text-gray-500">Hide</span>
+                        <div class="w-8 h-4 bg-[#0176d3] rounded-full relative cursor-pointer">
+                            <div class="w-3 h-3 bg-white rounded-full absolute right-0.5 top-0.5 flex items-center justify-center"><i class="fa-solid fa-check text-[#0176d3] text-[8px]"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right text-[9px] text-gray-400 mt-1 mr-2">Active</div>
+            </div>
+
             <!-- Contact Details Card -->
-            <div class="p-4 border-b border-[#dddbda] bg-white">
-                <h3 class="text-xs font-extrabold text-[#0176d3] uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <i class="fa-solid fa-address-card"></i> Contact Details
-                </h3>
+            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-[14px] font-bold text-[#014486] flex items-center gap-2">
+                        <div class="w-5 h-5 bg-purple-600 text-white rounded flex items-center justify-center text-[10px]"><i class="fa-solid fa-address-card"></i></div> Contact Details
+                    </h3>
+                    <i class="fa-solid fa-caret-down text-gray-500 text-sm cursor-pointer"></i>
+                </div>
                 
-                <div class="space-y-3">
+                <div class="text-[13px] font-bold text-[#0176d3] mb-4" id="target-detail-accname">Zoe Bouvard</div>
+                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
                     <div>
-                        <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Account Name</label>
-                        <span id="target-detail-accname" class="text-xs font-semibold text-gray-800">Cyberdyne Global Tech</span>
+                        <label class="text-[11px] text-gray-500 block">Account Name</label>
+                        <span class="text-[13px] text-[#181818]" id="target-detail-company">Frip'Zouille</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Birthdate</label>
-                            <span id="target-detail-birthdate" class="text-xs font-semibold text-gray-800">10.11.1965</span>
+                    <div>
+                        <label class="text-[11px] text-gray-500 block">Birthdate</label>
+                        <span id="target-detail-birthdate" class="text-[13px] text-[#181818]">13.04.1997</span>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-gray-500 block">Mobile Phone Number</label>
+                        <span id="target-detail-phone" class="text-[13px] text-[#181818]">+33647942027</span>
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-gray-500 block">Phone</label>
+                        <span class="text-[13px] text-[#181818]">+33647942027</span>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="text-[11px] text-gray-500 block">Email</label>
+                        <span id="target-detail-email" class="text-[13px] text-[#0176d3] hover:underline cursor-pointer">fripzouille@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Details Card -->
+            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white mb-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-[14px] font-bold text-[#014486] flex items-center gap-2">
+                        <div class="w-5 h-5 bg-blue-600 text-white rounded flex items-center justify-center text-[10px]"><i class="fa-solid fa-building"></i></div> Account Details
+                    </h3>
+                    <i class="fa-solid fa-caret-down text-gray-500 text-sm cursor-pointer"></i>
+                </div>
+                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
+                     <div class="col-span-2">
+                        <label class="text-[11px] text-gray-500 block">Account Name</label>
+                        <div class="flex justify-between items-center">
+                            <span class="text-[13px] text-[#181818]">Frip'Zouille</span>
+                            <i class="fa-solid fa-pencil text-gray-400 text-[10px] cursor-pointer hover:text-[#0176d3]"></i>
                         </div>
-                        <div>
-                            <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Mobile Phone</label>
-                            <span id="target-detail-phone" class="text-xs font-semibold text-[#0176d3] hover:underline cursor-pointer font-mono">+15550192823</span>
-                        </div>
                     </div>
                     <div>
-                        <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Email Address</label>
-                        <span id="target-detail-email" class="text-xs font-semibold text-[#0176d3] hover:underline cursor-pointer font-mono">sconnor@cyberdyne.com</span>
+                        <label class="text-[11px] text-gray-500 block">Country</label>
+                        <span id="target-detail-country" class="text-[13px] text-[#181818]">France</span>
                     </div>
                     <div>
-                        <label class="text-[10px] text-gray-500 block uppercase font-bold tracking-wider">Validated Region</label>
-                        <span id="target-detail-country" class="text-xs font-semibold text-gray-800">Germany 🇩🇪</span>
+                        <label class="text-[11px] text-gray-500 block">Merchant Code <i class="fa-solid fa-circle-info text-gray-400"></i></label>
+                        <span class="text-[13px] text-[#181818]" id="target-header-mid">MJSYTDAW</span>
                     </div>
                 </div>
             </div>
@@ -315,79 +346,70 @@
 
         <!-- CENTER COLUMN: Conversations & Tabs -->
         <div class="flex-1 flex flex-col bg-white border-r border-[#dddbda] overflow-hidden">
-            <div class="flex bg-[#f3f2f1] border-b border-[#dddbda] pl-2">
-                <button class="px-4 py-2.5 text-xs font-bold border-b-2 border-[#0176d3] text-gray-800 bg-white" id="tab-conv" onclick="switchCenterTab('conv')">Standard Conversation</button>
-                <button class="px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800" id="tab-details" onclick="switchCenterTab('details')">Details</button>
+            <div class="flex bg-white border-b border-[#dddbda] px-4 shadow-sm z-10">
+                <button class="px-4 py-3 text-[13px] font-bold border-b-2 border-[#0176d3] text-[#181818] bg-white transition-all" id="tab-conv" onclick="switchCenterTab('conv')">Standard Conversation</button>
+                <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-gray-600 hover:text-[#181818] transition-all" onclick="void(0)">Translated Conversation</button>
+                <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-gray-600 hover:text-[#181818] transition-all" id="tab-details" onclick="switchCenterTab('details')">Details</button>
+                <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-gray-600 hover:text-[#181818] transition-all" onclick="void(0)">Related</button>
             </div>
 
-            <div class="flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 flex flex-col overflow-hidden bg-slate-50">
                 <!-- Tab 1: Live Chat Conversation -->
-                <div class="flex-1 flex flex-col bg-white overflow-hidden" id="pane-conv">
+                <div class="flex-1 flex flex-col overflow-hidden" id="pane-conv">
                     
                     <!-- Standby State Call-to-Action -->
-                    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50">
+                    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-white shadow-sm m-4 rounded border border-[#dddbda]">
                         <div class="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-2xl text-blue-600 mb-4 animate-bounce">
                             💬
                         </div>
                         <h3 class="text-base font-extrabold text-gray-800">Simulation Session Ready</h3>
-                        <p class="text-xs text-gray-500 max-w-sm mt-1 mb-6">Click below to launch the live customer chat simulation and begin practice.</p>
+                        <p class="text-[13px] text-gray-500 max-w-sm mt-1 mb-6">Click below to launch the live customer chat simulation and begin practice.</p>
                         
-                        <button onclick="initializeSimulationSession()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-6 py-3 rounded-xl font-extrabold text-xs shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+                        <button onclick="initializeSimulationSession()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-6 py-3 rounded font-bold text-[13px] shadow transition-all flex items-center gap-2">
                             <i class="fa-solid fa-play"></i> Start Practice Session Now
                         </button>
                     </div>
 
                     <!-- Active Timeline -->
-                    <div class="hidden flex-1 overflow-y-auto p-4 space-y-4" id="chat-scroller">
+                    <div class="hidden flex-1 overflow-y-auto p-4 space-y-4 bg-white m-4 mb-0 rounded-t border border-b-0 border-[#dddbda]" id="chat-scroller">
+                        <div class="flex items-center justify-between mb-4 border-b pb-2">
+                            <div class="flex items-center gap-2 font-bold text-[#181818] text-[15px]">
+                                <i class="fa-solid fa-message text-[#e0609a]"></i> Conversation
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-gray-500 text-[12px]">Ended</span>
+                                <button class="border border-gray-300 rounded px-3 py-1 text-[12px] bg-white hover:bg-gray-50 text-[#181818]">End Chat ▼</button>
+                            </div>
+                        </div>
+
                         <div class="space-y-4" id="live-chat-timeline">
                             <!-- Appended dynamically -->
                         </div>
                     </div>
-<!-- Chat Reply Input -->
-<div class="p-3 border-t border-[#dddbda] flex gap-2 bg-[#f3f2f1]">
 
-    <input
-        type="text"
-        id="agent-input"
-        placeholder="Click 'Start Practice' to begin."
-        disabled
-        class="flex-1 text-xs p-2.5 border border-[#dddbda] rounded bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    <!-- Chat Reply Input -->
+                    <div class="p-3 border border-[#dddbda] rounded-b mx-4 mb-4 flex gap-2 bg-[#f3f2f1]">
+                        <input type="text" id="agent-input" placeholder="Click 'Start Practice' to begin." disabled class="flex-1 text-[13px] p-2.5 border border-[#dddbda] rounded bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <button onclick="sendAgentMessage()" id="agent-send-btn" disabled class="bg-[#0176d3] hover:bg-[#005fb2] disabled:opacity-50 text-white px-4 py-2 rounded text-[13px] font-bold transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                        <button onclick="triggerCaseGrading()" id="end-session-btn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-[13px] font-bold transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-square-check"></i> Wrap Up
+                        </button>
+                    </div>
+                </div>
 
-    <button
-        onclick="sendAgentMessage()"
-        id="agent-send-btn"
-        disabled
-        class="bg-[#0176d3] hover:bg-[#005fb2] disabled:opacity-50 text-white px-4 py-2 rounded text-xs font-bold transition-all flex items-center gap-1.5">
-
-        Send
-        <i class="fa-solid fa-paper-plane"></i>
-
-    </button>
-
-    <button
-        id="end-chat-btn"
-        onclick="endTrainingChat()"
-        disabled
-        class="bg-red-600 hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-4 py-2 rounded text-xs font-bold transition-all flex items-center gap-1.5">
-
-        <i class="fa-solid fa-phone-slash"></i>
-
-        End Chat
-
-    </button>
-
-</div>
                 <!-- Tab 2: Context Details Sheet -->
-                <div class="hidden p-6 overflow-y-auto bg-white h-full" id="pane-details">
-                    <h3 class="text-xs font-extrabold text-[#0176d3] border-b pb-2 mb-4 uppercase">System Context Data</h3>
+                <div class="hidden p-6 overflow-y-auto bg-white h-full m-4 border border-[#dddbda] rounded shadow-sm" id="pane-details">
+                    <h3 class="text-[14px] font-bold text-[#014486] border-b pb-2 mb-4">System Context Data</h3>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Merchant Country</label>
-                            <input type="text" id="target-detail-country-meta" readonly class="w-full text-xs p-2 bg-slate-100 border border-slate-200 rounded font-bold">
+                            <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Merchant Country</label>
+                            <input type="text" id="target-detail-country-meta" readonly class="w-full text-[13px] p-2 bg-slate-50 border border-[#dddbda] rounded font-bold">
                         </div>
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Assigned Merchant ID</label>
-                            <input type="text" id="target-detail-mid-meta" readonly class="w-full text-xs p-2 bg-slate-100 border border-slate-200 rounded font-bold font-mono">
+                            <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Assigned Merchant ID</label>
+                            <input type="text" id="target-detail-mid-meta" readonly class="w-full text-[13px] p-2 bg-slate-50 border border-[#dddbda] rounded font-bold font-mono">
                         </div>
                     </div>
                 </div>
@@ -395,250 +417,185 @@
         </div>
 
         <!-- RIGHT COLUMN: Agent Actions Hub -->
-        <div class="w-[320px] bg-white flex flex-col h-full overflow-y-auto border-l border-[#dddbda]">
-            <div class="bg-[#f3f2f1] p-3 font-bold text-xs border-b border-[#dddbda] flex items-center gap-1.5 text-gray-700">
-                <i class="fa-solid fa-graduation-cap text-blue-600"></i> Training Copilot
-            </div>
-
-            <!-- Copilot Tabs -->
-            <!-- Copilot Tabs -->
-<div class="flex border-b border-[#dddbda] bg-slate-50 text-[11px] font-bold">
-
-    <button
-        class="flex-1 p-2 border-b-2 border-[#0176d3] bg-white"
-        onclick="switchCopilotTab('summary')">
-        Summary
-    </button>
-
-    <button
-        class="flex-1 p-2"
-        onclick="switchCopilotTab('assistant')">
-        AI Assistant
-    </button>
-
-    <button
-        class="flex-1 p-2"
-        onclick="switchCopilotTab('wrapup')">
-        Wrap-up
-    </button>
-
-</div>
-
-            <!-- Escalation & Classification Workspace -->
-            <div id="copilot-pane-summary" class="p-4">
-
-    <div class="bg-white border rounded-lg p-3 mb-4">
-
-        <h3 class="font-bold text-sm text-[#0176d3] mb-3">
-            Case Details
-        </h3>
-
-        <table class="w-full text-xs">
-
-            <tr>
-                <td class="py-1 text-gray-500">Case ID</td>
-                <td><strong id="case-id">TR-100001</strong></td>
-            </tr>
-
-            <tr>
-                <td class="py-1 text-gray-500">Training Level</td>
-               <td>
-
-<span class="bg-blue-100 text-blue-700 text-[10px] px-2 py-1 rounded-full font-semibold">
-
-New Joiner
-
-</span>
-
-</td>
-            </tr>
-
-            <tr>
-                <td class="py-1 text-gray-500">Channel</td>
-               <td>
-
-<span class="bg-orange-100 text-orange-700 text-[10px] px-2 py-1 rounded-full font-semibold">
-
-<span id="case-channel"></span>
-
-</span>
-
-</td>
-            </tr>
-
-            <tr>
-                <td class="py-1 text-gray-500">Merchant</td>
-                <td id="case-customer"><span id="case-customer"></span></td>
-            </tr>
-
-            <tr>
-                <td class="py-1 text-gray-500">Merchant ID</td>
-                <td id="case-mid"><span id="case-mid"></span></td>
-            </tr>
-
-        </table>
-
-    </div>
-
-    <div class="bg-blue-50 border rounded-lg p-3 mb-4">
-
-        <h3 class="font-bold text-sm mb-2">
-
-<div class="flex items-center gap-2 mb-3">
-
-<i class="fa-solid fa-comments text-[#0176d3]"></i>
-
-<h3 class="font-bold text-sm">
-
-Customer Scenario
-
-</h3>
-
-</div>
-        </h3>
-
-        <p id="case-scenario" class="text-xs leading-5">
-
-            The merchant cannot access the account after failing MFA.
-            Investigate the issue using Salesforce Live, Hive and the
-            Knowledge Base before resolving the case.
-
-        </p>
-
-    </div>
-
-    <div class="bg-white border rounded-lg p-3 mb-4">
-
-        <h3 class="font-bold text-sm mb-2">
-
-            Learning Objectives
-
-        </h3>
-
-        <ul class="text-xs list-disc ml-4 space-y-1">
-
-            <li>Follow the correct workflow.</li>
-
-            <li>Verify the merchant correctly.</li>
-
-            <li>Search the correct KB article.</li>
-
-            <li>Provide a professional resolution.</li>
-
-        </ul>
-
-    </div>
-
-    <div class="bg-white border rounded-lg p-3">
-
-        <h3 class="font-bold text-sm mb-2">
-
-            Workflow Progress
-
-        </h3>
-
-        <div class="space-y-2 text-xs">
-
-           <div class="flex items-center gap-2">
-
-<div class="w-3 h-3 rounded-full border border-gray-400"></div>
-
-Greeting
-
-</div>
-
-            <div class="flex items-center gap-2">
-
-<div class="w-3 h-3 rounded-full border border-gray-400"></div>
-
-Verification
-
-</div>
-            <div class="flex items-center gap-2">
-
-<div class="w-3 h-3 rounded-full border border-gray-400"></div>
-
-Discovery
-
-</div>
-            </div>
-            <div class="flex items-center gap-2">
-
-<div class="w-3 h-3 rounded-full border border-gray-400"></div>
-
-Investigation
-
-</div>
-        </div>
-            <div class="flex items-center gap-2">
-
-<div class="w-3 h-3 rounded-full border border-gray-400"></div>
-
-Resolution
-
-</div>
+        <div class="w-[340px] bg-[#f3f2f1] flex flex-col h-full overflow-y-auto border-l border-[#dddbda] gap-3 p-3">
+            
+            <!-- Agent Copilot Widget -->
+            <div class="bg-white border border-[#dddbda] rounded shadow-sm flex flex-col">
+                <div class="p-3 pt-4 font-bold text-[16px] flex items-center gap-2 text-[#181818]">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[#5e23a6]"></i> Agent Copilot
+                    <div class="ml-auto text-[12px] text-[#0176d3] font-normal cursor-pointer hover:underline">en-GB ▼</div>
                 </div>
-            <div class="flex items-center gap-2">
 
-<div class="w-3 h-3 rounded-full border border-gray-400"></div>
+                <!-- Copilot Tabs -->
+                <div class="flex border-b border-[#dddbda] text-[13px] text-gray-600 px-4" id="copilot-tabs">
+                    <button class="py-2 mr-5 border-b-2 border-[#0176d3] text-[#181818] font-bold bg-white transition-all" onclick="switchCopilotTab('summary')">Summary</button>
+                    <button class="py-2 mr-5 border-b-2 border-transparent hover:text-[#181818] font-medium transition-all" onclick="switchCopilotTab('answer')">Answer</button>
+                    <button class="py-2 border-b-2 border-transparent hover:text-[#181818] font-medium transition-all" onclick="switchCopilotTab('wrapup')">Wrap-up</button>
+                </div>
 
-Closing
+                <!-- Copilot Panes -->
+                <div class="overflow-y-auto" style="max-height: calc(100vh - 350px);">
+                    
+                    <!-- SUMMARY PANE -->
+                    <div id="copilot-pane-summary" class="p-4">
+                        <div class="mb-6">
+                            <h3 class="text-[#014486] font-bold text-[13px] mb-2">Details</h3>
+                            <table class="w-full text-[13px] text-[#181818]">
+                                <tr><td class="py-1 w-2/5 text-gray-600 align-top">Intent</td><td class="py-1">Hardware####Delivery and Logistics</td></tr>
+                                <tr><td class="py-1 w-2/5 text-gray-600">Channel Language</td><td class="py-1">fr</td></tr>
+                                <tr><td class="py-1 w-2/5 text-gray-600">Platform Origin</td><td class="py-1">Dashboard</td></tr>
+                            </table>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-[#014486] font-bold text-[13px] mb-2">Closed Cases</h3>
+                            
+                            <div class="border-b border-gray-200 pb-3 mb-3">
+                                <a href="#" class="text-[#0176d3] font-bold text-[13px] hover:underline">93031011</a>
+                                <table class="w-full text-[13px] text-[#181818] mt-1">
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Closed Date</td><td>21.07.2026, 19:10</td></tr>
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Channel</td><td>App Chat</td></tr>
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600 align-top">Summary Issue</td><td></td></tr>
+                                </table>
+                            </div>
+                            
+                            <div class="border-b border-gray-200 pb-3 mb-3">
+                                <a href="#" class="text-[#0176d3] font-bold text-[13px] hover:underline">93023922</a>
+                                <table class="w-full text-[13px] text-[#181818] mt-1">
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Closed Date</td><td>21.07.2026, 14:44</td></tr>
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Channel</td><td>Email</td></tr>
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600 align-top">Summary Issue</td><td class="leading-tight">The merchant reported an issue with their cash register that has not been working for seven days and requested a quick solution.</td></tr>
+                                </table>
+                            </div>
 
-</div>
-                         <!-- Case Classification Dropdowns (4-Tier) -->
-                <div class="space-y-3">
-                    <h4 class="text-xs font-extrabold text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
-                        <i class="fa-solid fa-tags"></i> Case Classification
-                    </h4>
-                    <div class="text-[11px] text-gray-600">
-                        <strong>Classification Status:</strong> <span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check"></i> Ready</span>
+                            <div class="pb-1">
+                                <a href="#" class="text-[#0176d3] font-bold text-[13px] hover:underline">93023491</a>
+                                <table class="w-full text-[13px] text-[#181818] mt-1">
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Closed Date</td><td>21.07.2026, 11:45</td></tr>
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Channel</td><td>Phone</td></tr>
+                                    <tr><td class="py-0.5 w-2/5 text-gray-600 align-top">Summary Issue</td><td></td></tr>
+                                </table>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="space-y-2.5 pt-1">
-                        <div>
-                            <label class="block text-[9px] font-bold text-gray-500 uppercase">* 1. Product</label>
-                            <select id="class-product" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
-                                <option value="">Select Product...</option>
-                                <option>Service Cloud Core</option>
-                                <option>Billing & Payments</option>
-                                <option>Verification & Security</option>
-                                <option>VeriFactu Compliance</option>
-                            </select>
+                    <!-- ANSWER PANE -->
+                    <div id="copilot-pane-answer" class="hidden p-4">
+                        <div class="mb-6">
+                            <h3 class="text-[#014486] text-[14px] mb-3">Quick templates</h3>
+                            <div class="space-y-2.5 flex flex-col items-start w-full">
+                                <button onclick="useCopilotTemplate('Hello! Thank you for contacting support. How can I help you today?')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">👋 Welcome message</button>
+                                <button onclick="useCopilotTemplate('Could you please verify your identity by providing your full name and date of birth?')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">👩‍💻 Identity verification</button>
+                                <button onclick="useCopilotTemplate('Please allow me a moment while I investigate this issue for you.')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">⏸️ Hold / Investigation</button>
+                                <button onclick="useCopilotTemplate('I have escalated this issue. Is there anything else I can assist you with before we close this chat?')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">🤗 Pre-closing message</button>
+                                <button onclick="useCopilotTemplate('Thank you for reaching out. Have a great day!')" class="w-[45%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">👍 CSAT & Goodbye</button>
+                            </div>
                         </div>
+                        
                         <div>
-                            <label class="block text-[9px] font-bold text-gray-500 uppercase">* 2. Sub-Product</label>
-                            <select id="class-subproduct" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
-                                <option value="">Select Sub Product...</option>
-                                <option>Account Credentials</option>
-                                <option>API Gateway</option>
-                                <option>European Billing</option>
-                                <option>MFA Authentication</option>
-                            </select>
+                            <h3 class="text-[#014486] text-[14px] mb-2">Generate Answer</h3>
+                            <div class="border border-[#dddbda] rounded p-4 bg-white shadow-sm">
+                                <p class="text-[13px] text-[#181818] mb-2">Response suggestion:</p>
+                                <p class="text-[13px] text-[#181818] mb-4 leading-relaxed" id="ai-suggestion-text">The replacement device has not yet been shipped according to DHL's tracking information. I will escalate this issue to ensure you receive the most accurate update on your order.</p>
+                                <div class="flex gap-2 mb-2">
+                                    <button class="flex-1 border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded py-1.5 text-[13px] flex items-center justify-center gap-1.5 font-medium transition-all">Edit <i class="fa-solid fa-pen text-[10px]"></i></button>
+                                    <button onclick="useCopilotTemplate(document.getElementById('ai-suggestion-text').innerText)" class="flex-1 border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded py-1.5 text-[13px] flex items-center justify-center gap-1.5 font-medium transition-all">Use <i class="fa-solid fa-paper-plane text-[10px]"></i></button>
+                                </div>
+                                <button class="w-full border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded py-1.5 text-[13px] flex items-center justify-center gap-1.5 font-medium transition-all">Regenerate <i class="fa-solid fa-rotate text-[10px]"></i></button>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-[9px] font-bold text-gray-500 uppercase">* 3. Service</label>
-                            <select id="class-service" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
-                                <option value="">Select Service...</option>
-                                <option>User Verification Service</option>
-                                <option>Merchant ID Sync</option>
-                                <option>Invoice Direct API</option>
-                                <option>Multi-Factor Auth Service</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[9px] font-bold text-gray-500 uppercase">* 4. Cause / Reason</label>
-                            <select id="class-cause" class="w-full text-xs p-1.5 border border-gray-300 rounded bg-white">
-                                <option value="">Select Cause...</option>
-                                <option>Credentials Issue</option>
-                                <option>Verification Failed</option>
-                                <option>VeriFactu System Link</option>
-                                <option>MFA Authentication Error</option>
-                                <option>Region Discrepancy</option>
-                            </select>
+                    </div>
+
+                    <!-- WRAP-UP PANE -->
+                    <div id="copilot-pane-wrapup" class="hidden p-4">
+                        <div class="space-y-3">
+                            <h4 class="text-[14px] font-bold text-[#014486]">Case Classification</h4>
+                            <div class="text-[12px] text-gray-600 border-b border-gray-200 pb-2">
+                                <strong>Status:</strong> <span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check"></i> Ready</span>
+                            </div>
+
+                            <div class="space-y-3 pt-1">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 1. Product</label>
+                                    <select id="class-product" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
+                                        <option value="">Select Product...</option>
+                                        <option>Service Cloud Core</option>
+                                        <option>Billing & Payments</option>
+                                        <option>Verification & Security</option>
+                                        <option>VeriFactu Compliance</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 2. Sub-Product</label>
+                                    <select id="class-subproduct" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
+                                        <option value="">Select Sub Product...</option>
+                                        <option>Account Credentials</option>
+                                        <option>API Gateway</option>
+                                        <option>European Billing</option>
+                                        <option>MFA Authentication</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 3. Service</label>
+                                    <select id="class-service" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
+                                        <option value="">Select Service...</option>
+                                        <option>User Verification Service</option>
+                                        <option>Merchant ID Sync</option>
+                                        <option>Invoice Direct API</option>
+                                        <option>Multi-Factor Auth Service</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 4. Cause / Reason</label>
+                                    <select id="class-cause" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
+                                        <option value="">Select Cause...</option>
+                                        <option>Credentials Issue</option>
+                                        <option>Verification Failed</option>
+                                        <option>VeriFactu System Link</option>
+                                        <option>MFA Authentication Error</option>
+                                        <option>Region Discrepancy</option>
+                                    </select>
+                                </div>
+                                <div class="pt-3 border-t border-gray-200 mt-2">
+                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Escalation Queue</label>
+                                    <select id="esc-target" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
+                                        <option value="">Select Queue...</option>
+                                        <option>Tier 2 Backoffice Support</option>
+                                        <option>Bank Backoffice Core Hub</option>
+                                        <option>Compliance & Legal</option>
+                                    </select>
+                                    <button onclick="executeEscalation()" class="mt-3 w-full bg-white border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 p-2.5 rounded text-[13px] font-bold transition-all shadow-sm">Escalate Case</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Open Cases Widget (Mock) -->
+            <div class="bg-white border border-[#dddbda] rounded shadow-sm p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-all group">
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 bg-rose-500 text-white rounded flex items-center justify-center text-[12px]"><i class="fa-solid fa-briefcase"></i></div>
+                    <span class="text-[14px] font-bold text-[#181818]">Open Cases (0)</span>
+                </div>
+                <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] group-hover:text-gray-600 transition-colors"></i>
+            </div>
+
+            <!-- Knowledge Widget -->
+            <div class="bg-white border border-[#dddbda] rounded shadow-sm p-4 flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-[15px] font-bold text-[#181818]">Knowledge</span>
+                    <button class="border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded px-3 py-1.5 text-[12px] font-medium transition-all shadow-sm">New Article</button>
+                </div>
+                <div class="flex gap-2">
+                    <div class="flex-1 relative">
+                        <i class="fa-solid fa-search absolute left-2.5 top-2 text-gray-400 text-[12px]"></i>
+                        <input type="text" placeholder="Search Knowledge..." class="w-full pl-7 pr-2 py-1.5 border border-[#dddbda] rounded text-[13px] focus:outline-none focus:border-[#0176d3] text-[#181818]">
+                    </div>
+                    <button class="border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded px-3 py-1 text-[13px] font-medium transition-all shadow-sm">Filters</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -866,6 +823,45 @@ Closing
         document.getElementById('trainer-portal-view')?.classList.add('hidden');
         document.getElementById('sf-workspace')?.classList.add('hidden');
         document.getElementById('role-gateway-view')?.classList.remove('hidden');
+    };
+
+    window.switchCopilotTab = function(tabName) {
+        const tabs = ['summary', 'answer', 'wrapup'];
+        
+        const buttons = document.querySelectorAll('#copilot-tabs button');
+        buttons.forEach(btn => {
+            if(btn.innerText.toLowerCase().replace('-', '') === tabName.replace('-', '')) {
+                btn.className = "py-2 mr-5 border-b-2 border-[#0176d3] text-[#181818] font-bold bg-white transition-all";
+            } else {
+                btn.className = "py-2 mr-5 border-b-2 border-transparent text-gray-600 hover:text-[#181818] font-medium transition-all";
+            }
+        });
+        
+        tabs.forEach(t => {
+            const pane = document.getElementById(`copilot-pane-${t}`);
+            if (pane) {
+                if (t === tabName) pane.classList.remove('hidden');
+                else pane.classList.add('hidden');
+            }
+        });
+    };
+
+    window.useCopilotTemplate = function(text) {
+        const input = document.getElementById('agent-input');
+        const sendBtn = document.getElementById('agent-send-btn');
+        if (input && !input.disabled) {
+            input.value = text;
+            input.focus();
+            
+            // Optionally auto-send if it's the Generate Answer or flash a green border
+            input.classList.add('ring-2', 'ring-emerald-500', 'border-emerald-500');
+            setTimeout(() => {
+                input.classList.remove('ring-2', 'ring-emerald-500', 'border-emerald-500');
+            }, 600);
+            
+        } else {
+            showToast("Session Not Started", "Please start the practice session before pasting templates.", "error");
+        }
     };
 
     window.renderAgentCaseCards = function() {
@@ -1127,6 +1123,14 @@ Closing
             const el = document.getElementById('esc-target');
             if (el) el.value = cs.escalationPath;
         }
+
+        // Setup Copilot Data
+        const caseIdEl = document.getElementById('case-id');
+        if (caseIdEl) caseIdEl.innerText = cs.caseNumber;
+        const caseCustEl = document.getElementById('case-customer');
+        if (caseCustEl) caseCustEl.innerText = cs.customerName;
+        const caseMidEl = document.getElementById('case-mid');
+        if (caseMidEl) caseMidEl.innerText = cs.merchantId;
 
         document.getElementById('empty-state').classList.remove('hidden');
         document.getElementById('chat-scroller').classList.add('hidden');
@@ -1449,8 +1453,10 @@ Do NOT repeat previous statements. Progress the issue toward resolution or escal
      window.escalationQueue = queueSelection;
 
      const banner = document.getElementById('esc-banner');
-     banner.innerText = `🚨 ACTION RECORDED: ESCALATED TO [${queueSelection.toUpperCase()}]`;
-     banner.classList.remove('hidden');
+     if (banner) {
+         banner.innerText = `🚨 ACTION RECORDED: ESCALATED TO [${queueSelection.toUpperCase()}]`;
+         banner.classList.remove('hidden');
+     }
 
      appendSystemLog(`Case routed manually to [${queueSelection}] queue. Active flags updated.`);
      showToast("Case Escalated", `Routed successfully to ${queueSelection}`, "success");
@@ -1659,7 +1665,7 @@ Return a JSON object with this exact structure:{"score": number (0 to 100),"grad
     window.downloadCSVTemplate = function() {
         let csvContent = "data:text/csv;charset=utf-8,";
         csvContent += "CaseNumber,Topic,CustomerName,AccountName,MobilePhone,Birthdate,Email,ChannelStatus,MfaStatus,AccountHealth,Segment,AccessTier,AccountRole,Country,MerchantId,OpeningLine,AI_System_Prompt,SOP_Grading_Rubric,EscalationPath,ExpectedProduct,ExpectedSubProduct,ExpectedService,ExpectedCause\n";
-        csvContent += "9941012,Sovereign Hub Compliance Validation,<span id="case-customer"></span>,Cyberdyne Global Tech,+15550192823,1965-11-10,sconnor@cyberdyne.com,Logged In,Passed,Active Unlimited,Priority,Full,Owner,Germany,<span id="case-mid"></span>,\"Hello, I need to check European compliance codes and verify account details for Cyberdyne.\",\"Act as an impatient CTO requesting urgent European compliance verification. Demand quick answers but give Name and DOB when asked.\",\"1. Verify Customer Name and DOB.\\n2. Confirm Account Segment.\\n3. Check European Region Compliance.\",Tier 2 Backoffice Support,VeriFactu Compliance,Account Credentials,User Verification Service,VeriFactu System Link\n";
+        csvContent += "9941012,Sovereign Hub Compliance Validation,Sarah Connor,Cyberdyne Global Tech,+15550192823,1965-11-10,sconnor@cyberdyne.com,Logged In,Passed,Active Unlimited,Priority,Full,Owner,Germany,MCX1892B,\"Hello, I need to check European compliance codes and verify account details for Cyberdyne.\",\"Act as an impatient CTO requesting urgent European compliance verification. Demand quick answers but give Name and DOB when asked.\",\"1. Verify Customer Name and DOB.\\n2. Confirm Account Segment.\\n3. Check European Region Compliance.\",Tier 2 Backoffice Support,VeriFactu Compliance,Account Credentials,User Verification Service,VeriFactu System Link\n";
         csvContent += "4810291,European Hub Billing Issue,John Doe,Doe Enterprises Limited,+447123456789,1990-01-01,john.doe@doe-enterprises.co.uk,Logged Out,Failed,Active,Small,Team Member,User,Spain,MCX23910,\"Hi there. I got locked out of my billing module. Can you check my profile access details?\",\"Act as a confused business owner locked out of billing due to failed MFA. Ask agent to fix it or transfer to backoffice.\",\"1. Verify Customer Name and Phone.\\n2. Check MFA Status (Failed).\\n3. Escalate case to Backoffice Core queue as per security procedure.\",Bank Backoffice Core Hub,Billing & Payments,European Billing,Invoice Direct API,MFA Authentication Error\n";
         
         const encodedUri = encodeURI(csvContent);
@@ -1898,11 +1904,6 @@ Return a JSON object with this exact structure:{"score": number (0 to 100),"grad
         }, 4000);
     }
 </script>
-
-<script src="js/csv.js"></script>
-<script src="js/ai.js"></script>
-<script src="js/grading.js"></script>
-<script src="js/app.js"></script>
 
 </body>
 </html>
