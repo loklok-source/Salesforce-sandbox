@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salesforce Service Cloud Sandbox & AI Training Simulator</title>
-    <!-- Tailwind CSS for modern responsive design -->
+    <title>Salesforce Service Cloud Sandbox</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons for high-fidelity Salesforce Lightning styling -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
         :root {
             --sf-blue: #0176d3;
+            --sf-dark-blue: #0b2347;
             --sf-bg: #f3f2f1;
             --sf-border: #dddbda;
             --sf-text-dark: #181818;
@@ -25,72 +24,40 @@
             color: var(--sf-text-dark);
         }
 
-        /* High-fidelity custom scrollbars */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
+        /* Salesforce specific scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+        
+        /* Utility for exact SF styling */
+        .sf-shadow { box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1); }
+        .sf-input:focus { outline: none; border-color: var(--sf-blue); box-shadow: 0 0 3px var(--sf-blue); }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col overflow-hidden relative">
+<body class="h-screen w-screen flex flex-col overflow-hidden relative text-sm">
 
 <!-- ================================================================= -->
 <!-- ROLE GATEWAY LANDING VIEW                                         -->
 <!-- ================================================================= -->
-<div id="role-gateway-view" class="flex-1 flex flex-col items-center justify-center bg-slate-900 p-6 text-white relative">
-    <div class="max-w-xl w-full bg-slate-800 border border-slate-700 rounded-2xl p-8 shadow-2xl text-center space-y-6">
-        <div class="w-16 h-16 bg-[#0176d3]/20 border border-[#0176d3] rounded-2xl flex items-center justify-center mx-auto text-3xl text-blue-400 shadow-inner">
-            <i class="fa-solid fa-cloud"></i>
+<div id="role-gateway-view" class="flex-1 flex flex-col items-center justify-center bg-[#0b2347] p-6 text-white relative z-50">
+    <div class="max-w-md w-full bg-white rounded-lg p-8 shadow-2xl text-center space-y-6 text-gray-800">
+        <div class="w-16 h-16 bg-[#0176d3]/10 border border-[#0176d3] rounded-xl flex items-center justify-center mx-auto text-3xl text-[#0176d3]">
+            <i class="fa-brands fa-salesforce"></i>
         </div>
 
         <div>
-            <h1 class="text-2xl font-black tracking-tight text-white">Salesforce Service Cloud Sandbox</h1>
-            <p class="text-xs text-slate-400 mt-2 font-medium">Select your portal access mode to begin chat simulation or manage case database scenarios.</p>
+            <h1 class="text-xl font-bold text-gray-900">Service Cloud Sandbox</h1>
+            <p class="text-xs text-gray-500 mt-2">Select your access mode to begin the training simulation.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-            <!-- Agent Button -->
-            <button onclick="navigateToPortal('agent')" class="group bg-slate-700/60 hover:bg-[#0176d3] border border-slate-600 hover:border-blue-400 p-5 rounded-xl transition-all text-left flex flex-col justify-between space-y-3 shadow-md hover:shadow-blue-500/20">
-                <div class="flex items-center justify-between">
-                    <div class="w-10 h-10 rounded-lg bg-blue-500/20 text-blue-400 group-hover:text-white flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-headset"></i>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-slate-500 group-hover:text-white transition-all"></i>
-                </div>
-                <div>
-                    <span class="text-sm font-extrabold block text-white">Agent Portal</span>
-                    <span class="text-[11px] text-slate-400 group-hover:text-blue-100 font-medium">Practice case scenarios & SOP workflows</span>
-                </div>
+        <div class="flex flex-col gap-3 pt-2">
+            <button onclick="app.navigateToPortal('agent')" class="w-full bg-[#0176d3] hover:bg-[#005fb2] text-white p-3 rounded transition-all text-sm font-semibold shadow flex items-center justify-center gap-2">
+                <i class="fa-solid fa-headset"></i> Agent Practice Portal
             </button>
-
-            <!-- Trainer Button -->
-            <button onclick="promptTrainerAccess()" class="group bg-slate-700/60 hover:bg-amber-600 border border-slate-600 hover:border-amber-400 p-5 rounded-xl transition-all text-left flex flex-col justify-between space-y-3 shadow-md hover:shadow-amber-500/20">
-                <div class="flex items-center justify-between">
-                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 group-hover:text-white flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-user-gear"></i>
-                    </div>
-                    <i class="fa-solid fa-lock text-xs text-slate-500 group-hover:text-white transition-all"></i>
-                </div>
-                <div>
-                    <span class="text-sm font-extrabold block text-white">Trainer Portal</span>
-                    <span class="text-[11px] text-slate-400 group-hover:text-amber-100 font-medium">Upload CSV databases & manage SOP rules</span>
-                </div>
+            <button onclick="app.promptTrainerAccess()" class="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 p-3 rounded transition-all text-sm font-semibold shadow-sm flex items-center justify-center gap-2">
+                <i class="fa-solid fa-user-gear"></i> Trainer Control Panel
             </button>
-        </div>
-
-        <div class="pt-2 flex items-center justify-between text-[10px] text-slate-500 font-mono">
-            <span>Service Cloud Sandbox v3.5</span>
-            <span id="user-session-id-display" class="text-blue-400">User Session: Ready</span>
         </div>
     </div>
 </div>
@@ -98,93 +65,68 @@
 <!-- ================================================================= -->
 <!-- AGENT PORTAL VIEW                                                 -->
 <!-- ================================================================= -->
-<div id="agent-portal-view" class="hidden flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 p-6 space-y-6">
-    <!-- Agent Header Ribbon -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-5 rounded-xl border border-gray-200 shadow-sm gap-4">
-        <div>
-            <h1 class="text-2xl font-extrabold text-[#0176d3] flex items-center gap-2">
-                <i class="fa-solid fa-graduation-cap"></i> Agent Case Training Portal
-            </h1>
-            <p class="text-xs text-gray-500 mt-1 font-medium">Select an assigned training case topic below to launch your chat practice session.</p>
+<div id="agent-portal-view" class="hidden flex-1 flex flex-col h-full overflow-y-auto bg-[#f3f2f1] p-6">
+    <div class="max-w-6xl w-full mx-auto space-y-4">
+        <!-- Header Ribbon matching screenshot -->
+        <div class="flex justify-between items-center bg-white p-4 rounded border border-gray-200 sf-shadow">
+            <div>
+                <h1 class="text-lg font-bold text-[#0176d3] flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap"></i> Agent Case Training Portal
+                </h1>
+                <p class="text-[11px] text-gray-500 mt-0.5">Select an assigned training case topic below to launch your chat practice session.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded border border-blue-200 flex items-center gap-1.5">
+                    <i class="fa-solid fa-folder-open"></i> <span id="portal-case-count">0</span> Active Topics
+                </span>
+                <button onclick="app.returnToGateway()" class="bg-white hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded border border-gray-300 text-xs font-bold transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-right-from-bracket"></i> Switch Profile
+                </button>
+            </div>
         </div>
-        
-        <div class="flex items-center gap-3">
-            <span class="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200">
-                <i class="fa-solid fa-folder-open mr-1"></i> <span id="portal-case-count">0</span> Active Topics
-            </span>
-            <button onclick="returnToGateway()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border">
-                <i class="fa-solid fa-right-from-bracket"></i> Switch Profile
-            </button>
-        </div>
-    </div>
 
-    <!-- Case Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="agent-case-grid">
-        <!-- Dynamically populated -->
+        <!-- Case Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="agent-case-grid">
+            <!-- Dynamically populated by JS -->
+        </div>
     </div>
 </div>
 
 <!-- ================================================================= -->
 <!-- TRAINER PORTAL VIEW                                              -->
 <!-- ================================================================= -->
-<div id="trainer-portal-view" class="hidden flex-1 flex flex-col h-full overflow-y-auto bg-slate-50 p-6 space-y-6">
-    <!-- Header Ribbon -->
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-5 rounded-xl border border-gray-200 shadow-sm gap-4">
-        <div>
-            <h1 class="text-2xl font-extrabold text-amber-600 flex items-center gap-2">
-                <i class="fa-solid fa-chalkboard-user"></i> Trainer Control Center
-            </h1>
-            <p class="text-xs text-gray-500 mt-1 font-medium">Upload custom scenario database CSV files to update training procedures and add new customer cases.</p>
-        </div>
-        
-        <div class="flex items-center gap-3">
-            <div class="bg-purple-50 border border-purple-200 p-2.5 rounded-lg flex items-center gap-2">
-                <i class="fa-solid fa-wand-magic-sparkles text-purple-700 text-sm"></i>
-                <input type="password" id="gemini-key" value="" onchange="notifyKeySaved()" placeholder="Enter Gemini API Key..." class="text-xs p-1.5 border border-purple-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white min-w-[200px]">
+<div id="trainer-portal-view" class="hidden flex-1 flex flex-col h-full overflow-y-auto bg-[#f3f2f1] p-6">
+    <div class="max-w-6xl w-full mx-auto space-y-4">
+        <div class="flex justify-between items-center bg-white p-4 rounded border border-gray-200 sf-shadow">
+            <div>
+                <h1 class="text-lg font-bold text-amber-600 flex items-center gap-2">
+                    <i class="fa-solid fa-chalkboard-user"></i> Trainer Control Center
+                </h1>
+                <p class="text-[11px] text-gray-500 mt-0.5">Upload "Sandbox template 2026 - cases" CSV to update training scenarios.</p>
             </div>
-            <button onclick="returnToGateway()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 border">
-                <i class="fa-solid fa-right-from-bracket"></i> Switch Profile
-            </button>
-        </div>
-    </div>
-
-    <!-- Upload & Case Database Workspace -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Left Card: Upload Control -->
-        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <div class="flex items-center gap-2 text-amber-700 font-extrabold text-sm border-b pb-3">
-                <i class="fa-solid fa-file-csv text-lg"></i>
-                <h2>Import Scenario CSV Database</h2>
-            </div>
-            <p class="text-xs text-gray-500 leading-relaxed">
-                Upload your updated scenario database CSV to refresh process rules, SOP criteria, header parameters, and AI system prompts in real-time across all agents.
-            </p>
-
-            <div class="space-y-3 pt-2">
-                <label class="block w-full cursor-pointer bg-amber-50 hover:bg-amber-100 text-amber-800 border-2 border-dashed border-amber-300 rounded-xl p-5 text-center transition-all">
-                    <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2 block text-amber-600"></i>
-                    <span class="text-xs font-extrabold block">Select Scenario Database CSV</span>
-                    <span class="text-[10px] text-amber-600 font-medium">Click to browse or drop file here</span>
-                    <input type="file" id="csv-file-input" accept=".csv" onchange="handleCSVUpload(event)" class="hidden">
-                </label>
-
-                <button onclick="downloadCSVTemplate()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 border">
-                    <i class="fa-solid fa-download"></i> Download Standard CSV Template
+            <div class="flex items-center gap-3">
+                <div class="bg-purple-50 border border-purple-200 p-1.5 rounded flex items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-purple-700 ml-1"></i>
+                    <input type="password" id="gemini-key" placeholder="Enter Gemini API Key..." class="text-xs p-1 border border-purple-300 rounded focus:outline-none bg-white w-48">
+                </div>
+                <button onclick="app.returnToGateway()" class="bg-white hover:bg-gray-50 text-gray-700 px-3 py-1.5 rounded border border-gray-300 text-xs font-bold transition-all">
+                    Exit
                 </button>
             </div>
         </div>
 
-        <!-- Right Card: Loaded Cases Preview -->
-        <div class="lg:col-span-2 bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-            <div class="flex items-center justify-between border-b pb-3">
-                <div class="flex items-center gap-2 text-slate-800 font-extrabold text-sm">
-                    <i class="fa-solid fa-list-check text-blue-600"></i>
-                    <h2>Loaded Scenario Database</h2>
-                </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="bg-white p-5 rounded border border-gray-200 sf-shadow space-y-4">
+                <h2 class="font-bold text-sm text-gray-800 flex items-center gap-2"><i class="fa-solid fa-file-csv"></i> Import CSV Database</h2>
+                <label class="block w-full cursor-pointer bg-amber-50 hover:bg-amber-100 border border-dashed border-amber-300 rounded p-6 text-center transition-all">
+                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-amber-600 mb-2 block"></i>
+                    <span class="text-xs font-bold text-amber-800">Select Scenario CSV</span>
+                    <input type="file" id="csv-file-input" accept=".csv" onchange="csvModule.handleUpload(event)" class="hidden">
+                </label>
             </div>
-
-            <div class="space-y-2 max-h-[400px] overflow-y-auto pr-1" id="trainer-cases-preview-list">
-                <!-- Populated dynamically -->
+            <div class="lg:col-span-2 bg-white p-5 rounded border border-gray-200 sf-shadow space-y-3">
+                <h2 class="font-bold text-sm text-gray-800 border-b pb-2">Loaded Scenarios</h2>
+                <div class="space-y-2 max-h-[400px] overflow-y-auto" id="trainer-cases-preview-list"></div>
             </div>
         </div>
     </div>
@@ -193,1716 +135,648 @@
 <!-- ================================================================= -->
 <!-- MAIN SALESFORCE SERVICE CLOUD WORKSPACE                          -->
 <!-- ================================================================= -->
-<div id="sf-workspace" class="hidden flex-1 flex flex-col h-full overflow-hidden">
-    <!-- Top Salesforce Navigation Bar -->
-    <div class="bg-[#1b1b1b] h-[35px] flex items-end px-3 justify-between">
-        <div class="flex items-center gap-1">
-            <div class="bg-white text-gray-900 px-4 py-1.5 text-xs font-bold rounded-t border-t-2 border-[#0176d3] flex items-center gap-2 shadow-sm">
-                💬 Case: <span id="target-case-number-header">82337790</span>
-            </div>
+<div id="sf-workspace" class="hidden flex-1 flex flex-col h-full overflow-hidden bg-white">
+    <!-- Top Navigation Tabs (Salesforce Style) -->
+    <div class="bg-[#f3f2f1] border-b border-[#dddbda] flex items-end px-2 pt-1">
+        <div class="bg-white border-t border-l border-r border-[#dddbda] rounded-t text-xs font-medium px-4 py-2 flex items-center gap-2 text-gray-800 cursor-pointer border-b-0 relative after:content-[''] after:absolute after:bottom-[-1px] after:left-0 after:right-0 after:h-[2px] after:bg-[#0176d3]">
+            <i class="fa-solid fa-briefcase text-blue-400"></i> <span id="target-case-number-header">00000000</span> | Case
         </div>
-        <button onclick="exitSandboxToPortal()" class="text-gray-300 hover:text-white text-xs font-bold px-3 py-1 flex items-center gap-1">
-            <i class="fa-solid fa-arrow-left"></i> Exit to Agent Portal
+        <button onclick="app.exitSandbox()" class="ml-auto text-gray-500 hover:text-gray-800 text-[11px] font-bold px-3 py-1.5 mb-1 flex items-center gap-1 bg-white border border-gray-200 rounded">
+            <i class="fa-solid fa-times"></i> End Session
         </button>
     </div>
 
-    <!-- Case Customer Header Bar -->
-    <div class="bg-white border-b border-[#dddbda] px-6 py-3 flex justify-between items-center border-t-[4px] border-[#0176d3]">
+    <!-- Contact Header Ribbon -->
+    <div class="bg-white border-b border-[#dddbda] px-4 py-3 flex justify-between items-start">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-[#fdf2f8] border border-pink-200 flex items-center justify-center text-xl text-pink-600 font-bold shadow-sm">
-                👤
+            <div class="w-9 h-9 bg-purple-600 rounded text-white flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-user"></i>
             </div>
             <div>
-                <h1 class="text-base font-bold text-gray-900 flex items-center gap-2">
-                    <span id="target-header-name">Sarah Connor</span>, <span id="target-header-age">60</span>
-                    <span class="text-xs text-gray-400 font-medium font-mono">• <span id="target-header-email">sconnor@cyberdyne.com</span> • <span id="target-header-phone">+15550192823</span></span>
+                <h1 class="text-lg font-bold text-gray-900 flex items-center gap-2 leading-tight">
+                    <span id="target-header-name">Customer Name</span>, <span id="target-header-age">30</span>
+                    <span class="text-xs font-normal text-blue-600 hover:underline cursor-pointer">• <span id="target-header-email">email@example.com</span></span>
+                    <span class="text-xs font-normal text-blue-600 hover:underline cursor-pointer">• <span id="target-header-phone">+000000000</span></span>
                 </h1>
-                <div class="flex items-center gap-2 mt-1">
-                    <span id="target-header-mid" class="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono">MCX1892B</span>
-                    <span id="target-header-segment" class="text-xs font-extrabold text-[#7f4fce] bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">Priority</span>
-                    <span id="target-header-health-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Active Unlimited</span>
-                    <span id="target-header-role-badge" class="bg-[#1b8042] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full font-sans">Owner</span>
+                <div class="flex items-center gap-1.5 mt-1">
+                    <span id="target-header-mid" class="text-[11px] font-bold text-gray-700 bg-gray-100 px-1.5 py-0.5 rounded border border-gray-200">MID</span>
+                    <span class="text-[10px] font-bold text-white bg-green-700 px-2 py-0.5 rounded-full">Active Unlimited</span>
+                    <span class="text-[10px] font-bold text-green-700 bg-green-50 border border-green-200 px-2 py-0.5 rounded-full">Owner</span>
                 </div>
             </div>
         </div>
-        
-        <div class="flex items-center gap-2">
-            <button class="bg-white hover:bg-gray-50 text-[#0176d3] border border-[#aeaeae] px-3 py-1.5 rounded text-xs font-bold transition-all shadow-sm">Backoffice</button>
-            <button class="bg-white hover:bg-gray-50 text-[#0176d3] border border-[#aeaeae] px-3 py-1.5 rounded text-xs font-bold transition-all shadow-sm">Bank Backoffice</button>
-            <button class="bg-white hover:bg-gray-50 text-gray-600 border border-[#aeaeae] px-2.5 py-1.5 rounded text-xs transition-all shadow-sm">▼</button>
+        <div class="flex gap-2">
+            <button class="bg-white hover:bg-gray-50 text-[#0176d3] border border-[#dddbda] px-3 py-1 rounded text-xs font-semibold shadow-sm">Backoffice</button>
+            <button class="bg-white hover:bg-gray-50 text-[#0176d3] border border-[#dddbda] px-3 py-1 rounded text-xs font-semibold shadow-sm">Bank Backoffice</button>
         </div>
     </div>
 
-    <!-- Dynamic Grid Content Workspace -->
-    <div class="flex-1 flex overflow-hidden pb-[35px]">
+    <!-- 3-Column Layout -->
+    <div class="flex-1 flex overflow-hidden">
         
-        <!-- LEFT COLUMN: Key Info & Contact Card -->
-        <div class="w-[280px] border-r border-[#dddbda] bg-[#f3f2f1] flex flex-col overflow-y-auto gap-2 p-2">
-            
-            <!-- Key Information Card -->
-            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white">
-                <h3 class="text-[14px] font-bold text-[#014486] mb-4">
-                    Key Information
-                </h3>
-                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
-                    <div class="flex flex-col gap-1">
-                        <span class="text-[11px] text-gray-500">Channel</span>
-                        <div><span id="target-badge-channel" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Logged In</span></div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <span class="text-[11px] text-gray-500">MFA</span>
-                        <div><span id="target-badge-mfa" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Passed</span></div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <span class="text-[11px] text-gray-500">Account health</span>
-                        <div><span id="target-badge-health" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Active unlimited</span></div>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <span class="text-[11px] text-gray-500">Segment</span>
-                        <div><span id="target-badge-segment" class="bg-gray-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Nano-micro</span></div>
-                    </div>
-                    <div class="flex flex-col gap-1 col-span-2">
-                        <span class="text-[11px] text-gray-500">User access</span>
-                        <div><span id="target-badge-access" class="bg-[#1b8042] text-white text-[11px] font-bold px-2 py-0.5 rounded-full">Full</span></div>
-                    </div>
+        <!-- LEFT COLUMN: Key Info -->
+        <div class="w-[260px] border-r border-[#dddbda] bg-white flex flex-col overflow-y-auto">
+            <!-- Key Information section -->
+            <div class="p-3 border-b border-[#dddbda]">
+                <div class="flex items-center justify-between text-[#0176d3] font-bold text-xs mb-3 cursor-pointer">
+                    <i class="fa-solid fa-chevron-down text-[10px]"></i> Key Information
                 </div>
-            </div>
-
-            <!-- Chat Interaction Summary (Mock) -->
-            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-[14px] font-bold text-[#181818]">Chat Interaction Summary</h3>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[11px] text-gray-500">Hide</span>
-                        <div class="w-8 h-4 bg-[#0176d3] rounded-full relative cursor-pointer">
-                            <div class="w-3 h-3 bg-white rounded-full absolute right-0.5 top-0.5 flex items-center justify-center"><i class="fa-solid fa-check text-[#0176d3] text-[8px]"></i></div>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <span class="block text-[10px] text-gray-500 mb-0.5">Channel</span>
+                            <span id="target-badge-channel" class="bg-green-700 text-white text-[10px] font-bold px-2 py-0.5 rounded inline-block">Logged In</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-500 mb-0.5">MFA</span>
+                            <span id="target-badge-mfa" class="bg-green-700 text-white text-[10px] font-bold px-2 py-0.5 rounded inline-block">Passed</span>
                         </div>
                     </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <span class="block text-[10px] text-gray-500 mb-0.5">Account health</span>
+                            <span class="bg-green-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">Active unlimited</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-500 mb-0.5">Segment</span>
+                            <span class="bg-gray-200 text-gray-700 border border-gray-300 text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">Nano-micro</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] text-gray-500 mb-0.5">User access</span>
+                        <span class="bg-green-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-full inline-block">Full</span>
+                    </div>
                 </div>
-                <div class="text-right text-[9px] text-gray-400 mt-1 mr-2">Active</div>
             </div>
 
-            <!-- Contact Details Card -->
-            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-[14px] font-bold text-[#014486] flex items-center gap-2">
-                        <div class="w-5 h-5 bg-purple-600 text-white rounded flex items-center justify-center text-[10px]"><i class="fa-solid fa-address-card"></i></div> Contact Details
-                    </h3>
-                    <i class="fa-solid fa-caret-down text-gray-500 text-sm cursor-pointer"></i>
+            <!-- Contact Details section -->
+            <div class="p-3 border-b border-[#dddbda]">
+                <div class="flex items-center justify-between text-gray-800 font-bold text-xs mb-3 bg-gray-50 p-1.5 rounded border border-gray-200">
+                    <div class="flex items-center gap-1.5"><i class="fa-solid fa-address-card text-purple-600"></i> Contact Details</div>
+                    <i class="fa-solid fa-chevron-down text-gray-400 text-[10px]"></i>
                 </div>
+                <div class="space-y-2.5 pl-1">
+                    <div class="text-xs text-gray-900 font-medium" id="target-detail-name">Customer Name</div>
+                    <div class="grid grid-cols-2 gap-2 mt-2">
+                        <div>
+                            <span class="block text-[10px] text-gray-500">Account Name</span>
+                            <span class="text-xs text-gray-800" id="target-detail-accname">Company</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-500">Birthdate</span>
+                            <span class="text-xs text-gray-800" id="target-detail-birthdate">01.01.1990</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-500">Mobile Phone Number</span>
+                            <span class="text-xs text-[#0176d3]" id="target-detail-phone">+000000000</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-500">Phone</span>
+                            <span class="text-xs text-gray-800" id="target-detail-phone2">+000000000</span>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <span class="block text-[10px] text-gray-500">Email</span>
+                        <span class="text-xs text-[#0176d3]" id="target-detail-email">email@example.com</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account Details section -->
+            <div class="p-3">
+                <div class="flex items-center justify-between text-gray-800 font-bold text-xs mb-3 bg-gray-50 p-1.5 rounded border border-gray-200">
+                    <div class="flex items-center gap-1.5"><i class="fa-solid fa-building text-blue-600"></i> Account Details</div>
+                    <i class="fa-solid fa-chevron-down text-gray-400 text-[10px]"></i>
+                </div>
+                <div class="grid grid-cols-2 gap-2 pl-1">
+                    <div>
+                        <span class="block text-[10px] text-gray-500">Country</span>
+                        <span class="text-xs text-gray-800" id="target-detail-country">France</span>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] text-gray-500">Merchant Code</span>
+                        <span class="text-[11px] font-mono text-gray-800" id="target-detail-mid-2">MID</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER COLUMN: Chat Interface -->
+        <div class="flex-1 flex flex-col bg-[#f3f2f1] border-r border-[#dddbda] overflow-hidden p-2">
+            <!-- Center Tabs -->
+            <div class="flex gap-4 px-2 border-b border-[#dddbda] mb-2 bg-white rounded-t shadow-sm pt-1">
+                <button class="py-2 text-[12px] font-bold text-gray-900 border-b-2 border-[#0176d3]">Standard Conversation</button>
+                <button class="py-2 text-[12px] text-gray-600 hover:text-gray-900 border-b-2 border-transparent">Translated Conversation</button>
+                <button class="py-2 text-[12px] text-gray-600 hover:text-gray-900 border-b-2 border-transparent">Details</button>
+                <button class="py-2 text-[12px] text-gray-600 hover:text-gray-900 border-b-2 border-transparent">Related</button>
+            </div>
+
+            <!-- Chat Area -->
+            <div class="flex-1 bg-white rounded-b border border-[#dddbda] shadow-sm flex flex-col overflow-hidden relative">
                 
-                <div class="text-[13px] font-bold text-[#0176d3] mb-4" id="target-detail-accname">Zoe Bouvard</div>
-                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
-                    <div>
-                        <label class="text-[11px] text-gray-500 block">Account Name</label>
-                        <span class="text-[13px] text-[#181818]" id="target-detail-company">Frip'Zouille</span>
+                <!-- Chat Header -->
+                <div class="flex justify-between items-center p-2 border-b border-gray-200 bg-gray-50">
+                    <div class="flex items-center gap-2 font-bold text-gray-700 text-sm">
+                        <i class="fa-solid fa-message text-pink-600"></i> Conversation
                     </div>
-                    <div>
-                        <label class="text-[11px] text-gray-500 block">Birthdate</label>
-                        <span id="target-detail-birthdate" class="text-[13px] text-[#181818]">13.04.1997</span>
-                    </div>
-                    <div>
-                        <label class="text-[11px] text-gray-500 block">Mobile Phone Number</label>
-                        <span id="target-detail-phone" class="text-[13px] text-[#181818]">+33647942027</span>
-                    </div>
-                    <div>
-                        <label class="text-[11px] text-gray-500 block">Phone</label>
-                        <span class="text-[13px] text-[#181818]">+33647942027</span>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="text-[11px] text-gray-500 block">Email</label>
-                        <span id="target-detail-email" class="text-[13px] text-[#0176d3] hover:underline cursor-pointer">fripzouille@gmail.com</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] text-gray-500">Active</span>
+                        <button onclick="gradingModule.triggerGrading()" id="end-chat-btn" class="hidden bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded text-[11px] font-bold hover:bg-red-50 hover:text-red-600 hover:border-red-300 transition-all">End Chat</button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Account Details Card -->
-            <div class="p-4 border border-[#dddbda] rounded shadow-sm bg-white mb-4">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-[14px] font-bold text-[#014486] flex items-center gap-2">
-                        <div class="w-5 h-5 bg-blue-600 text-white rounded flex items-center justify-center text-[10px]"><i class="fa-solid fa-building"></i></div> Account Details
-                    </h3>
-                    <i class="fa-solid fa-caret-down text-gray-500 text-sm cursor-pointer"></i>
-                </div>
-                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
-                     <div class="col-span-2">
-                        <label class="text-[11px] text-gray-500 block">Account Name</label>
-                        <div class="flex justify-between items-center">
-                            <span class="text-[13px] text-[#181818]">Frip'Zouille</span>
-                            <i class="fa-solid fa-pencil text-gray-400 text-[10px] cursor-pointer hover:text-[#0176d3]"></i>
-                        </div>
+                <!-- Chat Scroller -->
+                <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4 relative bg-white" id="chat-scroller">
+                    <!-- Start Session Overlay -->
+                    <div id="start-session-overlay" class="absolute inset-0 z-10 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+                        <button onclick="aiModule.startSimulation()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-6 py-3 rounded text-sm font-bold shadow-lg transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-play"></i> Start Practice Scenario
+                        </button>
                     </div>
-                    <div>
-                        <label class="text-[11px] text-gray-500 block">Country</label>
-                        <span id="target-detail-country" class="text-[13px] text-[#181818]">France</span>
-                    </div>
-                    <div>
-                        <label class="text-[11px] text-gray-500 block">Merchant Code <i class="fa-solid fa-circle-info text-gray-400"></i></label>
-                        <span class="text-[13px] text-[#181818]" id="target-header-mid">MJSYTDAW</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CENTER COLUMN: Conversations & Tabs -->
-        <div class="flex-1 flex flex-col bg-white border-r border-[#dddbda] overflow-hidden">
-            <div class="flex bg-white border-b border-[#dddbda] px-4 shadow-sm z-10">
-                <button class="px-4 py-3 text-[13px] font-bold border-b-2 border-[#0176d3] text-[#181818] bg-white transition-all" id="tab-conv" onclick="switchCenterTab('conv')">Standard Conversation</button>
-                <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-gray-600 hover:text-[#181818] transition-all" onclick="void(0)">Translated Conversation</button>
-                <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-gray-600 hover:text-[#181818] transition-all" id="tab-details" onclick="switchCenterTab('details')">Details</button>
-                <button class="px-4 py-3 text-[13px] font-medium border-b-2 border-transparent text-gray-600 hover:text-[#181818] transition-all" onclick="void(0)">Related</button>
-            </div>
-
-            <div class="flex-1 flex flex-col overflow-hidden bg-slate-50">
-                <!-- Tab 1: Live Chat Conversation -->
-                <div class="flex-1 flex flex-col overflow-hidden" id="pane-conv">
                     
-                    <!-- Standby State Call-to-Action -->
-                    <div id="empty-state" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-white shadow-sm m-4 rounded border border-[#dddbda]">
-                        <div class="w-16 h-16 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center text-2xl text-blue-600 mb-4 animate-bounce">
-                            💬
-                        </div>
-                        <h3 class="text-base font-extrabold text-gray-800">Simulation Session Ready</h3>
-                        <p class="text-[13px] text-gray-500 max-w-sm mt-1 mb-6">Click below to launch the live customer chat simulation and begin practice.</p>
-                        
-                        <button onclick="initializeSimulationSession()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-6 py-3 rounded font-bold text-[13px] shadow transition-all flex items-center gap-2">
-                            <i class="fa-solid fa-play"></i> Start Practice Session Now
-                        </button>
-                    </div>
-
-                    <!-- Active Timeline -->
-                    <div class="hidden flex-1 overflow-y-auto p-4 space-y-4 bg-white m-4 mb-0 rounded-t border border-b-0 border-[#dddbda]" id="chat-scroller">
-                        <div class="flex items-center justify-between mb-4 border-b pb-2">
-                            <div class="flex items-center gap-2 font-bold text-[#181818] text-[15px]">
-                                <i class="fa-solid fa-message text-[#e0609a]"></i> Conversation
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-gray-500 text-[12px]">Ended</span>
-                                <button class="border border-gray-300 rounded px-3 py-1 text-[12px] bg-white hover:bg-gray-50 text-[#181818]">End Chat ▼</button>
-                            </div>
-                        </div>
-
-                        <div class="space-y-4" id="live-chat-timeline">
-                            <!-- Appended dynamically -->
-                        </div>
-                    </div>
-
-                    <!-- Chat Reply Input -->
-                    <div class="p-3 border border-[#dddbda] rounded-b mx-4 mb-4 flex gap-2 bg-[#f3f2f1]">
-                        <input type="text" id="agent-input" placeholder="Click 'Start Practice' to begin." disabled class="flex-1 text-[13px] p-2.5 border border-[#dddbda] rounded bg-white focus:outline-none focus:ring-1 focus:ring-blue-500">
-                        <button onclick="sendAgentMessage()" id="agent-send-btn" disabled class="bg-[#0176d3] hover:bg-[#005fb2] disabled:opacity-50 text-white px-4 py-2 rounded text-[13px] font-bold transition-all flex items-center gap-1.5">
-                            <i class="fa-solid fa-paper-plane"></i>
-                        </button>
-                        <button onclick="triggerCaseGrading()" id="end-session-btn" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-[13px] font-bold transition-all flex items-center gap-1.5">
-                            <i class="fa-solid fa-square-check"></i> Wrap Up
-                        </button>
+                    <div class="flex flex-col gap-4" id="live-chat-timeline">
+                        <!-- Messages populate here -->
                     </div>
                 </div>
 
-                <!-- Tab 2: Context Details Sheet -->
-                <div class="hidden p-6 overflow-y-auto bg-white h-full m-4 border border-[#dddbda] rounded shadow-sm" id="pane-details">
-                    <h3 class="text-[14px] font-bold text-[#014486] border-b pb-2 mb-4">System Context Data</h3>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Merchant Country</label>
-                            <input type="text" id="target-detail-country-meta" readonly class="w-full text-[13px] p-2 bg-slate-50 border border-[#dddbda] rounded font-bold">
+                <!-- Chat Input Area -->
+                <div class="p-2 border-t border-gray-200 bg-[#f3f2f1]">
+                    <div class="bg-white border border-gray-300 rounded flex flex-col">
+                        <div class="flex gap-2 p-1 border-b border-gray-100 text-gray-400">
+                            <button class="p-1 hover:text-gray-600"><i class="fa-solid fa-font text-[10px]"></i></button>
+                            <button class="p-1 hover:text-gray-600"><i class="fa-regular fa-face-smile text-[10px]"></i></button>
+                            <button class="p-1 hover:text-gray-600"><i class="fa-solid fa-paperclip text-[10px]"></i></button>
+                            <button class="p-1 hover:text-gray-600"><i class="fa-solid fa-flag text-[10px]"></i></button>
                         </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Assigned Merchant ID</label>
-                            <input type="text" id="target-detail-mid-meta" readonly class="w-full text-[13px] p-2 bg-slate-50 border border-[#dddbda] rounded font-bold font-mono">
+                        <div class="flex">
+                            <input type="text" id="agent-input" disabled placeholder="Reply to message" class="flex-1 p-2 text-xs focus:outline-none bg-transparent">
+                            <button id="agent-send-btn" disabled onclick="aiModule.sendAgentMessage()" class="p-2 text-gray-400 hover:text-[#0176d3] disabled:opacity-50"><i class="fa-solid fa-paper-plane"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT COLUMN: Agent Actions Hub -->
-        <div class="w-[340px] bg-[#f3f2f1] flex flex-col h-full overflow-y-auto border-l border-[#dddbda] gap-3 p-3">
+        <!-- RIGHT COLUMN: Agent Copilot -->
+        <div class="w-[300px] bg-[#f3f2f1] flex flex-col h-full overflow-y-auto p-2 space-y-3 border-l border-[#dddbda]">
             
-            <!-- Agent Copilot Widget -->
+            <!-- Agent Copilot Component -->
             <div class="bg-white border border-[#dddbda] rounded shadow-sm flex flex-col">
-                <div class="p-3 pt-4 font-bold text-[16px] flex items-center gap-2 text-[#181818]">
-                    <i class="fa-solid fa-wand-magic-sparkles text-[#5e23a6]"></i> Agent Copilot
-                    <div class="ml-auto text-[12px] text-[#0176d3] font-normal cursor-pointer hover:underline">en-GB ▼</div>
+                <div class="flex items-center justify-between p-3 border-b border-gray-200">
+                    <div class="flex items-center gap-2 font-bold text-gray-900 text-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles text-purple-700"></i> Agent Copilot
+                    </div>
+                    <span class="text-[10px] text-[#0176d3] cursor-pointer">en-GB <i class="fa-solid fa-caret-down"></i></span>
                 </div>
 
                 <!-- Copilot Tabs -->
-                <div class="flex border-b border-[#dddbda] text-[13px] text-gray-600 px-4" id="copilot-tabs">
-                    <button class="py-2 mr-5 border-b-2 border-[#0176d3] text-[#181818] font-bold bg-white transition-all" onclick="switchCopilotTab('summary')">Summary</button>
-                    <button class="py-2 mr-5 border-b-2 border-transparent hover:text-[#181818] font-medium transition-all" onclick="switchCopilotTab('answer')">Answer</button>
-                    <button class="py-2 border-b-2 border-transparent hover:text-[#181818] font-medium transition-all" onclick="switchCopilotTab('wrapup')">Wrap-up</button>
+                <div class="flex px-3 border-b border-gray-200 text-[11px] font-bold">
+                    <button class="py-2.5 px-3 border-b-2 border-[#0176d3] text-gray-900" id="tab-btn-summary" onclick="app.switchCopilotTab('summary')">Summary</button>
+                    <button class="py-2.5 px-3 border-b-2 border-transparent text-gray-500 hover:text-gray-900" id="tab-btn-answer" onclick="app.switchCopilotTab('answer')">Answer</button>
+                    <button class="py-2.5 px-3 border-b-2 border-transparent text-gray-500 hover:text-gray-900" id="tab-btn-wrapup" onclick="app.switchCopilotTab('wrapup')">Wrap-up</button>
                 </div>
 
-                <!-- Copilot Panes -->
-                <div class="overflow-y-auto" style="max-height: calc(100vh - 350px);">
-                    
+                <div class="p-4 overflow-y-auto max-h-[450px]">
                     <!-- SUMMARY PANE -->
-                    <div id="copilot-pane-summary" class="p-4">
-                        <div class="mb-6">
-                            <h3 class="text-[#014486] font-bold text-[13px] mb-2">Details</h3>
-                            <table class="w-full text-[13px] text-[#181818]">
-                                <tr><td class="py-1 w-2/5 text-gray-600 align-top">Intent</td><td class="py-1">Hardware####Delivery and Logistics</td></tr>
-                                <tr><td class="py-1 w-2/5 text-gray-600">Channel Language</td><td class="py-1">fr</td></tr>
-                                <tr><td class="py-1 w-2/5 text-gray-600">Platform Origin</td><td class="py-1">Dashboard</td></tr>
-                            </table>
-                        </div>
-                        
+                    <div id="pane-summary" class="space-y-5">
                         <div>
-                            <h3 class="text-[#014486] font-bold text-[13px] mb-2">Closed Cases</h3>
-                            
-                            <div class="border-b border-gray-200 pb-3 mb-3">
-                                <a href="#" class="text-[#0176d3] font-bold text-[13px] hover:underline">93031011</a>
-                                <table class="w-full text-[13px] text-[#181818] mt-1">
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Closed Date</td><td>21.07.2026, 19:10</td></tr>
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Channel</td><td>App Chat</td></tr>
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600 align-top">Summary Issue</td><td></td></tr>
-                                </table>
+                            <h3 class="text-[#014486] font-bold text-[12px] mb-2">Details</h3>
+                            <div class="grid grid-cols-[100px_1fr] gap-y-1 text-[11px]">
+                                <span class="text-gray-500">Intent</span><span class="text-gray-800">Hardware####Delivery</span>
+                                <span class="text-gray-500">Channel Language</span><span class="text-gray-800">en</span>
+                                <span class="text-gray-500">Platform Origin</span><span class="text-gray-800">app_Web</span>
                             </div>
-                            
-                            <div class="border-b border-gray-200 pb-3 mb-3">
-                                <a href="#" class="text-[#0176d3] font-bold text-[13px] hover:underline">93023922</a>
-                                <table class="w-full text-[13px] text-[#181818] mt-1">
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Closed Date</td><td>21.07.2026, 14:44</td></tr>
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Channel</td><td>Email</td></tr>
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600 align-top">Summary Issue</td><td class="leading-tight">The merchant reported an issue with their cash register that has not been working for seven days and requested a quick solution.</td></tr>
-                                </table>
-                            </div>
-
-                            <div class="pb-1">
-                                <a href="#" class="text-[#0176d3] font-bold text-[13px] hover:underline">93023491</a>
-                                <table class="w-full text-[13px] text-[#181818] mt-1">
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Closed Date</td><td>21.07.2026, 11:45</td></tr>
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600">Channel</td><td>Phone</td></tr>
-                                    <tr><td class="py-0.5 w-2/5 text-gray-600 align-top">Summary Issue</td><td></td></tr>
-                                </table>
+                        </div>
+                        <div>
+                            <h3 class="text-[#014486] font-bold text-[12px] mb-2">Closed Cases</h3>
+                            <div class="space-y-3">
+                                <div class="border-b border-gray-100 pb-2">
+                                    <a href="#" class="text-[#0176d3] font-bold text-[11px] mb-1 block">93031011</a>
+                                    <div class="grid grid-cols-[100px_1fr] gap-y-0.5 text-[10px]">
+                                        <span class="text-gray-500">Closed Date</span><span class="text-gray-800">21.07.2026, 19:10</span>
+                                        <span class="text-gray-500">Channel</span><span class="text-gray-800">App Chat</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a href="#" class="text-[#0176d3] font-bold text-[11px] mb-1 block">93023922</a>
+                                    <div class="grid grid-cols-[100px_1fr] gap-y-0.5 text-[10px]">
+                                        <span class="text-gray-500">Closed Date</span><span class="text-gray-800">21.07.2026, 14:44</span>
+                                        <span class="text-gray-500">Channel</span><span class="text-gray-800">Email</span>
+                                        <span class="text-gray-500">Summary Issue</span><span class="text-gray-800">Customer reported issue with card reader.</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- ANSWER PANE -->
-                    <div id="copilot-pane-answer" class="hidden p-4">
-                        <div class="mb-6">
-                            <h3 class="text-[#014486] text-[14px] mb-3">Quick templates</h3>
-                            <div class="space-y-2.5 flex flex-col items-start w-full">
-                                <button onclick="useCopilotTemplate('Hello! Thank you for contacting support. How can I help you today?')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">👋 Welcome message</button>
-                                <button onclick="useCopilotTemplate('Could you please verify your identity by providing your full name and date of birth?')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">👩‍💻 Identity verification</button>
-                                <button onclick="useCopilotTemplate('Please allow me a moment while I investigate this issue for you.')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">⏸️ Hold / Investigation</button>
-                                <button onclick="useCopilotTemplate('I have escalated this issue. Is there anything else I can assist you with before we close this chat?')" class="w-[85%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">🤗 Pre-closing message</button>
-                                <button onclick="useCopilotTemplate('Thank you for reaching out. Have a great day!')" class="w-[45%] border border-[#dddbda] bg-white rounded px-3 py-1.5 text-[13px] text-[#0176d3] hover:bg-gray-50 flex items-center justify-start gap-2 shadow-sm transition-all text-left">👍 CSAT & Goodbye</button>
+                    <div id="pane-answer" class="hidden space-y-5">
+                        <div>
+                            <h3 class="text-[#014486] text-[12px] mb-2 font-medium">Quick templates</h3>
+                            <div class="space-y-1.5 flex flex-col items-start w-full">
+                                <button onclick="app.insertTemplate('Hello! Thank you for contacting support. How can I help you today?')" class="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-[11px] text-[#0176d3] hover:bg-gray-50 text-left sf-shadow">👋 Welcome message</button>
+                                <button onclick="app.insertTemplate('Could you please verify your identity by providing your full name and date of birth?')" class="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-[11px] text-[#0176d3] hover:bg-gray-50 text-left sf-shadow">👩‍💻 Identity verification</button>
+                                <button onclick="app.insertTemplate('Please allow me a moment while I investigate this issue for you.')" class="w-full border border-gray-300 bg-white rounded px-2 py-1.5 text-[11px] text-[#0176d3] hover:bg-gray-50 text-left sf-shadow">⏸️ Hold / Investigation</button>
+                                <button onclick="app.insertTemplate('Thank you for reaching out. Have a great day!')" class="w-[60%] border border-gray-300 bg-white rounded px-2 py-1.5 text-[11px] text-[#0176d3] hover:bg-gray-50 text-left sf-shadow">👍 CSAT & Goodbye</button>
                             </div>
                         </div>
-                        
                         <div>
-                            <h3 class="text-[#014486] text-[14px] mb-2">Generate Answer</h3>
-                            <div class="border border-[#dddbda] rounded p-4 bg-white shadow-sm">
-                                <p class="text-[13px] text-[#181818] mb-2">Response suggestion:</p>
-                                <p class="text-[13px] text-[#181818] mb-4 leading-relaxed" id="ai-suggestion-text">The replacement device has not yet been shipped according to DHL's tracking information. I will escalate this issue to ensure you receive the most accurate update on your order.</p>
+                            <h3 class="text-[#014486] text-[12px] mb-2 font-medium">Generate Answer</h3>
+                            <div class="border border-gray-300 rounded p-3 bg-white sf-shadow">
+                                <p class="text-[11px] text-gray-800 mb-1 font-medium">Response suggestion:</p>
+                                <p class="text-[10px] text-gray-700 mb-3 leading-relaxed">I can see the issue you are facing. Let me verify your account details so I can assist further.</p>
                                 <div class="flex gap-2 mb-2">
-                                    <button class="flex-1 border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded py-1.5 text-[13px] flex items-center justify-center gap-1.5 font-medium transition-all">Edit <i class="fa-solid fa-pen text-[10px]"></i></button>
-                                    <button onclick="useCopilotTemplate(document.getElementById('ai-suggestion-text').innerText)" class="flex-1 border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded py-1.5 text-[13px] flex items-center justify-center gap-1.5 font-medium transition-all">Use <i class="fa-solid fa-paper-plane text-[10px]"></i></button>
+                                    <button class="flex-1 border border-[#0176d3] text-[#0176d3] hover:bg-blue-50 rounded py-1 text-[11px] font-medium"><i class="fa-solid fa-pen text-[9px] mr-1"></i> Edit</button>
+                                    <button onclick="app.insertTemplate('I can see the issue you are facing. Let me verify your account details so I can assist further.')" class="flex-1 bg-[#0176d3] text-white hover:bg-[#005fb2] rounded py-1 text-[11px] font-medium"><i class="fa-solid fa-paper-plane text-[9px] mr-1"></i> Use</button>
                                 </div>
-                                <button class="w-full border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded py-1.5 text-[13px] flex items-center justify-center gap-1.5 font-medium transition-all">Regenerate <i class="fa-solid fa-rotate text-[10px]"></i></button>
+                                <button class="w-full border border-[#0176d3] text-[#0176d3] hover:bg-blue-50 rounded py-1 text-[11px] font-medium"><i class="fa-solid fa-rotate text-[9px] mr-1"></i> Regenerate</button>
                             </div>
                         </div>
                     </div>
 
                     <!-- WRAP-UP PANE -->
-                    <div id="copilot-pane-wrapup" class="hidden p-4">
-                        <div class="space-y-3">
-                            <h4 class="text-[14px] font-bold text-[#014486]">Case Classification</h4>
-                            <div class="text-[12px] text-gray-600 border-b border-gray-200 pb-2">
-                                <strong>Status:</strong> <span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check"></i> Ready</span>
+                    <div id="pane-wrapup" class="hidden space-y-3">
+                        <div class="text-[11px] text-gray-600 mb-2">
+                            <strong>Classification Status:</strong> <span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check"></i> Pending</span>
+                        </div>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Product</label>
+                                <select id="class-product" class="w-full text-[11px] p-1 border border-gray-300 rounded"><option value="">Select...</option><option>Hardware</option><option>Software</option></select>
                             </div>
-
-                            <div class="space-y-3 pt-1">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 1. Product</label>
-                                    <select id="class-product" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
-                                        <option value="">Select Product...</option>
-                                        <option>Service Cloud Core</option>
-                                        <option>Billing & Payments</option>
-                                        <option>Verification & Security</option>
-                                        <option>VeriFactu Compliance</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 2. Sub-Product</label>
-                                    <select id="class-subproduct" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
-                                        <option value="">Select Sub Product...</option>
-                                        <option>Account Credentials</option>
-                                        <option>API Gateway</option>
-                                        <option>European Billing</option>
-                                        <option>MFA Authentication</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 3. Service</label>
-                                    <select id="class-service" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
-                                        <option value="">Select Service...</option>
-                                        <option>User Verification Service</option>
-                                        <option>Merchant ID Sync</option>
-                                        <option>Invoice Direct API</option>
-                                        <option>Multi-Factor Auth Service</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">* 4. Cause / Reason</label>
-                                    <select id="class-cause" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
-                                        <option value="">Select Cause...</option>
-                                        <option>Credentials Issue</option>
-                                        <option>Verification Failed</option>
-                                        <option>VeriFactu System Link</option>
-                                        <option>MFA Authentication Error</option>
-                                        <option>Region Discrepancy</option>
-                                    </select>
-                                </div>
-                                <div class="pt-3 border-t border-gray-200 mt-2">
-                                    <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Escalation Queue</label>
-                                    <select id="esc-target" class="w-full text-[13px] p-2 border border-[#dddbda] rounded bg-white focus:outline-none focus:border-[#0176d3]">
-                                        <option value="">Select Queue...</option>
-                                        <option>Tier 2 Backoffice Support</option>
-                                        <option>Bank Backoffice Core Hub</option>
-                                        <option>Compliance & Legal</option>
-                                    </select>
-                                    <button onclick="executeEscalation()" class="mt-3 w-full bg-white border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 p-2.5 rounded text-[13px] font-bold transition-all shadow-sm">Escalate Case</button>
-                                </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-600 mb-0.5">Cause</label>
+                                <select id="class-cause" class="w-full text-[11px] p-1 border border-gray-300 rounded"><option value="">Select...</option><option>Defect</option><option>User Error</option></select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Open Cases Widget (Mock) -->
-            <div class="bg-white border border-[#dddbda] rounded shadow-sm p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-all group">
-                <div class="flex items-center gap-3">
-                    <div class="w-6 h-6 bg-rose-500 text-white rounded flex items-center justify-center text-[12px]"><i class="fa-solid fa-briefcase"></i></div>
-                    <span class="text-[14px] font-bold text-[#181818]">Open Cases (0)</span>
+            <!-- Open Cases Widget (Static UI) -->
+            <div class="bg-white border border-[#dddbda] rounded shadow-sm p-2 flex items-center justify-between cursor-pointer">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 bg-pink-500 text-white rounded flex items-center justify-center text-[10px]"><i class="fa-solid fa-briefcase"></i></div>
+                    <span class="text-xs font-bold text-gray-800">Open Cases (0)</span>
                 </div>
-                <i class="fa-solid fa-chevron-down text-gray-400 text-[10px] group-hover:text-gray-600 transition-colors"></i>
+                <i class="fa-solid fa-chevron-down text-gray-400 text-[10px]"></i>
             </div>
-
-            <!-- Knowledge Widget -->
-            <div class="bg-white border border-[#dddbda] rounded shadow-sm p-4 flex flex-col gap-3">
-                <div class="flex items-center justify-between">
-                    <span class="text-[15px] font-bold text-[#181818]">Knowledge</span>
-                    <button class="border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded px-3 py-1.5 text-[12px] font-medium transition-all shadow-sm">New Article</button>
-                </div>
-                <div class="flex gap-2">
-                    <div class="flex-1 relative">
-                        <i class="fa-solid fa-search absolute left-2.5 top-2 text-gray-400 text-[12px]"></i>
-                        <input type="text" placeholder="Search Knowledge..." class="w-full pl-7 pr-2 py-1.5 border border-[#dddbda] rounded text-[13px] focus:outline-none focus:border-[#0176d3] text-[#181818]">
-                    </div>
-                    <button class="border border-[#dddbda] text-[#0176d3] hover:bg-gray-50 rounded px-3 py-1 text-[13px] font-medium transition-all shadow-sm">Filters</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- Footer Strip -->
-    <div class="fixed bottom-0 left-0 right-0 h-[35px] bg-[#f3f2f1] border-t border-[#dddbda] flex items-center px-4 justify-between text-[11px] text-gray-500 z-10">
-        <div class="flex items-center gap-3 font-semibold">
-            <span>Bottom Bar:</span>
-            <span class="hover:text-gray-900 cursor-pointer">Macros</span> | 
-            <span class="hover:text-gray-900 cursor-pointer">Recent Items</span> | 
-            <span class="hover:text-gray-900 cursor-pointer">Five9 Supervisor Plus</span>
-        </div>
-        <div class="font-bold text-blue-600 flex items-center gap-2">
-            <span id="footer-uid-badge" class="text-[10px] font-mono text-gray-500">ID: anon</span>
-            <span><i class="fa-solid fa-circle text-[8px] text-green-500 mr-1 animate-pulse"></i> Salesforce Service Hub Active</span>
         </div>
     </div>
 </div>
 
-<!-- Toast Notification Container -->
-<div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50 pointer-events-none"></div>
-
-<!-- TRAINER PASSCODE MODAL OVERLAY -->
-<div id="trainer-passcode-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center space-y-4">
-        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mx-auto text-xl">
-            <i class="fa-solid fa-key"></i>
-        </div>
-        <div>
-            <h3 class="text-base font-extrabold text-gray-800">Trainer Security Authentication</h3>
-            <p class="text-xs text-gray-500 mt-1">Enter passcode <strong class="text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded font-mono">1234</strong> to unlock management features.</p>
-        </div>
-
-        <input type="password" id="trainer-pin-input" placeholder="Enter PIN (Default: 1234)" class="w-full text-center text-lg p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none font-mono tracking-widest bg-slate-50">
-
-        <p id="pin-error-text" class="text-xs font-bold text-red-600 hidden"><i class="fa-solid fa-circle-exclamation"></i> Incorrect PIN. Passcode is 1234.</p>
-
-        <div class="flex gap-2 pt-2">
-            <button onclick="closeTrainerPasscode()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-lg text-xs font-bold transition-all">Cancel</button>
-            <button onclick="verifyTrainerPasscode()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2.5 rounded-lg text-xs font-bold transition-all">Unlock Portal</button>
+<!-- Trainer Passcode Modal -->
+<div id="trainer-passcode-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center space-y-4">
+        <h3 class="font-bold text-gray-800">Trainer Passcode Required</h3>
+        <input type="password" id="trainer-pin-input" placeholder="PIN: 1234" class="w-full text-center text-lg p-2 border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+        <p id="pin-error-text" class="text-xs font-bold text-red-600 hidden">Incorrect PIN.</p>
+        <div class="flex gap-2">
+            <button onclick="document.getElementById('trainer-passcode-modal').classList.add('hidden')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded text-xs font-bold">Cancel</button>
+            <button onclick="app.verifyTrainerPasscode()" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-2 rounded text-xs font-bold">Unlock</button>
         </div>
     </div>
 </div>
 
-<!-- EVALUATION / CASE WRAP-UP MODAL OVERLAY -->
-<div id="grading-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full flex flex-col max-h-[85vh] overflow-hidden">
-        <div class="bg-[#16325c] p-5 text-white flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xl">
-                    🏆
-                </div>
+<!-- Grading Modal -->
+<div id="grading-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-lg shadow-2xl max-w-xl w-full flex flex-col overflow-hidden">
+        <div class="bg-[#16325c] p-4 text-white flex justify-between items-center">
+            <h2 class="font-bold">Training Evaluation Report</h2>
+            <button onclick="app.closeGradingModal()" class="text-white hover:text-gray-300"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="p-6 space-y-4">
+            <div class="bg-gray-50 p-4 rounded border flex justify-between items-center">
                 <div>
-                    <h2 class="text-base font-extrabold uppercase tracking-wide">Training Performance Report</h2>
-                    <p class="text-[10px] text-blue-200 mt-0.5">Automated QA Scoring and Verification Results</p>
+                    <span class="text-xs font-bold text-gray-500 uppercase">Score</span>
+                    <span id="evaluation-grade" class="block text-sm font-bold text-emerald-600 mt-1">Evaluating...</span>
                 </div>
+                <div class="text-3xl font-black text-gray-800" id="evaluation-rating">.../100</div>
             </div>
-            <button onclick="closeGradingModal()" class="text-white hover:text-gray-200 text-lg">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <div class="space-y-2" id="criteria-checklist-container">
+                <div class="text-center text-xs text-gray-500"><i class="fa-solid fa-spinner fa-spin"></i> Analyzing transcript...</div>
+            </div>
+            <div class="bg-blue-50 border border-blue-100 p-3 rounded text-xs text-blue-900" id="evaluation-feedback-text"></div>
         </div>
-
-        <div class="p-6 flex-1 overflow-y-auto space-y-6">
-            <!-- Score Card -->
-            <div class="bg-slate-50 p-5 rounded-lg border border-gray-200 flex items-center justify-between">
-                <div>
-                    <span class="text-xs font-bold text-gray-500 block uppercase">Overall Training Score</span>
-                    <span id="evaluation-rating" class="text-3xl font-black text-gray-800">85 / 100</span>
-                    <span id="evaluation-grade" class="block text-[11px] font-bold text-emerald-600 mt-1">Excellent Case Handling</span>
-                </div>
-                <div class="w-20 h-20 bg-white rounded-full border-4 border-emerald-500 flex items-center justify-center shadow-md">
-                    <span id="evaluation-percent" class="text-lg font-black text-emerald-600">85%</span>
-                </div>
-            </div>
-
-            <!-- Checked Criteria List -->
-            <div class="space-y-3">
-                <h3 class="text-xs font-extrabold text-gray-700 uppercase tracking-wider flex items-center gap-1.5 border-b pb-1.5">
-                    <i class="fa-solid fa-clipboard-check"></i> Target Verification Checklist
-                </h3>
-                
-                <div class="space-y-2" id="criteria-checklist-container">
-                    <!-- Populated Dynamically -->
-                </div>
-            </div>
-
-            <!-- Qualitative Feedback -->
-            <div class="bg-blue-50/50 border border-blue-200 p-4 rounded-lg">
-                <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                    <i class="fa-solid fa-message"></i> Qualitative Feedback
-                </h3>
-                <p id="evaluation-feedback-text" class="text-xs text-blue-900 leading-relaxed font-medium">
-                    Great job verifying credentials before providing account information.
-                </p>
-            </div>
-        </div>
-
-        <div class="bg-gray-50 p-4 border-t flex justify-end gap-2">
-            <button onclick="closeGradingModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded font-bold text-xs transition-all">Dismiss Report</button>
-            <button onclick="restartCaseSession()" class="bg-[#0176d3] hover:bg-[#005fb2] text-white px-5 py-2 rounded font-bold text-xs transition-all flex items-center gap-1.5">
-                <i class="fa-solid fa-rotate-right"></i> Restart Practice Round
-            </button>
+        <div class="bg-gray-50 p-3 border-t flex justify-end gap-2">
+            <button onclick="app.closeGradingModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded text-xs font-bold">Dismiss</button>
         </div>
     </div>
 </div>
 
-<!-- ================================================================= -->
-<!-- JAVASCRIPT MECHANICS: CORE APPLICATION & FIREBASE PERSISTENCE     -->
-<!-- ================================================================= -->
+<!-- Toast Container -->
+<div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
+
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, deleteDoc, getDocs, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'sf-sandbox-v1';
-    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-        apiKey: "AIzaSyDemoConfigForFallbackOnly",
-        authDomain: "demo-app.firebaseapp.com",
-        projectId: "demo-app",
-        storageBucket: "demo-app.appspot.com",
-        messagingSenderId: "123456789",
-        appId: "1:123456789:web:abcdef"
+    /// =====================================================================
+    /// --- START OF Virtual app.js (State & UI Logic) ---
+    /// =====================================================================
+    window.AppState = {
+        cases: [],
+        currentCase: null,
+        chatMessages: [],
+        sessionActive: false,
+        verifiedItems: { name: false, phone: false, birthdate: false, email: false }
     };
 
-    let app = null;
-    let auth = null;
-    let db = null;
-
-    try {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-    } catch (e) {
-        console.warn("Firebase fallback mode initialized", e);
-    }
-
-    let currentUser = null;
-    let currentUserId = 'local-user-' + Math.floor(Math.random() * 10000);
-    let userCompletedCases = {};
-
-    const TRAINER_PASCODE_PIN = "1234";
-
-    window.conversationTurnIndex = 0;
-    window.currentRole = ""; 
-    window.currentCaseIndex = 0;
-    window.chatMessages = [];
-    window.sessionActive = false;
-    window.isEscalated = false;
-    window.escalationQueue = "";
-
-    window.verifiedItems = {
-        name: false,
-        phone: false,
-        birthdate: false,
-        email: false,
-        mfaChecked: false
-    };
-
-    window.loadedCases = [];
-    window.currentCase = null;
-
-    // Immediately load saved cases from localStorage for instant display across refreshes
-    const localSavedCases = localStorage.getItem('sf_sandbox_cases');
-    if (localSavedCases) {
-        try {
-            const parsed = JSON.parse(localSavedCases);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-                window.loadedCases = parsed;
-            }
-        } catch(e) {}
-    }
-
-    // Immediately update session text so UI is never stuck on "Initializing..."
-    const sessionDisplay = document.getElementById('user-session-id-display');
-    if (sessionDisplay) sessionDisplay.innerText = `User ID: ${currentUserId.slice(0, 12)}...`;
-    const footerUidBadge = document.getElementById('footer-uid-badge');
-    if (footerUidBadge) footerUidBadge.innerText = `ID: ${currentUserId}`;
-
-    window.promptTrainerAccess = function() {
-        const pinInput = document.getElementById('trainer-pin-input');
-        if (pinInput) pinInput.value = "";
-        const errText = document.getElementById('pin-error-text');
-        if (errText) errText.classList.add('hidden');
-        const modal = document.getElementById('trainer-passcode-modal');
-        if (modal) modal.classList.remove('hidden');
-        setTimeout(() => { if (pinInput) pinInput.focus(); }, 100);
-    };
-
-    window.closeTrainerPasscode = function() {
-        const modal = document.getElementById('trainer-passcode-modal');
-        if (modal) modal.classList.add('hidden');
-    };
-
-    window.verifyTrainerPasscode = function() {
-        const pinInput = document.getElementById('trainer-pin-input');
-        const pinVal = pinInput ? pinInput.value.trim() : "";
-        if (pinVal === TRAINER_PASCODE_PIN) {
-            window.closeTrainerPasscode();
-            window.navigateToPortal('trainer');
-            showToast("Access Unlocked", "Welcome back, Trainer.", "success");
-        } else {
-            const errText = document.getElementById('pin-error-text');
-            if (errText) errText.classList.remove('hidden');
-        }
-    };
-
-    window.navigateToPortal = function(role) {
-        window.currentRole = role;
-        const gatewayView = document.getElementById('role-gateway-view');
-        if (gatewayView) gatewayView.classList.add('hidden');
-
-        if (role === 'agent') {
-            const agentView = document.getElementById('agent-portal-view');
-            if (agentView) agentView.classList.remove('hidden');
-            window.renderAgentCaseCards();
-        } else if (role === 'trainer') {
-            const trainerView = document.getElementById('trainer-portal-view');
-            if (trainerView) trainerView.classList.remove('hidden');
-            window.renderTrainerPreviewList();
-        }
-    };
-
-    window.returnToGateway = function() {
-        window.currentRole = "";
-        document.getElementById('agent-portal-view')?.classList.add('hidden');
-        document.getElementById('trainer-portal-view')?.classList.add('hidden');
-        document.getElementById('sf-workspace')?.classList.add('hidden');
-        document.getElementById('role-gateway-view')?.classList.remove('hidden');
-    };
-
-    window.switchCopilotTab = function(tabName) {
-        const tabs = ['summary', 'answer', 'wrapup'];
-        
-        const buttons = document.querySelectorAll('#copilot-tabs button');
-        buttons.forEach(btn => {
-            if(btn.innerText.toLowerCase().replace('-', '') === tabName.replace('-', '')) {
-                btn.className = "py-2 mr-5 border-b-2 border-[#0176d3] text-[#181818] font-bold bg-white transition-all";
+    window.app = {
+        navigateToPortal: function(role) {
+            document.getElementById('role-gateway-view').classList.add('hidden');
+            if (role === 'agent') {
+                document.getElementById('agent-portal-view').classList.remove('hidden');
+                this.renderCaseGrid();
             } else {
-                btn.className = "py-2 mr-5 border-b-2 border-transparent text-gray-600 hover:text-[#181818] font-medium transition-all";
+                document.getElementById('trainer-portal-view').classList.remove('hidden');
             }
-        });
-        
-        tabs.forEach(t => {
-            const pane = document.getElementById(`copilot-pane-${t}`);
-            if (pane) {
-                if (t === tabName) pane.classList.remove('hidden');
-                else pane.classList.add('hidden');
-            }
-        });
-    };
-
-    window.useCopilotTemplate = function(text) {
-        const input = document.getElementById('agent-input');
-        const sendBtn = document.getElementById('agent-send-btn');
-        if (input && !input.disabled) {
-            input.value = text;
-            input.focus();
-            
-            // Optionally auto-send if it's the Generate Answer or flash a green border
-            input.classList.add('ring-2', 'ring-emerald-500', 'border-emerald-500');
-            setTimeout(() => {
-                input.classList.remove('ring-2', 'ring-emerald-500', 'border-emerald-500');
-            }, 600);
-            
-        } else {
-            showToast("Session Not Started", "Please start the practice session before pasting templates.", "error");
-        }
-    };
-
-    window.renderAgentCaseCards = function() {
-        const grid = document.getElementById('agent-case-grid');
-        const countSpan = document.getElementById('portal-case-count');
-        if (!grid) return;
-
-        if (countSpan) countSpan.innerText = window.loadedCases.length;
-
-        if (window.loadedCases.length === 0) {
-            grid.innerHTML = `
-                <div class="col-span-full bg-white p-8 rounded-xl border border-dashed border-slate-300 text-center space-y-3">
-                    <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto text-xl">
-                        <i class="fa-solid fa-folder-open"></i>
-                    </div>
-                    <h3 class="text-sm font-bold text-slate-700">No Training Scenarios Loaded</h3>
-                    <p class="text-xs text-slate-400 max-w-sm mx-auto">Trainers must log into the Trainer Portal and import a scenario CSV database to populate practice topics.</p>
-                </div>
-            `;
-            return;
-        }
-
-        grid.innerHTML = window.loadedCases.map((cs, idx) => {
-            const completedData = userCompletedCases[String(cs.caseNumber)];
-            const isCompleted = !!completedData;
-
-            return `
-                <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all p-5 flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
-                                Case #${cs.caseNumber}
-                            </span>
-                            ${isCompleted ? `
-                                <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded flex items-center gap-1">
-                                    <i class="fa-solid fa-circle-check"></i> ${completedData.score}% (${completedData.grade})
-                                </span>
-                            ` : `
-                                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-                                    <i class="fa-solid fa-clock mr-1"></i> Open Case
-                                </span>
-                            `}
-                        </div>
-
-                        <h3 class="text-sm font-extrabold text-gray-800 leading-snug">${cs.topic}</h3>
-                        <p class="text-xs text-gray-500 font-medium">Customer: <span class="text-gray-700 font-bold">${cs.customerName}</span> (${cs.country})</p>
-                    </div>
-
-                    <button onclick="launchCase(${idx})" class="w-full bg-[#0176d3] hover:bg-[#005fb2] text-white py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-play"></i> ${isCompleted ? 'Retry Practice Case' : 'Start Practice Session'}
-                    </button>
-                </div>
-            `;
-        }).join('');
-    };
-
-    window.renderTrainerPreviewList = function() {
-        const list = document.getElementById('trainer-cases-preview-list');
-        if (!list) return;
-
-        if (window.loadedCases.length === 0) {
-            list.innerHTML = `
-                <div class="p-6 text-center text-slate-400 bg-slate-50 rounded-lg border border-dashed border-slate-200">
-                    <i class="fa-solid fa-inbox text-2xl mb-2 text-slate-300"></i>
-                    <p class="text-xs font-bold">No cases uploaded in database yet.</p>
-                    <p class="text-[10px] text-slate-400 mt-0.5">Use the CSV upload tool on the left to populate practice scenarios.</p>
-                </div>
-            `;
-            return;
-        }
-
-        list.innerHTML = window.loadedCases.map((cs) => `
-            <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between gap-3 hover:bg-slate-100 transition-all">
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold text-blue-700 font-mono">#${cs.caseNumber}</span>
-                        <span class="text-xs font-extrabold text-slate-800 truncate">${cs.topic}</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 truncate mt-0.5">
-                        <strong>Customer:</strong> ${cs.customerName} (${cs.country}) | <strong>SOP:</strong> ${(cs.sopGradingRubric || cs.rubrics || '').slice(0, 60)}...
-                    </p>
-                </div>
-                <span class="text-[10px] font-extrabold px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded font-sans">
-                    ACTIVE
-                </span>
-            </div>
-        `).join('');
-    };
-
-    async function initAuth() {
-        if (!auth) return;
-        try {
-            const initialToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-            if (initialToken) {
-                await signInWithCustomToken(auth, initialToken);
+        },
+        returnToGateway: function() {
+            document.getElementById('agent-portal-view').classList.add('hidden');
+            document.getElementById('trainer-portal-view').classList.add('hidden');
+            document.getElementById('sf-workspace').classList.add('hidden');
+            document.getElementById('role-gateway-view').classList.remove('hidden');
+        },
+        promptTrainerAccess: function() {
+            document.getElementById('trainer-passcode-modal').classList.remove('hidden');
+            document.getElementById('pin-error-text').classList.add('hidden');
+            document.getElementById('trainer-pin-input').value = '';
+        },
+        verifyTrainerPasscode: function() {
+            if(document.getElementById('trainer-pin-input').value === '1234') {
+                document.getElementById('trainer-passcode-modal').classList.add('hidden');
+                this.navigateToPortal('trainer');
             } else {
-                await signInAnonymously(auth);
+                document.getElementById('pin-error-text').classList.remove('hidden');
             }
-        } catch (err) {
-            console.warn("Auth initialization fallback active", err);
-        }
-    }
-
-    if (auth) {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                currentUserId = user.uid;
-                
-                const sessionDisplay = document.getElementById('user-session-id-display');
-                if (sessionDisplay) sessionDisplay.innerText = `User ID: ${user.uid.slice(0, 8)}...`;
-                
-                const footerUidBadge = document.getElementById('footer-uid-badge');
-                if (footerUidBadge) footerUidBadge.innerText = `ID: ${user.uid}`;
-
-                subscribeToPublicCases();
-                subscribeToUserProgress(user.uid);
+        },
+        renderCaseGrid: function() {
+            const grid = document.getElementById('agent-case-grid');
+            document.getElementById('portal-case-count').innerText = AppState.cases.length;
+            
+            if (AppState.cases.length === 0) {
+                grid.innerHTML = `<div class="col-span-full p-8 text-center text-gray-400 bg-white rounded border border-dashed"><i class="fa-solid fa-folder-open text-2xl mb-2"></i><p class="text-xs">No scenarios loaded. Trainers must upload a CSV.</p></div>`;
+                return;
             }
-        });
-    }
 
-    function subscribeToPublicCases() {
-        if (!currentUser || !db) return;
-        const casesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'cases');
-        onSnapshot(casesColRef, (snapshot) => {
-            const publicCases = [];
-            snapshot.forEach(docSnap => {
-                publicCases.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            if (publicCases.length > 0) {
-                window.loadedCases = publicCases;
-                localStorage.setItem('sf_sandbox_cases', JSON.stringify(publicCases));
-                window.renderAgentCaseCards();
-                window.renderTrainerPreviewList();
-            }
-        }, (error) => {
-            console.error("Error listening to public cases:", error);
-        });
-    }
-
-    function subscribeToUserProgress(uid) {
-        if (!uid || !db) return;
-        const userProgressRef = collection(db, 'artifacts', appId, 'users', uid, 'completedCases');
-        onSnapshot(userProgressRef, (snapshot) => {
-            userCompletedCases = {};
-            snapshot.forEach(docSnap => {
-                userCompletedCases[docSnap.id] = docSnap.data();
-            });
-            window.renderAgentCaseCards();
-            window.renderTrainerPreviewList();
-        }, (error) => {
-            console.error("Error listening to user progress:", error);
-        });
-    }
-
-    window.onload = function() {
-        initAuth();
-        window.renderAgentCaseCards();
-        window.renderTrainerPreviewList();
-    };
-
-    window.notifyKeySaved = function() {
-        const keyVal = document.getElementById('gemini-key').value.trim();
-        if (keyVal) {
-            showToast("API Key Configured", "Gemini API Key saved for active training session.", "info");
-        }
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const pinInput = document.getElementById('trainer-pin-input');
-        if (pinInput) {
-            pinInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    window.verifyTrainerPasscode();
-                }
-            });
-        }
-
-        const agentInput = document.getElementById('agent-input');
-        if (agentInput) {
-            agentInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    window.sendAgentMessage();
-                }
-            });
-        }
-    });
-
-    window.launchCase = function(index) {
-        if (!window.loadedCases || !window.loadedCases[index]) return;
-
-        window.currentCaseIndex = index;
-        window.currentCase = window.loadedCases[index];
-
-        window.chatMessages = [];
-        window.sessionActive = false;
-        window.isEscalated = false;
-        window.escalationQueue = "";
-        window.verifiedItems = { name: false, phone: false, birthdate: false, email: false, mfaChecked: false };
-
-        const cs = window.currentCase;
-
-        document.getElementById('target-case-number-header').innerText = cs.caseNumber;
-        document.getElementById('target-header-name').innerText = cs.customerName;
-        document.getElementById('target-header-age').innerText = calculateAge(cs.birthdate);
-        document.getElementById('target-header-email').innerText = cs.email;
-        document.getElementById('target-header-phone').innerText = cs.mobilePhone;
-        document.getElementById('target-header-mid').innerText = cs.merchantId;
-        document.getElementById('target-header-segment').innerText = cs.segment;
-
-        // Badges in Header
-        const healthBadgeEl = document.getElementById('target-header-health-badge');
-        if (healthBadgeEl) healthBadgeEl.innerText = cs.accountHealth || 'Active Unlimited';
-        
-        const roleBadgeEl = document.getElementById('target-header-role-badge');
-        if (roleBadgeEl) roleBadgeEl.innerText = cs.accountRole || 'Owner';
-
-        // Key Info Cards
-        document.getElementById('target-badge-channel').innerText = cs.channelStatus || 'Logged In';
-        document.getElementById('target-badge-channel').className = (cs.channelStatus === 'Logged Out') ? 'bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded' : 'bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded';
-
-        document.getElementById('target-badge-mfa').innerText = cs.mfaStatus || 'Passed';
-        document.getElementById('target-badge-mfa').className = (cs.mfaStatus === 'Failed' || cs.mfaStatus === 'Low') ? 'bg-amber-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded' : 'bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 inline-block text-center rounded';
-
-        const healthKeyEl = document.getElementById('target-badge-health');
-        if (healthKeyEl) healthKeyEl.innerText = cs.accountHealth || 'Active';
-
-        document.getElementById('target-badge-segment').innerText = cs.segment || 'Small';
-        document.getElementById('target-badge-access').innerText = cs.accessTier || 'Full';
-
-        // Contact Details Card
-        document.getElementById('target-detail-accname').innerText = cs.accountName || cs.customerName;
-        document.getElementById('target-detail-birthdate').innerText = formatDateDisplay(cs.birthdate);
-        document.getElementById('target-detail-phone').innerText = cs.mobilePhone;
-        document.getElementById('target-detail-email').innerText = cs.email;
-        document.getElementById('target-detail-country').innerText = cs.country;
-
-        document.getElementById('target-detail-country-meta').value = cs.country;
-        document.getElementById('target-detail-mid-meta').value = cs.merchantId;
-
-        // Classification defaults if present in CSV
-        if (cs.expectedProduct) {
-            const el = document.getElementById('class-product');
-            if (el) el.value = cs.expectedProduct;
-        }
-        if (cs.expectedSubProduct) {
-            const el = document.getElementById('class-subproduct');
-            if (el) el.value = cs.expectedSubProduct;
-        }
-        if (cs.expectedService) {
-            const el = document.getElementById('class-service');
-            if (el) el.value = cs.expectedService;
-        }
-        if (cs.expectedCause) {
-            const el = document.getElementById('class-cause');
-            if (el) el.value = cs.expectedCause;
-        }
-        if (cs.escalationPath) {
-            const el = document.getElementById('esc-target');
-            if (el) el.value = cs.escalationPath;
-        }
-
-        // Setup Copilot Data
-        const caseIdEl = document.getElementById('case-id');
-        if (caseIdEl) caseIdEl.innerText = cs.caseNumber;
-        const caseCustEl = document.getElementById('case-customer');
-        if (caseCustEl) caseCustEl.innerText = cs.customerName;
-        const caseMidEl = document.getElementById('case-mid');
-        if (caseMidEl) caseMidEl.innerText = cs.merchantId;
-
-        document.getElementById('empty-state').classList.remove('hidden');
-        document.getElementById('chat-scroller').classList.add('hidden');
-        document.getElementById('live-chat-timeline').innerHTML = '';
-
-        const agentInput = document.getElementById('agent-input');
-        agentInput.value = '';
-        agentInput.disabled = true;
-        agentInput.placeholder = "Click 'Start Practice Session Now' to begin.";
-
-        document.getElementById('agent-send-btn').disabled = true;
-        document.getElementById('end-session-btn').classList.add('hidden');
-        document.getElementById('esc-banner').classList.add('hidden');
-
-        document.getElementById('agent-portal-view').classList.add('hidden');
-        document.getElementById('sf-workspace').classList.remove('hidden');
-    };
-
-    window.exitSandboxToPortal = function() {
-        document.getElementById('sf-workspace').classList.add('hidden');
-        document.getElementById('agent-portal-view').classList.remove('hidden');
-        window.renderAgentCaseCards();
-    };
-
-    function calculateAge(birthdateStr) {
-        if (!birthdateStr) return '30';
-        const birthDate = new Date(birthdateStr);
-        if (isNaN(birthDate.getTime())) return '30';
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age > 0 ? age : '30';
-    }
-
-    function formatDateDisplay(dateStr) {
-        if (!dateStr) return '01.01.1990';
-        const d = new Date(dateStr);
-        if (isNaN(d.getTime())) return dateStr;
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        return `${day}.${month}.${year}`;
-    }
-
-    window.initializeSimulationSession = function() {
-        if (!window.currentCase) return;
-
-        window.sessionActive = true;
-        window.conversationTurnIndex = 0;
-        window.chatMessages = [];
-
-        document.getElementById('empty-state').classList.add('hidden');
-        document.getElementById('chat-scroller').classList.remove('hidden');
-
-        const timeline = document.getElementById('live-chat-timeline');
-        const nowStr = new Date().toLocaleString();
-        timeline.innerHTML = `<div class="text-center text-gray-400 text-[10px] my-2 font-mono">Chat session accepted by Agent • ${nowStr}</div>`;
-
-        const agentInput = document.getElementById('agent-input');
-        agentInput.disabled = false;
-        agentInput.placeholder = "Type your response as support agent...";
-        agentInput.focus();
-
-        document.getElementById('agent-send-btn').disabled = false;
-        document.getElementById('end-session-btn').classList.remove('hidden');
-
-        const cs = window.currentCase;
-        const openingText = cs.openingLine || (cs.topic ? `Hello, I need assistance with ${cs.topic}.` : "Hello, I need assistance with my account.");
-        setTimeout(() => {
-            appendChatMessage("Guest (Customer)", openingText, false);
-        }, 300);
-    };
-
-    window.sendAgentMessage = function() {
-        const input = document.getElementById('agent-input');
-        const text = input.value.trim();
-        if (!text || !window.sessionActive) return;
-
-        appendChatMessage("Support Agent", text, true);
-        input.value = '';
-
-        scanHeuristicsForVerification(text);
-        triggerAICustomerResponse(text);
-    };
-
-    function scanHeuristicsForVerification(msgText) {
-        const lc = msgText.toLowerCase();
-        const cName = window.currentCase.customerName.toLowerCase().split(' ')[0];
-        
-        if (lc.includes(cName) || lc.includes("confirm your name") || lc.includes("verification process") || lc.includes("verify your identity") || lc.includes("full name")) {
-            window.verifiedItems.name = true;
-        }
-        const cPhone = window.currentCase.mobilePhone.replace('+', '').slice(-4);
-        if (lc.includes(cPhone) || lc.includes("mobile phone") || lc.includes("phone number") || lc.includes("phone")) {
-            window.verifiedItems.phone = true;
-        }
-        if (lc.includes("birthdate") || lc.includes("born") || lc.includes("date of birth") || lc.includes("birthday") || lc.includes("dob")) {
-            window.verifiedItems.birthdate = true;
-        }
-        const cEmailId = window.currentCase.email.split('@')[0];
-        if (lc.includes(cEmailId) || lc.includes("email address") || lc.includes("confirm email") || lc.includes("email")) {
-            window.verifiedItems.email = true;
-        }
-        if (lc.includes("mfa") || lc.includes("authentication") || lc.includes("passed") || lc.includes("failed") || lc.includes("multi-factor")) {
-            window.verifiedItems.mfaChecked = true;
-        }
-    }
-
-    function appendChatMessage(sender, text, isAgent) {
-        const timeline = document.getElementById('live-chat-timeline');
-        if (!timeline) return;
-
-        window.chatMessages.push({ sender, text, isAgent });
-
-        const bubbleRow = document.createElement('div');
-        bubbleRow.className = `flex flex-col w-full ${isAgent ? 'items-end' : 'items-start'}`;
-
-        const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        bubbleRow.innerHTML = `
-            <div class="p-3 rounded-lg text-xs max-w-[80%] leading-relaxed ${isAgent ? 'bg-[#16325c] text-white rounded-br-none shadow-sm' : 'bg-slate-100 text-slate-800 border border-slate-200 rounded-bl-none shadow-sm'}">
-                <p>${text.replace(/\n/g, '<br>')}</p>
-                <span class="block text-[9px] mt-1 ${isAgent ? 'text-blue-200 text-right' : 'text-slate-400'} font-mono">${sender} • ${timestamp}</span>
-            </div>
-        `;
-
-        timeline.appendChild(bubbleRow);
-        const scroller = document.getElementById('chat-scroller');
-        if (scroller) scroller.scrollTop = scroller.scrollHeight;
-    }
-
-    function appendSystemLog(text) {
-        const timeline = document.getElementById('live-chat-timeline');
-        if (!timeline) return;
-
-        const logDiv = document.createElement('div');
-        logDiv.className = 'text-center text-amber-700 bg-amber-50 border border-amber-200 text-[10px] font-bold p-2 rounded my-2';
-        logDiv.innerHTML = `<i class="fa-solid fa-circle-info mr-1"></i> ${text}`;
-
-        timeline.appendChild(logDiv);
-        const scroller = document.getElementById('chat-scroller');
-        if (scroller) scroller.scrollTop = scroller.scrollHeight;
-    }
-
-    async function triggerAICustomerResponse(agentMsg) {
-        const customKey = document.getElementById('gemini-key') ? document.getElementById('gemini-key').value.trim() : "";
-        const success = await callGeminiAI(customKey, agentMsg);
-        if (!success) {
-            runLocalHeuristicCustomerReply(agentMsg);
-        }
-    }
-
-    async function callGeminiAI(userKey, agentMsg) {
-        const apiKey = userKey || "";
-        if (!apiKey) return false;
-
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        if (!window.currentCase) return false;
-
-        const cs = window.currentCase;
-
-        const systemInstructionText = `You are playing the role of a real customer in a simulated Salesforce Service Cloud support chat.
-
-CUSTOM CUSTOMER PERSONA & INSTRUCTIONS (FROM CSV):${cs.aiSystemPrompt || "Act as a customer needing support for your issue."}
-
-CUSTOMER PROFILE RECORD DATA:
-
-Full Name: ${cs.customerName}
-
-Company/Account Name: ${cs.accountName}
-
-Mobile Phone: ${cs.mobilePhone}
-
-Birthdate: ${cs.birthdate}
-
-Email: ${cs.email}
-
-Country Origin: ${cs.country}
-
-Merchant ID: ${cs.merchantId}
-
-Current MFA Status: ${cs.mfaStatus}
-
-Access Tier: ${cs.accessTier}
-
-Segment: ${cs.segment}
-
-ACTIVE SCENARIO CONTEXT:
-
-Support Topic: ${cs.topic}
-
-Opening Line Issue: "${cs.openingLine}"
-
-SOP Grading Rubric Criteria: "${cs.sopGradingRubric || cs.rubrics || ''}"
-
-ROLEPLAY INSTRUCTIONS:
-
-Embody the persona and instructions described in the CSV AI System Prompt above. Act 100% as customer ${cs.customerName}. Never admit you are an AI.
-
-Respond directly to the support agent's message. Provide requested identity details (Name, DOB, Phone, Email, Merchant ID) when asked.
-
-Keep responses concise and realistic (1 to 3 sentences max).
-
-Match the language used by the support agent.
-
-Do NOT repeat previous statements. Progress the issue toward resolution or escalation according to your persona.`;
-
-     const turns = [];
-     turns.push({ 
-         role: "user", 
-         parts: [{ text: `[System: Customer ${cs.customerName} initiated chat regarding topic "${cs.topic}". Opening issue: "${cs.openingLine}"]` }] 
-     });
-     turns.push({ 
-         role: "model", 
-         parts: [{ text: cs.openingLine || "Hello, I need assistance." }] 
-     });
-
-     for (const msg of window.chatMessages) {
-         if (!msg.isAgent && msg.text === cs.openingLine && turns.length === 2) {
-             continue;
-         }
-
-         const role = msg.isAgent ? "user" : "model";
-         if (turns.length > 0 && turns[turns.length - 1].role === role) {
-             turns[turns.length - 1].parts[0].text += "\n" + msg.text;
-         } else {
-             turns.push({ role: role, parts: [{ text: msg.text }] });
-         }
-     }
-
-     if (turns.length === 0 || turns[turns.length - 1].role !== "user") {
-         turns.push({ role: "user", parts: [{ text: agentMsg }] });
-     }
-
-     const payload = {
-         systemInstruction: { parts: [{ text: systemInstructionText }] },
-         contents: turns
-     };
-
-     try {
-         const response = await fetch(apiUrl, {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify(payload)
-         });
-
-         if (!response.ok) return false;
-
-         const data = await response.json();
-         const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-         if (replyText && replyText.trim()) {
-             setTimeout(() => {
-                 appendChatMessage("Guest (Customer)", replyText.trim(), false);
-             }, 600);
-             return true;
-         }
-     } catch (err) {
-         console.warn("Gemini API call skipped or unconfigured, utilizing dynamic heuristic fallback.", err);
-         return false;
-     }
-     return false;
- }
-
- function runLocalHeuristicCustomerReply(agentMsg) {
-     const lc = agentMsg.toLowerCase();
-     window.conversationTurnIndex++;
-     
-     const cs = window.currentCase;
-     if (!cs) return;
-
-     let reply = "";
-
-     const mentionsName = lc.includes("name") || lc.includes("nombre") || lc.includes("identity") || lc.includes("who am i") || lc.includes("identifi");
-     const mentionsPhone = lc.includes("phone") || lc.includes("mobile") || lc.includes("teléfono") || lc.includes("celular") || lc.includes("contacto");
-     const mentionsDob = lc.includes("birth") || lc.includes("dob") || lc.includes("nacimiento") || lc.includes("cumplea") || lc.includes("born");
-     const mentionsEmail = lc.includes("email") || lc.includes("mail") || lc.includes("correo");
-     const mentionsMid = lc.includes("merchant") || lc.includes("mid") || lc.includes("id") || lc.includes("código") || lc.includes("comercio");
-     const isGreeting = lc.includes("hello") || lc.includes("hi") || lc.includes("hola") || lc.includes("good day") || lc.includes("buenos días") || lc.includes("buenas");
-     const isThanks = lc.includes("thank") || lc.includes("gracias") || lc.includes("great") || lc.includes("perfect") || lc.includes("excelente");
-     const isEscalating = lc.includes("escalat") || lc.includes("transfer") || lc.includes("backoffice") || lc.includes("supervisor") || lc.includes("tier 2") || lc.includes("departamento");
-
-     if (mentionsName) {
-         reply = `My full name is ${cs.customerName}, and the account name is ${cs.accountName}.`;
-     } else if (mentionsPhone) {
-         reply = `My registered mobile phone number is ${cs.mobilePhone}.`;
-     } else if (mentionsDob) {
-         reply = `My date of birth is ${formatDateDisplay(cs.birthdate)}.`;
-     } else if (mentionsEmail) {
-         reply = `My email address on file is ${cs.email}.`;
-     } else if (mentionsMid) {
-         reply = `My Merchant ID is ${cs.merchantId}.`;
-     } else if (isGreeting && window.conversationTurnIndex <= 2) {
-         reply = `Hello! I'm ${cs.customerName}. Thank you for taking my chat regarding ${cs.topic}. My issue is: ${cs.openingLine}`;
-     } else if (isThanks) {
-         reply = `Thank you! Will you be able to update my record or guide me on the next steps?`;
-     } else if (isEscalating) {
-         reply = `Understood. Thank you for routing my request to the appropriate backoffice queue. I'll await their update.`;
-     } else {
-         reply = `Regarding my issue with ${cs.topic}: ${cs.openingLine} Could you check if my account permissions or MFA status are causing this?`;
-     }
-
-     setTimeout(() => {
-         appendChatMessage("Guest (Customer)", reply, false);
-     }, 700);
- }
-
- window.executeEscalation = function() {
-     if (!window.sessionActive) {
-         showToast("Action Locked", "Start a practice session first to unlock escalations.", "error");
-         return;
-     }
-
-     const queueSelection = document.getElementById('esc-target').value;
-     window.isEscalated = true;
-     window.escalationQueue = queueSelection;
-
-     const banner = document.getElementById('esc-banner');
-     if (banner) {
-         banner.innerText = `🚨 ACTION RECORDED: ESCALATED TO [${queueSelection.toUpperCase()}]`;
-         banner.classList.remove('hidden');
-     }
-
-     appendSystemLog(`Case routed manually to [${queueSelection}] queue. Active flags updated.`);
-     showToast("Case Escalated", `Routed successfully to ${queueSelection}`, "success");
- };
-
- window.triggerCaseGrading = async function() {
-     if (!window.sessionActive) return;
-
-     const checklistContainer = document.getElementById('criteria-checklist-container');
-     checklistContainer.innerHTML = '<div class="text-center text-xs font-bold text-gray-500 py-4"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Analyzing chat transcript & classifications against SOP Grading Rubric...</div>';
-
-     document.getElementById('evaluation-rating').innerText = "... / 100";
-     document.getElementById('evaluation-percent').innerText = "...%";
-     document.getElementById('evaluation-grade').innerText = "Evaluating...";
-     document.getElementById('evaluation-feedback-text').innerText = "Generating feedback based on SOP Rubric...";
-
-     document.getElementById('grading-modal').classList.remove('hidden');
-
-     const customKey = document.getElementById('gemini-key') ? document.getElementById('gemini-key').value.trim() : "";
-     const apiKey = customKey || "";
-
-     if (!apiKey) {
-         runFallbackGrading(window.currentCase.sopGradingRubric || window.currentCase.rubrics || "Verify Customer Credentials");
-         return;
-     }
-
-     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-     const transcript = window.chatMessages.map(m => `${m.sender}: ${m.text}`).join('\n');
-     const rubricText = window.currentCase.sopGradingRubric || window.currentCase.rubrics || "Verify Customer Name, Phone, Birthdate, Email, and MFA status.";
-
-     const selectedProduct = document.getElementById('class-product')?.value || 'Not selected';
-     const selectedSubProduct = document.getElementById('class-subproduct')?.value || 'Not selected';
-     const selectedService = document.getElementById('class-service')?.value || 'Not selected';
-     const selectedCause = document.getElementById('class-cause')?.value || 'Not selected';
-     const selectedEscalation = window.isEscalated ? window.escalationQueue : 'None';
-
-     const evaluationPrompt = `You are a Senior QA Evaluator for a Salesforce Service Cloud Customer Support Team.
-
-Evaluate the following chat transcript and agent classification selections against the provided SOP Grading Rubric.
-
-CASE TOPIC: ${window.currentCase.topic}CUSTOMER MFA STATUS: ${window.currentCase.mfaStatus}
-
-AGENT SELECTIONS IN SYSTEM:
-
-Selected Product: ${selectedProduct} (Expected: ${window.currentCase.expectedProduct || 'Any relevant'})
-
-Selected Sub-Product: ${selectedSubProduct} (Expected: ${window.currentCase.expectedSubProduct || 'Any relevant'})
-
-Selected Service: ${selectedService} (Expected: ${window.currentCase.expectedService || 'Any relevant'})
-
-Selected Cause/Reason: ${selectedCause} (Expected: ${window.currentCase.expectedCause || 'Any relevant'})
-
-Escalation Queue Selected: ${selectedEscalation} (Expected Escalation Path: ${window.currentCase.escalationPath || 'As required by SOP'})
-
-SOP GRADING RUBRIC TO ENFORCE:${rubricText}
-
-CHAT TRANSCRIPT:${transcript}
-
-Return a JSON object with this exact structure:{"score": number (0 to 100),"grade": string ("Excellent", "Satisfactory", or "Needs Improvement"),"feedback": string (2-3 sentences of clear qualitative feedback on what the agent did well and how to improve according to the SOP Grading Rubric),"checklist": [{ "item": string (SOP Criteria Description), "passed": boolean, "points": string (e.g. "+20" or "0") }]}`;
-
-        const payload = {
-            contents: [{ role: "user", parts: [{ text: evaluationPrompt }] }],
-            generationConfig: {
-                responseMimeType: "application/json",
-                responseSchema: {
-                    type: "OBJECT",
-                    properties: {
-                        score: { type: "INTEGER" },
-                        grade: { type: "STRING" },
-                        feedback: { type: "STRING" },
-                        checklist: {
-                            type: "ARRAY",
-                            items: {
-                                type: "OBJECT",
-                                properties: {
-                                    item: { type: "STRING" },
-                                    passed: { type: "BOOLEAN" },
-                                    points: { type: "STRING" }
-                                },
-                                required: ["item", "passed", "points"]
-                            }
-                        }
-                    },
-                    required: ["score", "grade", "feedback", "checklist"]
-                }
-            }
-        };
-
-        try {
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const evalText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (evalText) {
-                    const evalResult = JSON.parse(evalText);
-                    renderEvaluationReport(evalResult.score, evalResult.grade, evalResult.feedback, evalResult.checklist);
-                    saveCompletedProgress(evalResult.score, evalResult.grade);
-                    return;
-                }
-            }
-        } catch (e) {
-            console.warn("AI grading unavailable, falling back to heuristic grading", e);
-        }
-
-        // Fallback grading if AI call is unreachable
-        runFallbackGrading(rubricText);
-    };
-
-    function renderEvaluationReport(score, grade, feedback, checklist) {
-        document.getElementById('evaluation-rating').innerText = `${score} / 100`;
-        document.getElementById('evaluation-percent').innerText = `${score}%`;
-        document.getElementById('evaluation-grade').innerText = grade;
-        document.getElementById('evaluation-feedback-text').innerText = feedback;
-
-        const container = document.getElementById('criteria-checklist-container');
-        if (checklist && checklist.length > 0) {
-            container.innerHTML = checklist.map(c => `
-                <div class="flex items-center justify-between p-2.5 rounded ${c.passed ? 'bg-emerald-50 text-emerald-800 border border-emerald-100' : 'bg-rose-50 text-rose-800 border border-rose-100'} text-xs font-semibold">
-                    <span>${c.item}</span>
-                    <span>${c.passed ? '✓ PASSED (' + c.points + ')' : '✗ FAILED (0)'}</span>
+            grid.innerHTML = AppState.cases.map((c, i) => `
+                <div class="bg-white rounded border border-gray-200 p-4 sf-shadow flex flex-col justify-between">
+                    <div>
+                        <span class="text-[10px] font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-100">Case #${c.caseNumber}</span>
+                        <h3 class="text-sm font-bold text-gray-800 mt-2">${c.topic}</h3>
+                        <p class="text-xs text-gray-500">Customer: ${c.customerName}</p>
+                    </div>
+                    <button onclick="app.launchCase(${i})" class="mt-4 w-full bg-[#0176d3] hover:bg-[#005fb2] text-white py-1.5 rounded text-xs font-bold transition-all"><i class="fa-solid fa-play mr-1"></i> Start Session</button>
                 </div>
             `).join('');
-        } else {
-            container.innerHTML = `<div class="text-xs text-gray-500">Grading criteria evaluated against active SOP rubric.</div>`;
-        }
-    }
-
-    function runFallbackGrading(rubricText) {
-        let score = 0;
-        const verifyNamePassed = window.verifiedItems.name;
-        if (verifyNamePassed) score += 25;
-
-        const verifyPhonePassed = window.verifiedItems.phone;
-        if (verifyPhonePassed) score += 25;
-
-        const verifyBirthdatePassed = window.verifiedItems.birthdate;
-        if (verifyBirthdatePassed) score += 25;
-
-        const verifyEmailPassed = window.verifiedItems.email;
-        if (verifyEmailPassed) score += 25;
-
-        const checklist = [
-            { item: "Verify Customer Full Name", passed: verifyNamePassed, points: "+25" },
-            { item: "Verify Mobile Phone Number", passed: verifyPhonePassed, points: "+25" },
-            { item: "Verify Customer Birthdate", passed: verifyBirthdatePassed, points: "+25" },
-            { item: "Verify Registered Email Address", passed: verifyEmailPassed, points: "+25" }
-        ];
-
-        let grade = score >= 75 ? "Satisfactory" : "Needs Improvement";
-        let feedback = `Evaluated against SOP Rubric: "${rubricText.slice(0, 80)}...". Please make sure all required SOP verification steps are performed before resolving the case.`;
-
-        renderEvaluationReport(score, grade, feedback, checklist);
-        saveCompletedProgress(score, grade);
-    }
-
-    function saveCompletedProgress(score, grade) {
-        if (currentUser && currentUserId && window.currentCase) {
-            const caseNumStr = String(window.currentCase.caseNumber);
-            const docRef = doc(db, 'artifacts', appId, 'users', currentUserId, 'completedCases', caseNumStr);
-            setDoc(docRef, {
-                caseNumber: caseNumStr,
-                topic: window.currentCase.topic || 'Case Practice',
-                score: score,
-                grade: grade,
-                completed: true,
-                completedAt: new Date().toISOString()
-            }).catch(err => console.error("Error saving user completed case:", err));
-        }
-    }
-
-    window.closeGradingModal = function() {
-        document.getElementById('grading-modal').classList.add('hidden');
-        window.exitSandboxToPortal();
-    };
-
-    window.restartCaseSession = function() {
-        document.getElementById('grading-modal').classList.add('hidden');
-        window.initializeSimulationSession();
-    };
-
-    window.switchCenterTab = function(tab) {
-        const tabConv = document.getElementById('tab-conv');
-        const tabDetails = document.getElementById('tab-details');
-        const paneConv = document.getElementById('pane-conv');
-        const paneDetails = document.getElementById('pane-details');
-
-        if (tab === 'conv') {
-            tabConv.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-[#0176d3] text-gray-800 bg-white";
-            tabDetails.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800";
-            paneConv.classList.remove('hidden');
-            paneDetails.classList.add('hidden');
-        } else {
-            tabDetails.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-[#0176d3] text-gray-800 bg-white";
-            tabConv.className = "px-4 py-2.5 text-xs font-bold border-b-2 border-transparent text-gray-500 hover:text-gray-800";
-            paneDetails.classList.remove('hidden');
-            paneConv.classList.add('hidden');
-        }
-    };
-
-    window.downloadCSVTemplate = function() {
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "CaseNumber,Topic,CustomerName,AccountName,MobilePhone,Birthdate,Email,ChannelStatus,MfaStatus,AccountHealth,Segment,AccessTier,AccountRole,Country,MerchantId,OpeningLine,AI_System_Prompt,SOP_Grading_Rubric,EscalationPath,ExpectedProduct,ExpectedSubProduct,ExpectedService,ExpectedCause\n";
-        csvContent += "9941012,Sovereign Hub Compliance Validation,Sarah Connor,Cyberdyne Global Tech,+15550192823,1965-11-10,sconnor@cyberdyne.com,Logged In,Passed,Active Unlimited,Priority,Full,Owner,Germany,MCX1892B,\"Hello, I need to check European compliance codes and verify account details for Cyberdyne.\",\"Act as an impatient CTO requesting urgent European compliance verification. Demand quick answers but give Name and DOB when asked.\",\"1. Verify Customer Name and DOB.\\n2. Confirm Account Segment.\\n3. Check European Region Compliance.\",Tier 2 Backoffice Support,VeriFactu Compliance,Account Credentials,User Verification Service,VeriFactu System Link\n";
-        csvContent += "4810291,European Hub Billing Issue,John Doe,Doe Enterprises Limited,+447123456789,1990-01-01,john.doe@doe-enterprises.co.uk,Logged Out,Failed,Active,Small,Team Member,User,Spain,MCX23910,\"Hi there. I got locked out of my billing module. Can you check my profile access details?\",\"Act as a confused business owner locked out of billing due to failed MFA. Ask agent to fix it or transfer to backoffice.\",\"1. Verify Customer Name and Phone.\\n2. Check MFA Status (Failed).\\n3. Escalate case to Backoffice Core queue as per security procedure.\",Bank Backoffice Core Hub,Billing & Payments,European Billing,Invoice Direct API,MFA Authentication Error\n";
-        
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "Sandbox template 2026 - Scenario DB.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        showToast("CSV Downloaded", "Standard template downloaded with complete header & escalation columns.", "info");
-    };
-
-    window.handleCSVUpload = function(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            processUploadedCSV(e.target.result);
-        };
-        reader.readAsText(file);
-    };
-
-    // RFC-4180 Compliant Quote-Aware CSV Parser State Machine
-    function parseFullCSV(text) {
-        const rows = [];
-        let currentRow = [];
-        let currentCell = '';
-        let inQuotes = false;
-
-        for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            const nextChar = text[i + 1];
-
-            if (char === '"') {
-                if (inQuotes && nextChar === '"') {
-                    currentCell += '"';
-                    i++;
-                } else {
-                    inQuotes = !inQuotes;
-                }
-            } else if (char === ',' && !inQuotes) {
-                currentRow.push(currentCell.trim());
-                currentCell = '';
-            } else if ((char === '\r' || char === '\n') && !inQuotes) {
-                if (char === '\r' && nextChar === '\n') {
-                    i++;
-                }
-                currentRow.push(currentCell.trim());
-                if (currentRow.some(c => c !== '')) {
-                    rows.push(currentRow);
-                }
-                currentRow = [];
-                currentCell = '';
-            } else {
-                currentCell += char;
-            }
-        }
-        if (currentCell || currentRow.length > 0) {
-            currentRow.push(currentCell.trim());
-            if (currentRow.some(c => c !== '')) {
-                rows.push(currentRow);
-            }
-        }
-        return rows;
-    }
-
-    async function processUploadedCSV(text) {
-        const rows = parseFullCSV(text);
-        if (rows.length < 2) {
-            showToast("Error", "CSV file contains no valid data rows.", "error");
-            return;
-        }
-
-        const headerCols = rows[0].map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
-        
-        const getIdx = (candidates) => {
-            for (let candidate of candidates) {
-                const cleanCandidate = candidate.toLowerCase().replace(/[^a-z0-9]/g, '');
-                const idx = headerCols.findIndex(h => h.includes(cleanCandidate));
-                if (idx !== -1) return idx;
-            }
-            return -1;
-        };
-
-        const idxNum = getIdx(['casenumber', 'case number', 'case', 'id']);
-        const idxTopic = getIdx(['topic', 'subject', 'title', 'scenario']);
-        const idxCustName = getIdx(['customername', 'customer name', 'customer', 'name']);
-        const idxAccName = getIdx(['accountname', 'account name', 'account', 'company']);
-        const idxPhone = getIdx(['mobilephone', 'mobile phone', 'phone', 'mobile']);
-        const idxDob = getIdx(['birthdate', 'birth date', 'dob', 'birth']);
-        const idxEmail = getIdx(['email']);
-        const idxChannel = getIdx(['channelstatus', 'channel status', 'channel']);
-        const idxMfa = getIdx(['mfastatus', 'mfa status', 'mfa']);
-        const idxHealth = getIdx(['accounthealth', 'account health', 'health', 'acc health']);
-        const idxSeg = getIdx(['segment']);
-        const idxAccess = getIdx(['accesstier', 'access tier', 'access']);
-        const idxRole = getIdx(['accountrole', 'account role', 'role', 'badge']);
-        const idxCountry = getIdx(['country', 'region', 'validatedregion']);
-        const idxMid = getIdx(['merchantid', 'merchant id', 'merchant', 'mid']);
-        const idxOpening = getIdx(['openingline', 'opening line', 'opening', 'firstline', 'first line', 'initialmessage', 'initial message', 'customermessage', 'openingtext', 'issue']);
-        const idxPrompt = getIdx(['aisystemprompt', 'ai system prompt', 'systemprompt', 'system prompt', 'prompt', 'persona', 'instructions']);
-        const idxRubric = getIdx(['sopgradingrubric', 'sop grading rubric', 'gradingrubric', 'grading rubric', 'rubrics', 'rubric', 'sop', 'criteria']);
-        const idxEsc = getIdx(['escalationpath', 'escalation path', 'escalationqueue', 'targetqueue']);
-        const idxProd = getIdx(['expectedproduct', 'product']);
-        const idxSubProd = getIdx(['expectedsubproduct', 'subproduct', 'sub product']);
-        const idxServ = getIdx(['expectedservice', 'service']);
-        const idxCause = getIdx(['expectedcause', 'cause', 'reason']);
-
-        let newCases = [];
-        for (let i = 1; i < rows.length; i++) {
-            const cols = rows[i];
-            if (cols.length < 2) continue;
-
-            const caseNum = (idxNum !== -1 && cols[idxNum]) ? cols[idxNum] : Math.floor(Math.random() * 8000000 + 1000000).toString();
-            const topic = (idxTopic !== -1 && cols[idxTopic]) ? cols[idxTopic] : "Standard Procedure Case";
-            const cName = (idxCustName !== -1 && cols[idxCustName]) ? cols[idxCustName] : "Jane Doe";
-            const aName = (idxAccName !== -1 && cols[idxAccName]) ? cols[idxAccName] : "Acme Corp";
-            const phone = (idxPhone !== -1 && cols[idxPhone]) ? cols[idxPhone] : "+34600112233";
-            const dob = (idxDob !== -1 && cols[idxDob]) ? cols[idxDob] : "1988-05-15";
-            const email = (idxEmail !== -1 && cols[idxEmail]) ? cols[idxEmail] : "customer@example.com";
-            const channel = (idxChannel !== -1 && cols[idxChannel]) ? cols[idxChannel] : "Logged In";
-            const mfa = (idxMfa !== -1 && cols[idxMfa]) ? cols[idxMfa] : "Passed";
-            const health = (idxHealth !== -1 && cols[idxHealth]) ? cols[idxHealth] : "Active Unlimited";
-            const segment = (idxSeg !== -1 && cols[idxSeg]) ? cols[idxSeg] : "Small";
-            const access = (idxAccess !== -1 && cols[idxAccess]) ? cols[idxAccess] : "Full";
-            const role = (idxRole !== -1 && cols[idxRole]) ? cols[idxRole] : "Owner";
-            const country = (idxCountry !== -1 && cols[idxCountry]) ? cols[idxCountry] : "Spain";
-            const mid = (idxMid !== -1 && cols[idxMid]) ? cols[idxMid] : "MCX99881";
+        },
+        launchCase: function(index) {
+            AppState.currentCase = AppState.cases[index];
+            const c = AppState.currentCase;
             
-            let opening = (idxOpening !== -1 && cols[idxOpening]) ? cols[idxOpening] : "";
-            if (!opening) {
-                if (topic && topic !== "Standard Procedure Case") {
-                    opening = `Hello, I need assistance with ${topic}.`;
-                } else {
-                    opening = "Hello, I need assistance with my account.";
-                }
-            }
-            
-            const prompt = (idxPrompt !== -1 && cols[idxPrompt]) ? cols[idxPrompt] : "";
-            const rubrics = (idxRubric !== -1 && cols[idxRubric]) ? cols[idxRubric] : "1. Verify Customer Name.\n2. Verify Phone & Birthdate.\n3. Check MFA status.";
-            const escPath = (idxEsc !== -1 && cols[idxEsc]) ? cols[idxEsc] : "Tier 2 Backoffice Support";
-            const exProd = (idxProd !== -1 && cols[idxProd]) ? cols[idxProd] : "";
-            const exSubProd = (idxSubProd !== -1 && cols[idxSubProd]) ? cols[idxSubProd] : "";
-            const exServ = (idxServ !== -1 && cols[idxServ]) ? cols[idxServ] : "";
-            const exCause = (idxCause !== -1 && cols[idxCause]) ? cols[idxCause] : "";
+            // Populate SF Header & Left Column
+            document.getElementById('target-case-number-header').innerText = c.caseNumber || '000000';
+            document.getElementById('target-header-name').innerText = c.customerName || 'Unknown';
+            document.getElementById('target-detail-name').innerText = c.customerName || 'Unknown';
+            document.getElementById('target-detail-accname').innerText = c.accountName || 'Unknown';
+            document.getElementById('target-detail-email').innerText = c.email || 'Unknown';
+            document.getElementById('target-header-email').innerText = c.email || 'Unknown';
+            document.getElementById('target-detail-phone').innerText = c.mobilePhone || 'Unknown';
+            document.getElementById('target-header-phone').innerText = c.mobilePhone || 'Unknown';
+            document.getElementById('target-detail-phone2').innerText = c.mobilePhone || 'Unknown';
+            document.getElementById('target-detail-country').innerText = c.country || 'Unknown';
+            document.getElementById('target-detail-mid-2').innerText = c.merchantId || 'Unknown';
+            document.getElementById('target-header-mid').innerText = c.merchantId || 'Unknown';
 
-            newCases.push({
-                caseNumber: caseNum,
-                topic: topic,
-                customerName: cName,
-                accountName: aName,
-                mobilePhone: phone,
-                birthdate: dob,
-                email: email,
-                channelStatus: channel,
-                mfaStatus: mfa,
-                accountHealth: health,
-                segment: segment,
-                accessTier: access,
-                accountRole: role,
-                country: country,
-                merchantId: mid,
-                openingLine: opening,
-                aiSystemPrompt: prompt,
-                sopGradingRubric: rubrics,
-                rubrics: rubrics,
-                escalationPath: escPath,
-                expectedProduct: exProd,
-                expectedSubProduct: exSubProd,
-                expectedService: exServ,
-                expectedCause: exCause
+            // Reset UI State
+            document.getElementById('agent-portal-view').classList.add('hidden');
+            document.getElementById('sf-workspace').classList.remove('hidden');
+            document.getElementById('start-session-overlay').classList.remove('hidden');
+            document.getElementById('live-chat-timeline').innerHTML = '';
+            document.getElementById('end-chat-btn').classList.add('hidden');
+            document.getElementById('agent-input').disabled = true;
+            document.getElementById('agent-send-btn').disabled = true;
+            this.switchCopilotTab('summary');
+        },
+        exitSandbox: function() {
+            document.getElementById('sf-workspace').classList.add('hidden');
+            document.getElementById('agent-portal-view').classList.remove('hidden');
+        },
+        switchCopilotTab: function(tab) {
+            ['summary', 'answer', 'wrapup'].forEach(t => {
+                document.getElementById(`pane-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`tab-btn-${t}`);
+                btn.classList.remove('border-[#0176d3]', 'text-gray-900');
+                btn.classList.add('border-transparent', 'text-gray-500');
             });
+            document.getElementById(`pane-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tab}`);
+            activeBtn.classList.remove('border-transparent', 'text-gray-500');
+            activeBtn.classList.add('border-[#0176d3]', 'text-gray-900');
+        },
+        insertTemplate: function(text) {
+            const input = document.getElementById('agent-input');
+            if(!input.disabled) {
+                input.value = text;
+                input.focus();
+            } else {
+                this.showToast('Start Session First', 'Click Start Practice Scenario in the chat window.', 'error');
+            }
+        },
+        closeGradingModal: function() {
+            document.getElementById('grading-modal').classList.add('hidden');
+            this.exitSandbox();
+        },
+        showToast: function(title, msg, type='info') {
+            const container = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className = `p-3 rounded shadow-lg text-white text-xs ${type==='error'?'bg-red-600':'bg-blue-600'} transition-all opacity-100`;
+            t.innerHTML = `<strong>${title}</strong><br>${msg}`;
+            container.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
         }
+    };
 
-        if (newCases.length > 0) {
-            window.loadedCases = newCases;
-            window.currentCase = window.loadedCases[0];
+    /// =====================================================================
+    /// --- START OF Virtual csv.js (CSV Parsing) ---
+    /// =====================================================================
+    window.csvModule = {
+        handleUpload: function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => this.processCSV(e.target.result);
+            reader.readAsText(file);
+        },
+        processCSV: function(text) {
+            // Basic CSV parser assuming standard layout without complex quotes for simplicity in this sandbox
+            const rows = text.split('\n').filter(r => r.trim().length > 0);
+            if(rows.length < 2) return app.showToast('Error', 'Invalid CSV', 'error');
             
-            // Save locally to localStorage so cases persist across refreshes
-            localStorage.setItem('sf_sandbox_cases', JSON.stringify(newCases));
+            const headers = rows[0].toLowerCase().split(',').map(h=>h.trim());
+            const getI = (name) => headers.findIndex(h => h.includes(name));
+            
+            AppState.cases = [];
+            for(let i=1; i<rows.length; i++) {
+                const cols = rows[i].split(',').map(c => c.trim().replace(/^"|"$/g, ''));
+                if(cols.length < 3) continue;
+                
+                AppState.cases.push({
+                    caseNumber: cols[getI('case')] || Math.floor(Math.random()*1000000),
+                    topic: cols[getI('topic')] || 'General Inquiry',
+                    customerName: cols[getI('name')] || cols[getI('customer')] || 'Jane Doe',
+                    accountName: cols[getI('account')] || 'Unknown Corp',
+                    mobilePhone: cols[getI('phone')] || '+100000000',
+                    email: cols[getI('email')] || 'test@test.com',
+                    country: cols[getI('country')] || 'USA',
+                    merchantId: cols[getI('merchant')] || cols[getI('mid')] || 'MID123',
+                    openingLine: cols[getI('opening')] || cols[getI('issue')] || 'Hello, I need help.',
+                    aiSystemPrompt: cols[getI('prompt')] || cols[getI('persona')] || 'Act as a confused customer.',
+                    rubrics: cols[getI('rubric')] || 'Verify Name and Email.'
+                });
+            }
+            
+            app.showToast('Success', `Loaded ${AppState.cases.length} scenarios.`, 'success');
+            
+            // Update Trainer UI
+            const preview = document.getElementById('trainer-cases-preview-list');
+            preview.innerHTML = AppState.cases.map(c => `
+                <div class="p-2 border rounded bg-gray-50 text-xs"><strong>#${c.caseNumber}</strong>: ${c.topic} (${c.customerName})</div>
+            `).join('');
+            
+            app.renderCaseGrid();
+        }
+    };
 
-            if (currentUser && db) {
-                try {
-                    const casesColRef = collection(db, 'artifacts', appId, 'public', 'data', 'cases');
-                    const existingDocs = await getDocs(casesColRef);
-                    const deletePromises = [];
-                    existingDocs.forEach(docSnap => {
-                        deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'cases', docSnap.id)));
-                    });
-                    await Promise.all(deletePromises);
-
-                    for (const cs of newCases) {
-                        const caseDocId = `case_${cs.caseNumber}`;
-                        const caseRef = doc(db, 'artifacts', appId, 'public', 'data', 'cases', caseDocId);
-                        await setDoc(caseRef, cs);
-                    }
-                } catch (err) {
-                    console.error("Error updating Firestore cases:", err);
-                }
+    /// =====================================================================
+    /// --- START OF Virtual ai.js (Chat & Gemini Logic) ---
+    /// =====================================================================
+    window.aiModule = {
+        startSimulation: function() {
+            document.getElementById('start-session-overlay').classList.add('hidden');
+            document.getElementById('agent-input').disabled = false;
+            document.getElementById('agent-send-btn').disabled = false;
+            document.getElementById('end-chat-btn').classList.remove('hidden');
+            AppState.sessionActive = true;
+            AppState.chatMessages = [];
+            
+            // AI triggers first message based on CSV opening line
+            setTimeout(() => {
+                this.appendMessage("Customer", AppState.currentCase.openingLine, false);
+            }, 500);
+        },
+        sendAgentMessage: function() {
+            const input = document.getElementById('agent-input');
+            const txt = input.value.trim();
+            if(!txt) return;
+            
+            this.appendMessage("Support Agent", txt, true);
+            input.value = '';
+            
+            this.callGemini(txt);
+        },
+        appendMessage: function(sender, text, isAgent) {
+            AppState.chatMessages.push({ sender, text, isAgent });
+            const tl = document.getElementById('live-chat-timeline');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            // Styled to match the chat layout in Screenshot 153639
+            const align = isAgent ? 'items-end' : 'items-start';
+            const bg = isAgent ? 'bg-gray-500 text-white' : 'bg-white border border-gray-200 text-gray-800';
+            const nameColor = isAgent ? 'text-blue-500' : 'text-gray-500';
+            
+            tl.innerHTML += `
+                <div class="flex flex-col ${align} w-full">
+                    <div class="${bg} p-2 rounded-lg text-xs max-w-[70%] leading-relaxed sf-shadow">
+                        ${text}
+                    </div>
+                    <span class="text-[9px] mt-1 ${nameColor} font-medium">${isAgent?'Arther':sender} • 11.7.2026, ${time}</span>
+                </div>
+            `;
+            const scroller = document.getElementById('chat-scroller');
+            scroller.scrollTop = scroller.scrollHeight;
+        },
+        callGemini: async function(agentText) {
+            const key = document.getElementById('gemini-key').value.trim();
+            const c = AppState.currentCase;
+            
+            // Simple heuristic fallback if no key is provided
+            if(!key) {
+                setTimeout(() => {
+                    let reply = "I'm still having trouble.";
+                    if(agentText.toLowerCase().includes('name')) reply = `My name is ${c.customerName}.`;
+                    if(agentText.toLowerCase().includes('email')) reply = `My email is ${c.email}.`;
+                    this.appendMessage("Customer", reply, false);
+                }, 1000);
+                return;
             }
 
-            showToast("Database Updated & Saved", `Uploaded ${newCases.length} scenario(s). Cases are saved permanently until next upload!`, "success");
-            window.renderAgentCaseCards();
-            window.renderTrainerPreviewList();
-        } else {
-            showToast("Error", "No valid case records detected in CSV.", "error");
+            // Real Gemini Call
+            const prompt = `You are playing a customer in a simulated chat.
+            Persona: ${c.aiSystemPrompt}
+            Your Name: ${c.customerName}
+            Email: ${c.email}
+            Context: ${c.topic}
+            Initial Issue: ${c.openingLine}
+            
+            Respond directly to the agent's last message: "${agentText}". Keep it under 2 sentences. Act like the persona.`;
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({contents: [{role: "user", parts: [{text: prompt}]}]})
+                });
+                const data = await res.json();
+                const replyText = data.candidates[0].content.parts[0].text;
+                this.appendMessage("Customer", replyText, false);
+            } catch(e) {
+                console.error(e);
+                this.appendMessage("Customer", "System error: Cannot connect to AI.", false);
+            }
         }
-    }
+    };
 
-    function showToast(title, message, type = "info") {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
-        const toast = document.createElement('div');
-        toast.className = `p-4 rounded-lg shadow-lg text-white text-xs font-semibold max-w-sm pointer-events-auto transition-all duration-300 transform translate-x-5 flex flex-col gap-0.5`;
-        
-        if (type === "success") {
-            toast.classList.add('bg-[#1b8042]');
-        } else if (type === "error") {
-            toast.classList.add('bg-[#c23934]');
-        } else {
-            toast.classList.add('bg-[#16325c]');
+    /// =====================================================================
+    /// --- START OF Virtual grading.js (Feedback Logic) ---
+    /// =====================================================================
+    window.gradingModule = {
+        triggerGrading: function() {
+            document.getElementById('grading-modal').classList.remove('hidden');
+            
+            // Simple heuristic grading for demonstration
+            let score = 0;
+            const transcript = AppState.chatMessages.map(m=>m.text.toLowerCase()).join(' ');
+            
+            const checkedName = transcript.includes('name');
+            const checkedEmail = transcript.includes('email');
+            
+            if(checkedName) score += 50;
+            if(checkedEmail) score += 50;
+            
+            setTimeout(() => {
+                document.getElementById('evaluation-rating').innerText = `${score}/100`;
+                document.getElementById('evaluation-grade').innerText = score >= 100 ? 'Excellent' : 'Needs Improvement';
+                
+                document.getElementById('criteria-checklist-container').innerHTML = `
+                    <div class="flex justify-between p-2 rounded text-xs ${checkedName?'bg-green-50 text-green-700':'bg-red-50 text-red-700'}">
+                        <span>Verified Name</span><span>${checkedName?'Pass':'Fail'}</span>
+                    </div>
+                    <div class="flex justify-between p-2 rounded text-xs ${checkedEmail?'bg-green-50 text-green-700':'bg-red-50 text-red-700'}">
+                        <span>Verified Email</span><span>${checkedEmail?'Pass':'Fail'}</span>
+                    </div>
+                `;
+                
+                document.getElementById('evaluation-feedback-text').innerText = 
+                    `SOP Requires: ${AppState.currentCase.rubrics}. Ensure you verify identity before providing support.`;
+            }, 1000);
         }
+    };
 
-        toast.innerHTML = `
-            <strong class="block text-[10px] uppercase tracking-wider font-extrabold">${title}</strong>
-            <span class="text-slate-100 font-medium">${message}</span>
-        `;
-
-        container.appendChild(toast);
-        setTimeout(() => { toast.classList.remove('translate-x-5'); }, 10);
-
-        setTimeout(() => {
-            toast.classList.add('opacity-0', 'translate-y-2');
-            setTimeout(() => { toast.remove(); }, 300);
-        }, 4000);
-    }
+    // Ensure Enter key works on input
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('agent-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') aiModule.sendAgentMessage();
+        });
+    });
 </script>
 
 </body>
