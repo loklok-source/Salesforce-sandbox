@@ -897,19 +897,18 @@
         scroller.scrollTop = scroller.scrollHeight;
     }
 
-    // --- API CONNECTION : GEMINI-3.5-FLASH CHAT SIMULATION ---
+    // --- API CONNECTION : GEMINI-2.5-FLASH CHAT SIMULATION ---
     async function triggerAIGeminiResponse(agentText) {
         const cs = window.currentCase;
         if (!cs) return;
 
         // Ensure we bypass if no key exists
         if (!window.geminiApiKey) {
-            generateFallbackCustomerReply(agentText);
+            generateFallbackCustomerReply(agentText, "No API Key Provided");
             return;
         }
 
-        // UPDATED URL: Using the stable 2026 gemini-3.5-flash endpoint.
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${window.geminiApiKey}`;
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${window.geminiApiKey}`;
 
         // Embed instructions directly into the first user message for bulletproof parsing
         const systemPrompt = `[SYSTEM PERSONA INSTRUCTIONS]
@@ -980,13 +979,14 @@ RULES:
                 body: JSON.stringify(payload)
             });
 
-            const data = await response.json();
-
+            // True Error Logging as requested
             if (!response.ok) {
-                console.error("Gemini API Error Response:", data);
-                throw new Error(data.error?.message || "API request failed");
+                const errorText = await response.text();
+                console.error("Gemini API Error Response:", errorText);
+                throw new Error(errorText || "API request failed with status " + response.status);
             }
-
+            
+            const data = await response.json();
             const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
             if (replyText) {
@@ -995,17 +995,28 @@ RULES:
             }
         } catch (err) {
             console.error("Gemini API call failed:", err);
-            appendSystemLog(`API Error: ${err.message}`);
-            generateFallbackCustomerReply(agentText);
+            
+            // Try to extract a clean JSON error message if possible
+            let cleanError = err.message;
+            try {
+                const parsed = JSON.parse(err.message);
+                if (parsed.error && parsed.error.message) {
+                    cleanError = parsed.error.message;
+                }
+            } catch(e) {}
+            
+            appendSystemLog(`API Error: ${cleanError}`);
+            generateFallbackCustomerReply(agentText, "API Failure");
         }
     }
 
     window.fallbackWarned = false;
 
     // Fallback if AI Key is missing or invalid
-    function generateFallbackCustomerReply(agentMsg) {
+    function generateFallbackCustomerReply(agentMsg, errorReason) {
         if (!window.fallbackWarned) {
-            appendSystemLog("AI Engine disconnected or API Key missing. Switched to offline fallback rules.");
+            const logMsg = errorReason ? `Switched to offline fallback rules due to: ${errorReason}` : "AI Engine disconnected. Switched to offline fallback rules.";
+            appendSystemLog(logMsg);
             window.fallbackWarned = true;
         }
 
@@ -1071,7 +1082,7 @@ RULES:
         input.focus();
     };
 
-    // --- AI QA GRADING LOGIC (GEMINI-3.5-FLASH) ---
+    // --- AI QA GRADING LOGIC (GEMINI-2.5-FLASH) ---
     window.triggerCaseGrading = async function() {
         if (!window.sessionActive) return;
         window.sessionActive = false; // Stop chat
@@ -1126,12 +1137,17 @@ RULES:
         }`;
 
         try {
-            // UPDATED URL: Using the stable 2026 gemini-3.5-flash endpoint.
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${window.geminiApiKey}`, {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${window.geminiApiKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: promptText }] }] })
             });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("Gemini API Grading Error Response:", errorText);
+                throw new Error(errorText || "Grading API request failed");
+            }
 
             const data = await response.json();
             let aiResponse = data.candidates[0].content.parts[0].text;
