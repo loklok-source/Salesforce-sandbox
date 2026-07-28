@@ -649,7 +649,8 @@
         const cs = window.currentCase;
         if (!cs) return;
 
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${window.geminiApiKey}`;
+        // Use the stable gemini-1.5-flash model endpoint
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.geminiApiKey}`;
 
         const systemInstructionText = `You are a real customer in a live support chat. 
         PERSONA INSTRUCTIONS (FROM CSV): ${cs.aiSystemPrompt || "Act as a frustrated customer who needs help."}
@@ -666,19 +667,41 @@
             turns.push({ role: msg.isAgent ? "user" : "model", parts: [{ text: msg.text }] });
         }
 
+        // GEMINI API FIX: Gemini strictly requires alternating roles. 
+        // If an agent sends multiple messages in a row, we must collapse them into one before sending.
+        const collapsedTurns = [];
+        for (const turn of turns) {
+            if (collapsedTurns.length > 0 && collapsedTurns[collapsedTurns.length - 1].role === turn.role) {
+                collapsedTurns[collapsedTurns.length - 1].parts[0].text += "\n" + turn.parts[0].text;
+            } else {
+                collapsedTurns.push({ role: turn.role, parts: [{ text: turn.parts[0].text }] });
+            }
+        }
+        
+        // Safety catch: ensure the very last message being sent is from the user
+        if (collapsedTurns.length > 0 && collapsedTurns[collapsedTurns.length - 1].role === "model") {
+            collapsedTurns.push({ role: "user", parts: [{ text: "[Agent is waiting for response]" }] });
+        }
+
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ systemInstruction: { parts: [{ text: systemInstructionText }] }, contents: turns })
+                body: JSON.stringify({ systemInstruction: { parts: [{ text: systemInstructionText }] }, contents: collapsedTurns })
             });
 
-            if (!response.ok) throw new Error("API Error");
+            if (!response.ok) {
+                const errorData = await response.text();
+                console.error("Gemini API Rejected Request:", errorData);
+                throw new Error("API Error");
+            }
+            
             const data = await response.json();
             const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
             if (replyText) appendChatMessage("Customer", replyText.trim(), false);
         } catch (err) {
+            console.warn("Falling back to local heuristic rules due to API failure.");
             generateFallbackReply(agentText);
         }
     }
@@ -686,9 +709,30 @@
     function generateFallbackReply(agentMsg) {
         const msg = agentMsg.toLowerCase();
         let reply = "Could you check my profile to see what is causing the issue?";
-        if (msg.includes("name") || msg.includes("dob") || msg.includes("birth")) reply = `My name is ${window.currentCase.customerName}.`;
-        else if (msg.includes("email")) reply = `My email is ${window.currentCase.email}.`;
-        else if (msg.includes("phone")) reply = `My phone number is ${window.currentCase.mobilePhone}.`;
+        
+        if (msg.includes("name") || msg.includes("dob") || msg.includes("birth")) {
+            reply = `My name is ${window.currentCase.customerName}.`;
+        } else if (msg.includes("email")) {
+            reply = `My email is ${window.currentCase.email}.`;
+        } else if (msg.includes("phone")) {
+            reply = `My phone number is ${window.currentCase.mobilePhone}.`;
+        } else if (msg.includes("help") || msg.includes("assist") || msg.includes("do for you")) {
+            reply = `I'm having trouble with my account and need assistance.`;
+        } else if (msg.includes("inactive") || msg.includes("disabled") || msg.includes("onboarding")) {
+            reply = `Oh, I didn't realize that. What do I need to do to complete the onboarding?`;
+        }
+        
+        // Add randomization so the fallback doesn't loop the exact same sentence endlessly
+        if (reply === "Could you check my profile to see what is causing the issue?") {
+            const defaults = [
+                "Could you check my profile to see what is causing the issue?",
+                "I'm not sure what you mean, can you clarify?",
+                "Is there a setting in my account I need to change?",
+                "I'm still waiting for a solution to this."
+            ];
+            reply = defaults[Math.floor(Math.random() * defaults.length)];
+        }
+        
         appendChatMessage("Customer", reply, false);
     }
 
