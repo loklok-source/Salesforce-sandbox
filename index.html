@@ -75,22 +75,22 @@
             </button>
 
             <!-- Trainer Button -->
-            <button onclick="promptTrainerAccess()" class="group bg-slate-700/60 hover:bg-emerald-600 border border-slate-600 hover:border-emerald-400 p-5 rounded-xl transition-all text-left flex flex-col justify-between space-y-3 shadow-md hover:shadow-emerald-500/20">
+            <button onclick="promptTrainerAccess()" class="group bg-slate-700/60 hover:bg-amber-600 border border-slate-600 hover:border-amber-400 p-5 rounded-xl transition-all text-left flex flex-col justify-between space-y-3 shadow-md hover:shadow-amber-500/20">
                 <div class="flex items-center justify-between">
-                    <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 group-hover:text-white flex items-center justify-center text-lg">
+                    <div class="w-10 h-10 rounded-lg bg-amber-500/20 text-amber-400 group-hover:text-white flex items-center justify-center text-lg">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
                     <i class="fa-solid fa-lock text-xs text-slate-500 group-hover:text-white transition-all"></i>
                 </div>
                 <div>
                     <span class="text-sm font-extrabold block text-white">Trainer Portal</span>
-                    <span class="text-[11px] text-slate-400 group-hover:text-emerald-100 font-medium">Upload CSV databases & manage AI rules</span>
+                    <span class="text-[11px] text-slate-400 group-hover:text-amber-100 font-medium">Upload CSV databases & manage SOP rules</span>
                 </div>
             </button>
         </div>
 
         <div class="pt-2 flex items-center justify-between text-[10px] text-slate-500 font-mono">
-            <span>Service Cloud Sandbox v5.0 (OpenAI Enabled)</span>
+            <span>Service Cloud Sandbox v5.0 (Gemini Free Tier)</span>
             <span id="user-session-id-display" class="text-blue-400">User Session: Ready</span>
         </div>
     </div>
@@ -132,10 +132,10 @@
     <!-- Header Ribbon -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-5 rounded-xl border border-gray-200 shadow-sm gap-4">
         <div>
-            <h1 class="text-2xl font-extrabold text-emerald-600 flex items-center gap-2">
+            <h1 class="text-2xl font-extrabold text-amber-600 flex items-center gap-2">
                 <i class="fa-solid fa-chalkboard-user"></i> Trainer Control Center
             </h1>
-            <p class="text-xs text-gray-500 mt-1 font-medium">Configure OpenAI connection and upload custom scenario databases.</p>
+            <p class="text-xs text-gray-500 mt-1 font-medium">Configure AI connection and upload custom scenario databases.</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -151,36 +151,36 @@
         <div class="space-y-6">
             
             <!-- AI Configuration Card -->
-            <div class="bg-white p-6 rounded-xl border border-emerald-200 shadow-sm space-y-4 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
-                <div class="flex items-center gap-2 text-emerald-700 font-extrabold text-sm border-b border-emerald-100 pb-3">
+            <div class="bg-white p-6 rounded-xl border border-purple-200 shadow-sm space-y-4 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-blue-500"></div>
+                <div class="flex items-center gap-2 text-purple-700 font-extrabold text-sm border-b border-purple-100 pb-3">
                     <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
-                    <h2>OpenAI Engine Configuration</h2>
+                    <h2>Google AI Free Engine Config</h2>
                 </div>
                 <p class="text-xs text-gray-500 leading-relaxed">
-                    Configure your OpenAI (ChatGPT) API connection. This provides a highly stable, unrestricted AI engine for your roleplay scenarios.
+                    Paste your <strong>AIza...</strong> key from Google AI Studio to enable free, dynamic customer roleplay.
                 </p>
                 <div class="space-y-3 pt-2">
                     
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">OpenAI Model Selection</label>
-                        <input type="text" id="ai-model-input" value="gpt-4o-mini" class="w-full text-xs p-2.5 border border-emerald-300 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white font-mono font-bold text-emerald-700">
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Google Model Selection</label>
+                        <input type="text" id="ai-model-input" value="gemini-1.5-flash" class="w-full text-xs p-2.5 border border-purple-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white font-mono font-bold text-purple-700">
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">OpenAI Secret API Key</label>
+                        <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1">Google AI Studio Key (AIza...)</label>
                         <div class="flex gap-2">
-                            <input type="password" id="ai-key-input" placeholder="sk-proj-..." class="flex-1 text-xs p-2.5 border border-emerald-300 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white font-mono">
-                            <button onclick="saveAPIKey()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded text-xs font-bold shadow-sm transition-all">Save</button>
+                            <input type="password" id="gemini-key" placeholder="AIza..." class="flex-1 text-xs p-2.5 border border-purple-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-500 bg-white font-mono">
+                            <button onclick="saveAPIKey()" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2.5 rounded text-xs font-bold shadow-sm transition-all">Save</button>
                         </div>
                     </div>
 
                     <p id="api-status" class="text-[10px] text-gray-400 font-medium hidden flex items-center gap-1"><i class="fa-solid fa-circle-check text-green-500"></i> Settings saved securely in your browser.</p>
                     
-                    <div class="mt-4 pt-3 border-t border-emerald-100">
-                        <span class="block text-[10px] text-emerald-700 font-bold mb-1">Need an OpenAI API Key?</span>
-                        <a href="https://platform.openai.com/api-keys" target="_blank" class="text-[10px] text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 font-medium">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open OpenAI Developer Dashboard
+                    <div class="mt-4 pt-3 border-t border-purple-100">
+                        <span class="block text-[10px] text-purple-700 font-bold mb-1">Need a Free API Key?</span>
+                        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-[10px] text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1 font-medium">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Google AI Studio
                         </a>
                     </div>
                 </div>
@@ -188,19 +188,19 @@
 
             <!-- Upload Control Card -->
             <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm space-y-4">
-                <div class="flex items-center gap-2 text-slate-700 font-extrabold text-sm border-b pb-3">
+                <div class="flex items-center gap-2 text-amber-700 font-extrabold text-sm border-b pb-3">
                     <i class="fa-solid fa-file-csv text-lg"></i>
                     <h2>Import Scenario CSV</h2>
                 </div>
                 <p class="text-xs text-gray-500 leading-relaxed">
-                    Upload your scenario database CSV. Ensure it includes an <strong>AI_System_Prompt</strong> column for the AI to follow. Note: Only the first valid row is loaded as the active case.
+                    Upload your scenario database CSV. Ensure it includes an <strong>AI_System_Prompt</strong> column. Note: Only the first valid row is loaded as the active case.
                 </p>
 
                 <div class="space-y-3 pt-2">
-                    <label class="block w-full cursor-pointer bg-slate-50 hover:bg-slate-100 text-slate-800 border-2 border-dashed border-slate-300 rounded-xl p-5 text-center transition-all">
-                        <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2 block text-slate-500"></i>
+                    <label class="block w-full cursor-pointer bg-amber-50 hover:bg-amber-100 text-amber-800 border-2 border-dashed border-amber-300 rounded-xl p-5 text-center transition-all">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2 block text-amber-600"></i>
                         <span class="text-xs font-extrabold block">Select Scenario Database CSV</span>
-                        <span class="text-[10px] text-slate-500 font-medium">Click to browse or drop file here</span>
+                        <span class="text-[10px] text-amber-600 font-medium">Click to browse or drop file here</span>
                         <input type="file" id="csv-file-input" accept=".csv" onchange="handleCSVUpload(event)" class="hidden">
                     </label>
                 </div>
@@ -632,9 +632,8 @@
     window.activeAgentEmail = "";
     window.agentScores = {};
     
-    // Switch to OpenAI variables
-    window.openAiKey = localStorage.getItem('sf_openai_key') || "";
-    window.openAiModel = localStorage.getItem('sf_openai_model') || "gpt-4o-mini";
+    window.geminiApiKey = localStorage.getItem('sf_gemini_key') || "";
+    window.aiModel = localStorage.getItem('sf_ai_model') || "gemini-1.5-flash";
 
     // Load persisted cases from local storage
     const saved = localStorage.getItem('sf_sandbox_cases');
@@ -643,9 +642,9 @@
     }
 
     // Restore API key into input if it exists
-    if(window.openAiKey) {
-        document.getElementById('ai-key-input').value = window.openAiKey;
-        document.getElementById('ai-model-input').value = window.openAiModel;
+    if(window.geminiApiKey) {
+        document.getElementById('gemini-key').value = window.geminiApiKey;
+        document.getElementById('ai-model-input').value = window.aiModel;
         document.getElementById('api-status').classList.remove('hidden');
     }
 
@@ -802,10 +801,10 @@
         document.getElementById('copilot-intent').innerText = cs.topic || 'Support';
 
         // Check if API key is loaded for AI warning
-        if(window.openAiKey) {
-            document.getElementById('ai-status-message').innerHTML = `Click below to launch the simulation. <strong class='text-emerald-600'>AI Connected (${window.openAiModel}).</strong>`;
+        if(window.geminiApiKey) {
+            document.getElementById('ai-status-message').innerHTML = `Click below to launch the live customer chat simulation. <strong class='text-emerald-600'>AI Connected (${window.aiModel}).</strong>`;
         } else {
-            document.getElementById('ai-status-message').innerHTML = "Click below to launch the simulation. <strong class='text-amber-600'>Warning: No OpenAI Key. Using fallback rules.</strong>";
+            document.getElementById('ai-status-message').innerHTML = "Click below to launch the simulation. <strong class='text-amber-600'>Warning: No AI Key. Using fallback rules.</strong>";
         }
 
         // Show Workspace
@@ -867,18 +866,15 @@
         scroller.scrollTop = scroller.scrollHeight;
 
         // Try AI first, if no key or error, use fallback
-        if (window.openAiKey) {
-            triggerOpenAIResponse(text);
+        if (window.geminiApiKey) {
+            triggerAIGeminiResponse(text);
         } else {
             setTimeout(() => { generateFallbackCustomerReply(text); }, 1200);
         }
     };
 
     function appendChatMessage(sender, text, isAgent) {
-        // Hide typing indicator when actual message arrives
         document.getElementById('ai-typing-indicator').classList.add('hidden');
-
-        // Add message to tracking array for AI context
         window.chatMessages.push({ sender, text, isAgent });
 
         const timeline = document.getElementById('live-chat-timeline');
@@ -909,18 +905,20 @@
         scroller.scrollTop = scroller.scrollHeight;
     }
 
-    // --- API CONNECTION : OPENAI CHAT SIMULATION ---
-    async function triggerOpenAIResponse(agentText) {
+    // --- API CONNECTION : GOOGLE GEMINI FREE TIER ---
+    async function triggerAIGeminiResponse(agentText) {
         const cs = window.currentCase;
-        if (!cs) return;
-
-        // Ensure we bypass if no key exists
-        if (!window.openAiKey) {
+        if (!cs || !window.geminiApiKey) {
             generateFallbackCustomerReply(agentText);
             return;
         }
 
-        const systemPrompt = `You are a real customer in a live support chat. 
+        // Dynamically inject the model name chosen in the UI
+        const activeModel = window.aiModel || "gemini-1.5-flash";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${window.geminiApiKey}`;
+
+        const systemPrompt = `[SYSTEM PERSONA INSTRUCTIONS]
+You are a real customer in a live support chat. 
 PERSONA (FROM CSV): ${cs.aiSystemPrompt || "Act as a frustrated customer who needs help."}
 
 YOUR DETAILS TO USE IF ASKED:
@@ -936,53 +934,78 @@ RULES:
 - NEVER admit you are an AI. You are a human customer.
 - Respond directly to the agent's message.
 - Give them your details (name, email, etc.) ONLY when they ask for them.
-- Keep responses concise and realistic (1 to 3 sentences max).`;
+- Keep responses concise and realistic (1 to 3 sentences max).
+[END SYSTEM INSTRUCTIONS]\n\n`;
 
-        const messages = [
-            { role: "system", content: systemPrompt },
-            { role: "assistant", content: cs.openingLine || "Hello, I need assistance." }
-        ];
+        const turns = [];
         
+        // 1. Initial System Spoof (User)
+        turns.push({ 
+            role: "user", 
+            parts: [{ text: systemPrompt + `The customer initiated the chat. The opening issue was: "${cs.openingLine}"` }] 
+        });
+        
+        // 2. Customer's opening line (Model)
+        turns.push({ 
+            role: "model", 
+            parts: [{ text: cs.openingLine || "Hello, I need assistance." }] 
+        });
+
+        // 3. Add actual chat history
         let skipFirst = true;
         for (const msg of window.chatMessages) {
             if (!msg.isAgent && skipFirst) { skipFirst = false; continue; }
-            messages.push({
-                role: msg.isAgent ? "user" : "assistant",
-                content: msg.text
-            });
+            const role = msg.isAgent ? "user" : "model";
+            turns.push({ role: role, parts: [{ text: msg.text }] });
         }
 
-        try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${window.openAiKey}`
-                },
-                body: JSON.stringify({
-                    model: window.openAiModel || "gpt-4o-mini",
-                    messages: messages,
-                    max_tokens: 150
-                })
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                console.error("OpenAI API Error Response:", data);
-                throw new Error(data.error?.message || "API request failed");
+        // 4. Collapse consecutive messages (Gemini STRICT requirement to prevent crashing)
+        const collapsedTurns = [];
+        for (const turn of turns) {
+            if (collapsedTurns.length > 0 && collapsedTurns[collapsedTurns.length - 1].role === turn.role) {
+                collapsedTurns[collapsedTurns.length - 1].parts[0].text += "\n\n" + turn.parts[0].text;
+            } else {
+                collapsedTurns.push({ role: turn.role, parts: [{ text: turn.parts[0].text }] });
             }
+        }
+        
+        if (collapsedTurns.length > 0 && collapsedTurns[collapsedTurns.length - 1].role === "model") {
+            collapsedTurns.push({ role: "user", parts: [{ text: "[Agent is waiting for your response]" }] });
+        }
 
-            const replyText = data.choices?.[0]?.message?.content;
+        const payload = { contents: collapsedTurns };
 
-            if (replyText) {
-                appendChatMessage("Guest (Customer)", replyText.trim(), false);
+        let retries = 3;
+        while (retries > 0) {
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (data.error?.code === 503 || data.error?.code === 429) {
+                        retries--;
+                        if (retries === 0) throw new Error(`Google API: ${data.error.message || 'Rate Limit Hit'}`);
+                        await new Promise(r => setTimeout(r, 1500));
+                        continue; 
+                    }
+                    throw new Error(`Google API: ${data.error?.message || "Request failed"}`);
+                }
+                
+                const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (replyText) {
+                    appendChatMessage("Guest (Customer)", replyText.trim(), false);
+                    return;
+                }
+            } catch (err) {
+                console.error("Gemini API call failed:", err);
+                appendSystemLog(`API Error: ${err.message}`);
+                generateFallbackCustomerReply(agentText);
                 return;
             }
-        } catch (err) {
-            console.error("OpenAI API call failed:", err);
-            appendSystemLog(`API Error: ${err.message}`);
-            generateFallbackCustomerReply(agentText);
         }
     }
 
@@ -991,7 +1014,7 @@ RULES:
     // Fallback if AI Key is missing or invalid
     function generateFallbackCustomerReply(agentMsg) {
         if (!window.fallbackWarned) {
-            appendSystemLog("AI Engine disconnected or API Key missing. Switched to offline fallback rules.");
+            appendSystemLog("Switched to offline fallback rules due to API Failure.");
             window.fallbackWarned = true;
         }
 
@@ -1023,7 +1046,6 @@ RULES:
 
     // --- COPILOT / SIDEBAR LOGIC ---
     window.switchCopilotTab = function(tab) {
-        // Reset all tabs
         ['summary', 'answer', 'wrapup'].forEach(p => {
             const pane = document.getElementById('copilot-pane-' + p);
             if(pane) pane.classList.add('hidden');
@@ -1031,7 +1053,6 @@ RULES:
             if(btn) btn.className = "flex-1 p-3 border-b-[3px] border-transparent hover:text-gray-800 transition-all text-gray-500 font-bold";
         });
         
-        // Activate target tab
         const activePane = document.getElementById('copilot-pane-' + tab);
         if(activePane) activePane.classList.remove('hidden');
         
@@ -1057,7 +1078,7 @@ RULES:
         input.focus();
     };
 
-    // --- AI QA GRADING LOGIC (OPENAI) ---
+    // --- AI QA GRADING LOGIC ---
     window.triggerCaseGrading = async function() {
         if (!window.sessionActive) return;
         window.sessionActive = false; // Stop chat
@@ -1070,7 +1091,6 @@ RULES:
         closeBtn.disabled = true;
         closeBtn.innerText = "Awaiting Report...";
         
-        // Loading State
         content.innerHTML = `
             <div class="flex flex-col items-center justify-center py-12 space-y-4">
                 <i class="fa-solid fa-robot text-4xl text-[#0176d3] animate-pulse"></i>
@@ -1079,19 +1099,16 @@ RULES:
             </div>
         `;
 
-        // 1. Build Transcript String
         let transcriptString = "";
         window.chatMessages.forEach(msg => {
             transcriptString += `${msg.isAgent ? 'Agent' : 'Customer'}: ${msg.text}\n`;
         });
 
-        // 2. Fallback logic if no API key or no chat history
-        if (!window.openAiKey || window.chatMessages.length < 2) {
+        if (!window.geminiApiKey || window.chatMessages.length < 2) {
             setTimeout(() => renderStaticGradeResult(transcriptString.length > 50 ? 85 : 40), 1500);
             return;
         }
 
-        // 3. Prompt for OpenAI Evaluator
         const promptText = `You are a strict but fair Quality Assurance Manager evaluating a customer service agent's performance.
         Review the following live chat transcript and evaluate the agent strictly on these 4 criteria:
         1. Greeting (Did they welcome the user professionally?)
@@ -1111,27 +1128,26 @@ RULES:
           "empathy": "Feedback on empathy..."
         }`;
 
+        const activeModel = window.aiModel || "gemini-1.5-flash";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${window.geminiApiKey}`;
+
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            const response = await fetch(apiUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${window.openAiKey}`
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    model: window.openAiModel || "gpt-4o-mini",
-                    messages: [{ role: "user", content: promptText }],
-                    response_format: { type: "json_object" }
+                    contents: [{ role: "user", parts: [{ text: promptText }] }],
+                    generationConfig: { responseMimeType: "application/json" } // Force strict JSON
                 })
             });
 
             const data = await response.json();
             
             if (!response.ok) {
-                throw new Error(data.error?.message || "API request failed");
+                 throw new Error(`Google API: ${data.error?.message || "Request failed"}`);
             }
-            
-            let aiResponse = data.choices[0].message.content;
+
+            let aiResponse = data.candidates[0].content.parts[0].text;
             const gradeData = JSON.parse(aiResponse);
             
             renderDynamicGradeResult(gradeData);
@@ -1143,7 +1159,6 @@ RULES:
     };
 
     function renderDynamicGradeResult(data) {
-        // Save score
         if(window.activeAgentEmail && window.currentCase) {
             window.agentScores[window.currentCase.caseNumber] = { score: data.score };
             localStorage.setItem(`sf_scores_${window.activeAgentEmail}`, JSON.stringify(window.agentScores));
@@ -1206,16 +1221,15 @@ RULES:
 
     // --- CSV PARSING & UPLOAD LOGIC ---
     window.saveAPIKey = function() {
-        const key = document.getElementById('ai-key-input').value.trim();
-        const model = document.getElementById('ai-model-input').value.trim() || 'gpt-4o-mini';
-        
+        const key = document.getElementById('gemini-key').value.trim();
+        const model = document.getElementById('ai-model-input').value.trim();
         if(key) {
-            window.openAiKey = key;
-            window.openAiModel = model;
-            localStorage.setItem('sf_openai_key', key);
-            localStorage.setItem('sf_openai_model', model);
+            window.geminiApiKey = key;
+            window.aiModel = model;
+            localStorage.setItem('sf_gemini_key', key);
+            localStorage.setItem('sf_ai_model', model);
             document.getElementById('api-status').classList.remove('hidden');
-            document.getElementById('api-status').innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i> Valid OpenAI Key saved securely.';
+            document.getElementById('api-status').innerHTML = '<i class="fa-solid fa-circle-check text-green-500"></i> Settings saved securely.';
         }
     };
 
